@@ -19,6 +19,10 @@ public class Image {
     @JoinColumn(name = "productID")
     private Product product;
 
+    public Image(){
+
+    }
+
         // Parameterized Constructor
     public Image(String fileName, String fileType, Blob img, Product product) {
         this.fileName = fileName;

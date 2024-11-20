@@ -30,6 +30,10 @@ public class Categories {
         this.description = description;
         this.products = products;
     }
+
+    public Categories(){
+
+    }
     // Getters and Setters
     public Long getCategoryId() {
         return categoryId;

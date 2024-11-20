@@ -32,6 +32,10 @@ public class shoppingCartItems {
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
 
+    public shoppingCartItems(){
+
+    }
+
     public shoppingCartItems(shoppingCart shoppingCart, Product product, Integer quantity, BigDecimal unitPrice, BigDecimal totalPrice) {
         this.shoppingCart = shoppingCart;
         this.product = product;

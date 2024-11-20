@@ -25,10 +25,13 @@ public class shoppingCart {
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<shoppingCartItems> shoppingCartItems;
 
-//    @OneToOne
-//    @JoinColumn(name = "userID")
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "userID")
+    private User user;
 
+    public shoppingCart(){
+
+    }
 
     public shoppingCart(Long customerId, Set<shoppingCartItems> shoppingCartItems) {
         this.customerId = customerId;

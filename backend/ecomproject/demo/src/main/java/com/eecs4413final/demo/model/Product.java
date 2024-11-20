@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,9 @@ public class Product {
 
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
+
+    @Column(name = "platform", nullable = false, length = 100)
+    private String platform;
 
 
     @Column(name = "price", nullable = false)
@@ -47,13 +51,16 @@ public class Product {
 
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp createdAt;
+    private LocalDateTime  createdAt;
 
     @Column(name = "updated_at", nullable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 
+    public Product(){
+        this.createdAt = LocalDateTime.now() ;
+    }
 
-    public Product(String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, List<Image> images) {
+    public Product(String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, List<Image> images, String platform) {
         this.name = name;
         this.developer = developer;
         this.description = description;
@@ -62,6 +69,8 @@ public class Product {
         this.saleMod = saleMod;
         this.categoryList = categories;
         this.images = images;
+        this.createdAt = LocalDateTime.now();
+        this.platform = platform;
     }
     // Getters and Setters
     public Long getProductId() {
@@ -127,20 +136,20 @@ public class Product {
         this.images = images;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void addCategory(Categories category) {
@@ -157,6 +166,22 @@ public class Product {
 
     public void removeImages(Image images){
         this.images.remove(images);
+    }
+
+    public void setMod(float mod){
+        this.saleMod = mod;
+    }
+
+    public float getMod(){
+        return saleMod;
+    }
+
+    public void setPlatform(String platform){
+        this.platform = platform;
+    }
+
+    public String getPlatform(){
+        return platform;
     }
 
 
