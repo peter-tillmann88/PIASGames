@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -119,6 +119,3 @@ public class Order {
     }
 }
 
-enum OrderStatus {
-    PENDING, PROCESSING, COMPLETED, FAILED
-}
