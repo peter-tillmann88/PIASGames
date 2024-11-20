@@ -118,11 +118,3 @@ public class Payment {
         return Objects.hash(paymentID);
     }
 }
-
-enum PaymentMethod {
-    CREDIT_CARD, DEBIT_CARD, PAYPAL
-}
-
-enum PaymentStatus {
-    APPROVED, DENIED
-}
