@@ -29,7 +29,7 @@ public class User {
     private Role role;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     // Enum for Role
     public enum Role {
