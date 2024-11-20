@@ -25,17 +25,17 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentMethod paymentMethod;
+    private String paymentMethod;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private String status;
 
     // Default constructor
     public Payment() {}
 
     // Parameterized constructor
-    public Payment(Order order, BigDecimal amount, PaymentMethod paymentMethod, PaymentStatus status) {
+    public Payment(Order order, BigDecimal amount, String paymentMethod, String status) {
         this.order = order;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
@@ -76,19 +76,19 @@ public class Payment {
         this.amount = amount;
     }
 
-    public PaymentMethod getPaymentMethod() {
+    public String getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
+    public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
-    public PaymentStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(PaymentStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
