@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "ShoppingCartItems")
-public class shoppingCartItems {
+public class ShoppingCartItems {
 
 
     @Id
@@ -17,7 +17,7 @@ public class shoppingCartItems {
 
     @ManyToOne
     @JoinColumn(name = "cartID", nullable = false)
-    private shoppingCart shoppingCart;
+    private ShoppingCart shoppingCart;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "productID", nullable = false)
@@ -32,11 +32,11 @@ public class shoppingCartItems {
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
 
-    public shoppingCartItems(){
+    public ShoppingCartItems(){
 
     }
 
-    public shoppingCartItems(shoppingCart shoppingCart, Product product, Integer quantity, BigDecimal unitPrice, BigDecimal totalPrice) {
+    public ShoppingCartItems(ShoppingCart shoppingCart, Product product, Integer quantity, BigDecimal unitPrice, BigDecimal totalPrice) {
         this.shoppingCart = shoppingCart;
         this.product = product;
         this.quantity = quantity;
@@ -54,11 +54,11 @@ public class shoppingCartItems {
         this.cartItemId = cartItemId;
     }
 
-    public shoppingCart getShoppingCart() {
+    public ShoppingCart getShoppingCart() {
         return shoppingCart;
     }
 
-    public void setShoppingCart(shoppingCart shoppingCart) {
+    public void setShoppingCart(ShoppingCart shoppingCart) {
         this.shoppingCart = shoppingCart;
     }
 

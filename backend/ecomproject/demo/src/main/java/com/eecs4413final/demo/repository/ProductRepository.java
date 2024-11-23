@@ -10,14 +10,11 @@ import java.util.Set;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    // Custom query methods can be added here if needed
     Product findByName(String name);
 
     List<Product> findByDeveloper(String developer);
 
-    List<Product> findByManyCategory(Set<Categories> categoriesSet);
+    List<Product> findByCategoryListIn(Set<Categories> categories);
 
-    List<Product> findByCategory(Categories category);
-
-    boolean existByName(String name);
+    boolean existsByName(String name);
 }

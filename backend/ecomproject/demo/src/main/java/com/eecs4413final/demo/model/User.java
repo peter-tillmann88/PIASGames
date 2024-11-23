@@ -10,7 +10,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userID;
+    private Long userId;
 
     @Column(unique = true, nullable = false, length = 50)
     private String username;
@@ -53,12 +53,12 @@ public class User {
 
     // Getters and Setters
 
-    public Long getUserID() {
-        return userID;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -110,7 +110,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userID=" + userID +
+                "userID=" + userId +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
@@ -128,11 +128,11 @@ public class User {
 
         User user = (User) o;
 
-        return Objects.equals(userID, user.userID);
+        return Objects.equals(userId, user.userId);
     }
 
     @Override
     public int hashCode() {
-        return userID != null ? userID.hashCode() : 0;
+        return userId != null ? userId.hashCode() : 0;
     }
 }

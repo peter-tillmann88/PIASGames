@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ShoppingCarts")
-public class shoppingCart {
+public class ShoppingCart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +23,17 @@ public class shoppingCart {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<shoppingCartItems> shoppingCartItems;
+    private Set<ShoppingCartItems> shoppingCartItems;
 
     @OneToOne
     @JoinColumn(name = "userID")
     private User user;
 
-    public shoppingCart(){
+    public ShoppingCart(){
 
     }
 
-    public shoppingCart(Long customerId, Set<shoppingCartItems> shoppingCartItems) {
+    public ShoppingCart(Long customerId, Set<ShoppingCartItems> shoppingCartItems) {
         this.customerId = customerId;
         this.shoppingCartItems = shoppingCartItems;
     }
@@ -70,19 +70,19 @@ public class shoppingCart {
         this.updatedAt = updatedAt;
     }
 
-    public Set<shoppingCartItems> getShoppingCartItems() {
+    public Set<ShoppingCartItems> getShoppingCartItems() {
         return shoppingCartItems;
     }
 
-    public void setShoppingCartItems(Set<shoppingCartItems> shoppingCartItems) {
+    public void setShoppingCartItems(Set<ShoppingCartItems> shoppingCartItems) {
         this.shoppingCartItems = shoppingCartItems;
     }
 
-    public void addShoppingCartItems(shoppingCartItems item){
+    public void addShoppingCartItems(ShoppingCartItems item){
         this.shoppingCartItems.add(item);
     }
 
-    public void removeShoppingCartItems(shoppingCartItems item){
+    public void removeShoppingCartItems(ShoppingCartItems item){
         this.shoppingCartItems.remove(item);
     }
 

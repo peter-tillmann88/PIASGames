@@ -8,10 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
-
     Image findByFileName(String fileName);
-
-    List<Image> findByProductID(long id);
-
-    boolean existByFileName(String fileName);
+    List<Image> findByProduct_ProductId(Long productId);
+    boolean existsByFileName(String fileName);
 }
