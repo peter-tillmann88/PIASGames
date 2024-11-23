@@ -1,11 +1,13 @@
+// src/main/java/com/eecs4413final/demo/model/Product.java
+
 package com.eecs4413final.demo.model;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -15,7 +17,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productID")
-    private long id;
+    private Long productId;
 
     @Column(name = "name", nullable = false, length = 100)
     private String name;
@@ -44,11 +46,10 @@ public class Product {
             name = "Product_Categories",
             joinColumns = @JoinColumn(name = "productID"),
             inverseJoinColumns = @JoinColumn(name = "categoryID"))
-    private Set<Categories> categoryList;
+    private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true) //removes all images when item deleted
     private List<Image> images;
-
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime  createdAt;
@@ -56,8 +57,9 @@ public class Product {
     @Column(name = "updated_at", nullable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
+    // Constructors
     public Product(){
-        this.createdAt = LocalDateTime.now() ;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Product(String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, List<Image> images, String platform) {
@@ -72,13 +74,14 @@ public class Product {
         this.createdAt = LocalDateTime.now();
         this.platform = platform;
     }
+
     // Getters and Setters
     public Long getProductId() {
-        return id;
+        return productId;
     }
 
     public void setProductId(Long productId) {
-        this.id = productId;
+        this.productId = productId;
     }
 
     public String getName() {
@@ -105,12 +108,12 @@ public class Product {
         this.developer = developer;
     }
 
-    public Set<Categories> getCategory() {
+    public Set<Categories> getCategoryList() {
         return categoryList;
     }
 
-    public Set<Categories> setCategory(Set<Categories> categoryList) {
-        return this.categoryList = categoryList;
+    public void setCategoryList(Set<Categories> categoryList) {
+        this.categoryList = categoryList;
     }
 
     public BigDecimal getPrice() {
@@ -152,20 +155,25 @@ public class Product {
         this.updatedAt = LocalDateTime.now();
     }
 
+    // Helper methods to manage bidirectional relationship
     public void addCategory(Categories category) {
         this.categoryList.add(category);
+        category.getProducts().add(this);
     }
 
     public void removeCategory(Categories category){
         this.categoryList.remove(category);
+        category.getProducts().remove(this);
     }
 
-    public void addImages(Image images) {
-        this.images.add(images);
+    public void addImages(Image image) {
+        this.images.add(image);
+        image.setProduct(this);
     }
 
-    public void removeImages(Image images){
-        this.images.remove(images);
+    public void removeImages(Image image){
+        this.images.remove(image);
+        image.setProduct(null);
     }
 
     public void setMod(float mod){
@@ -184,6 +192,36 @@ public class Product {
         return platform;
     }
 
+    // toString, equals, hashCode
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productID=" + productId +
+                ", name='" + name + '\'' +
+                ", developer='" + developer + '\'' +
+                ", description='" + description + '\'' +
+                ", platform='" + platform + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", saleMod=" + saleMod +
+                ", categoryList=" + categoryList +
+                ", images=" + images +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+        return Objects.equals(productId, product.productId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId);
+    }
 }
-
