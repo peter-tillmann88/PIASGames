@@ -75,6 +75,18 @@ public class Product {
         this.platform = platform;
     }
 
+    public Product(String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, String platform) {
+        this.name = name;
+        this.developer = developer;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.saleMod = saleMod;
+        this.categoryList = categories;
+        this.createdAt = LocalDateTime.now();
+        this.platform = platform;
+    }
+
     // Getters and Setters
     public Long getProductId() {
         return productId;
