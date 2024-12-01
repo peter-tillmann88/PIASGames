@@ -4,7 +4,7 @@ import Homepage from './screen/homepage/HomePage';  // Correct path
 import LoginPage from './screen/loginpage/LoginPage';
 import CartPage from './cart/CartPage';
 import CheckoutPage from './cart/CheckoutPage';
-import GameDetailPage from './screen/gamedetailpage/GaneDetailPage';
+import GameDetailPage from './screen/gamedetailpage/GameDetailPage';
 import OrderConfirmationPage from './cart/OrderConfirmationPage';
 import XboxPage from './screen/xbox/XboxPage';  // Ensure correct import paths
 import PlaystationPage from './screen/playstation/PlaystationPage';
