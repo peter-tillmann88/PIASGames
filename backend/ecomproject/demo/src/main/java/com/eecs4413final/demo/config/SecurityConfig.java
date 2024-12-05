@@ -16,14 +16,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() // Disables CSRF protection for simplicity
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity; consider enabling it for production
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/index", "/api/users/register", "/hello").permitAll() // Public endpoints
-                        .anyRequest().authenticated() // Secures all other endpoints
+                        .anyRequest().permitAll() // Allow all endpoints without authentication
                 )
-                .httpBasic(); // Enables HTTP Basic Authentication
+                .httpBasic().disable(); // Disable HTTP Basic Authentication as it's no longer needed
 
         return http.build();
     }
