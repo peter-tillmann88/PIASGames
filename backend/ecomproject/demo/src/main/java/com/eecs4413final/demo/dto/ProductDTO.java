@@ -3,6 +3,8 @@ package com.eecs4413final.demo.dto;
 import com.eecs4413final.demo.model.Categories;
 import com.eecs4413final.demo.model.Image;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,19 +23,21 @@ public class ProductDTO {
     @NotBlank(message = "Product description is required")
     private String description;
 
-    @NotBlank(message = "Product price is required")
+    @NotNull(message = "Product price is required")
     private BigDecimal price;
 
-    @NotBlank(message = "Product stock is required")
-    private int stock;
+    @NotNull(message = "Product stock is required")
+    private Integer stock;
+
+    @NotNull(message = "Product categories are required")
+    @Size(min = 1, message = "At least one category is required")
+    private Set<Categories> categories;
 
     private float saleMod;
 
     @NotBlank(message = "Product platform is required")
     private String platform;
 
-    @NotBlank(message = "Product categories are required")
-    private Set<Categories> categories;
     private List<ImageDTO> images;
 
     // Getters and Setters

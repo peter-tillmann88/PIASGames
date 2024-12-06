@@ -11,6 +11,7 @@ com/eecs4413final/demo/dto/ProductDTO.class
 com/eecs4413final/demo/repository/AdministratorRepository.class
 com/eecs4413final/demo/controller/WishlistController.class
 com/eecs4413final/demo/exception/ShoppingCartNotFoundException.class
+com/eecs4413final/demo/exception/ImageTooLargeException.class
 com/eecs4413final/demo/service/CategoryService.class
 com/eecs4413final/demo/util/JwtUtil.class
 com/eecs4413final/demo/repository/ProductRepository.class
@@ -25,6 +26,7 @@ com/eecs4413final/demo/dto/WishlistDTO.class
 com/eecs4413final/demo/exception/EmailAlreadyExistsException.class
 com/eecs4413final/demo/service/ProductService.class
 com/eecs4413final/demo/model/Wishlist.class
+com/eecs4413final/demo/service/SupabaseStorageService.class
 com/eecs4413final/demo/dto/LoginRequestDTO.class
 com/eecs4413final/demo/repository/WishlistRepository.class
 com/eecs4413final/demo/controller/AuthController.class
@@ -34,9 +36,11 @@ com/eecs4413final/demo/controller/UserController.class
 com/eecs4413final/demo/model/Administrator.class
 com/eecs4413final/demo/repository/CategoriesRepository.class
 com/eecs4413final/demo/service/ShoppingCartService.class
+com/eecs4413final/demo/config/EnvConfig.class
 com/eecs4413final/demo/exception/GlobalExceptionHandler.class
 com/eecs4413final/demo/repository/ShoppingCartRepository.class
 com/eecs4413final/demo/dto/ChangePasswordDTO.class
+com/eecs4413final/demo/service/SupabaseStorageService$1.class
 com/eecs4413final/demo/service/CategoryServiceImpl.class
 com/eecs4413final/demo/exception/UsernameAlreadyExistsException.class
 com/eecs4413final/demo/HomePageController.class
@@ -56,6 +60,7 @@ com/eecs4413final/demo/service/WishlistServiceImpl.class
 com/eecs4413final/demo/exception/ImageNotFoundException.class
 com/eecs4413final/demo/dto/UserRegistrationDTO.class
 com/eecs4413final/demo/repository/CustomerRepository.class
+com/eecs4413final/demo/controller/ProductController.class
 com/eecs4413final/demo/model/ShoppingCartItems.class
 com/eecs4413final/demo/VGameStoreApplication.class
 com/eecs4413final/demo/exception/ProductNotFoundException.class

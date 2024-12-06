@@ -5,10 +5,7 @@ package com.eecs4413final.demo.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "Products")
@@ -49,7 +46,7 @@ public class Product {
     private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true) //removes all images when item deleted
-    private List<Image> images;
+    private List<Image> images = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime  createdAt;

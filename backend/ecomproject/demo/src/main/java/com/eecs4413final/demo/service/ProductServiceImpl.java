@@ -1,5 +1,6 @@
 package com.eecs4413final.demo.service;
 
+import com.eecs4413final.demo.dto.ImageDTO;
 import com.eecs4413final.demo.dto.ProductDTO;
 import com.eecs4413final.demo.exception.ProductNotFoundException;
 import com.eecs4413final.demo.model.Categories;
@@ -8,6 +9,8 @@ import com.eecs4413final.demo.repository.CategoriesRepository;
 import com.eecs4413final.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,15 +21,18 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoriesRepository categoriesRepository;
+    private final ImageService imageService;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoriesRepository categoriesRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoriesRepository categoriesRepository, ImageService imageService) {
         this.productRepository = productRepository;
         this.categoriesRepository = categoriesRepository;
+        this.imageService = imageService;
     }
 
     @Override
-    public Product addProduct(ProductDTO productDTO) {
+    @Transactional
+    public Product addProduct(ProductDTO productDTO, List<MultipartFile> imageFiles) throws Exception {
         Set<Categories> prodCategories = productDTO.getCategory();
 
         Set<Categories> repoCategories = new HashSet<>(categoriesRepository.findAll());
@@ -38,10 +44,22 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
+        // Create the Product entity
         Product product = new Product(productDTO.getName(), productDTO.getDeveloper(), productDTO.getDescription(),
                 productDTO.getPrice(), productDTO.getStock(), productDTO.getSaleMod(), prodCategories, productDTO.getPlatform());
 
-        return productRepository.save(product);
+        // Save the product first to get the productId
+        Product savedProduct = productRepository.save(product);
+
+        // Upload images and associate with product
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            for (MultipartFile file : imageFiles) {
+                ImageDTO imageDTO = imageService.addImage(savedProduct.getProductId(), file);
+                // Optionally, you can collect imageDTOs
+            }
+        }
+
+        return savedProduct;
     }
 
     @Override
@@ -91,21 +109,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(Long productId) {
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product != null) {
-            return product;
-        } else {
-            throw new ProductNotFoundException("Product not found with id: " + productId);
-        }
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
     }
 
     @Override
+    @Transactional
     public void deleteById(Long productId) {
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product != null) {
-            productRepository.deleteById(productId);
-        } else {
-            throw new ProductNotFoundException("Product not found with id: " + productId);
-        }
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
+        // Images will be deleted automatically due to orphanRemoval = true
+        productRepository.deleteById(productId);
+    }
+
+    @Override
+    public List<ImageDTO> addImages(Long productId, List<MultipartFile> files) throws Exception {
+        return imageService.addImages(productId, files);
+    }
+
+    @Override
+    public void deleteImage(Long imageId) {
+        imageService.deleteById(imageId);
     }
 }
