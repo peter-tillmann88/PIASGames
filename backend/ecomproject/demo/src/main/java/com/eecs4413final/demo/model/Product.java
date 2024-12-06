@@ -204,6 +204,10 @@ public class Product {
         return platform;
     }
 
+    public float getSaleMod(){
+        return saleMod;
+    }
+
     // toString, equals, hashCode
     @Override
     public String toString() {
@@ -235,5 +239,9 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(productId);
+    }
+
+    public void setSaleMod(float saleMod) {
+        this.saleMod = saleMod;
     }
 }

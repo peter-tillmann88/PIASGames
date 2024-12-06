@@ -108,4 +108,8 @@ public class ProductDTO {
     public void addCategory(Categories categories){
         this.categories.add(categories);
     }
+
+    public Set<Categories> getCategories() {
+        return categories;
+    }
 }

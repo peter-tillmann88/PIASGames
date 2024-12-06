@@ -1,6 +1,7 @@
 package com.eecs4413final.demo.service;
 
 import com.eecs4413final.demo.dto.ProductDTO;
+import com.eecs4413final.demo.exception.CategoryNotFoundException;
 import com.eecs4413final.demo.exception.ProductNotFoundException;
 import com.eecs4413final.demo.model.Categories;
 import com.eecs4413final.demo.model.Product;
@@ -27,22 +28,29 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product addProduct(ProductDTO productDTO) {
-        Set<Categories> prodCategories = productDTO.getCategory();
+        // Map DTO to Entity
+        Product newProduct = new Product();
+        newProduct.setName(productDTO.getName());
+        newProduct.setDeveloper(productDTO.getDeveloper());
+        newProduct.setDescription(productDTO.getDescription());
+        newProduct.setPrice(productDTO.getPrice());
+        newProduct.setStock(productDTO.getStock());
+        newProduct.setSaleMod(productDTO.getSaleMod());
+        newProduct.setPlatform(productDTO.getPlatform());
 
-        Set<Categories> repoCategories = new HashSet<>(categoriesRepository.findAll());
-
-        // Check if category for product exists in repo, if not add
-        for (Categories categories : prodCategories) {
-            if (!repoCategories.contains(categories)) {
-                categoriesRepository.save(categories);
-            }
+        // Handle categories
+        Set<Categories> categories = new HashSet<>();
+        for (Categories category : productDTO.getCategories()) {
+            Categories existingCategory = categoriesRepository.findById(category.getCategoryId())
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found for ID: " + category.getCategoryId()));
+            categories.add(existingCategory);
         }
+        newProduct.setCategoryList(categories);
 
-        Product product = new Product(productDTO.getName(), productDTO.getDeveloper(), productDTO.getDescription(),
-                productDTO.getPrice(), productDTO.getStock(), productDTO.getSaleMod(), prodCategories, productDTO.getPlatform());
-
-        return productRepository.save(product);
+        // Save product
+        return productRepository.save(newProduct);
     }
+
 
     @Override
     public List<Product> getAllProducts() {

@@ -22,7 +22,7 @@ public interface ProductService {
     Product getById(Long productId);
     void deleteById(Long productId);
 
-    Product addProduct(ProductDTO productDTO);
+    Product addProduct(ProductDTO product);
 
 
 }

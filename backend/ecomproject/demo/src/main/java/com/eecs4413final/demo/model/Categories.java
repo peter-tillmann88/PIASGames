@@ -31,6 +31,11 @@ public class Categories {
         this.products = products;
     }
 
+    public Categories(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public Categories() {
     }
 
@@ -77,4 +82,14 @@ public class Categories {
         this.products.remove(product);
         product.getCategoryList().remove(this);
     }
+
+    @Override
+    public String toString() {
+        return "Categories{"
+            + "categoryID=" + categoryId
+            + ", name='" + name + '\''
+            + ", description='" + description + '\''
+            + ", products=" + products
+            + '}';
+        }
 }
