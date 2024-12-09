@@ -2,15 +2,16 @@ package com.eecs4413final.demo.dto;
 
 import com.eecs4413final.demo.model.Categories;
 import com.eecs4413final.demo.model.Image;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
 public class ProductDTO {
-
-    private Long id;
 
     @NotBlank(message = "Product developer is required")
     private String developer;
@@ -21,30 +22,25 @@ public class ProductDTO {
     @NotBlank(message = "Product description is required")
     private String description;
 
-    @NotBlank(message = "Product price is required")
+    @NotNull(message = "Product price is required")
+    @Positive(message = "Product price must be positive")
     private BigDecimal price;
 
-    @NotBlank(message = "Product stock is required")
+    @NotNull(message = "Product stock is required")
+    @Min(value = 0, message = "Product stock must be non-negative")
     private int stock;
+
 
     private float saleMod;
 
     @NotBlank(message = "Product platform is required")
     private String platform;
 
-    @NotBlank(message = "Product categories are required")
-    private Set<Categories> categories;
-    private List<ImageDTO> images;
+    @NotNull(message = "Product categories are required")
+    private List<Categories> categories;
+    private List<String> imageNames;
 
     // Getters and Setters
-
-    public Long getId(){
-        return  id;
-    }
-
-    public void setId(Long id){
-        this.id = id;
-    }
     public String getDeveloper() {
         return developer;
     }
@@ -101,11 +97,11 @@ public class ProductDTO {
         this.platform = platform;
     }
 
-    public Set<Categories> getCategory(){
-        return categories;
-    }
-
     public void addCategory(Categories categories){
         this.categories.add(categories);
+    }
+
+    public List<Categories> getCategories() {
+        return categories;
     }
 }

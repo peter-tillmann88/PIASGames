@@ -8,7 +8,7 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long imageId;
     private String fileName;
     private String fileType;
 
@@ -33,11 +33,11 @@ public class Image {
 
     // Getters and Setters
     public Long getId() {
-        return id;
+        return imageId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.imageId = id;
     }
 
     public String getFileName() {
@@ -70,6 +70,16 @@ public class Image {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+    @Override
+    public String toString() {
+        return "Image{"
+                + "imageId=" + imageId
+                + ", fileName='" + fileName + '\''
+                + ", fileType='" + fileType + '\''
+                + ", img=" + img
+                + ", productID=" + product
+                + '}';
     }
 }
 

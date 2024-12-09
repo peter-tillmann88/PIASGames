@@ -2,6 +2,8 @@
 
 package com.eecs4413final.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +14,7 @@ public class Categories {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "categoryID")
+    @Column(name = "categoryid")
     private Long categoryId;
 
     @Column(name = "name", unique = true, nullable = false, length = 100)
@@ -22,6 +24,7 @@ public class Categories {
     private String description;
 
     @ManyToMany(mappedBy = "categoryList")
+    @JsonBackReference
     private Set<Product> products = new HashSet<>(); // Initialize to prevent NullPointerException
 
     // Constructors
@@ -29,6 +32,11 @@ public class Categories {
         this.name = name;
         this.description = description;
         this.products = products;
+    }
+
+    public Categories(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public Categories() {
@@ -77,4 +85,14 @@ public class Categories {
         this.products.remove(product);
         product.getCategoryList().remove(this);
     }
+
+    @Override
+    public String toString() {
+        return "Categories{"
+            + "categoryID=" + categoryId
+            + ", name='" + name + '\''
+            + ", description='" + description + '\''
+            + ", products=" + products
+            + '}';
+        }
 }
