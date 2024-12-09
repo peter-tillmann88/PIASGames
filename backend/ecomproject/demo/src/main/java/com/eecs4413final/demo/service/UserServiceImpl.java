@@ -1,6 +1,7 @@
 package com.eecs4413final.demo.service;
 
 import com.eecs4413final.demo.dto.UserRegistrationDTO;
+import com.eecs4413final.demo.dto.UserUpdateDTO;
 import com.eecs4413final.demo.exception.EmailAlreadyExistsException;
 import com.eecs4413final.demo.exception.UsernameAlreadyExistsException;
 import com.eecs4413final.demo.model.User;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Optional;
 
@@ -30,30 +32,29 @@ public class UserServiceImpl implements UserService {
     public User registerUser(UserRegistrationDTO registrationDto) {
         logger.info("Registering user: {}", registrationDto.getUsername());
 
-        // Check if username already exists
         if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
             logger.warn("Username '{}' is already taken.", registrationDto.getUsername());
             throw new UsernameAlreadyExistsException("Username '" + registrationDto.getUsername() + "' is already taken.");
         }
 
-        // Check if email already exists
         if (userRepository.findByEmail(registrationDto.getEmail()).isPresent()) {
             logger.warn("Email '{}' is already registered.", registrationDto.getEmail());
             throw new EmailAlreadyExistsException("Email '" + registrationDto.getEmail() + "' is already registered.");
         }
 
-        // Create new User entity
         User user = new User();
         user.setUsername(registrationDto.getUsername());
-        String hashedPassword = passwordEncoder.encode(registrationDto.getPassword());
-        user.setPasswordHash(hashedPassword);
+        user.setPasswordHash(passwordEncoder.encode(registrationDto.getPassword()));
         user.setEmail(registrationDto.getEmail());
         user.setPhone(registrationDto.getPhone());
-        user.setRole(User.Role.CUSTOMER); // Default role
+        user.setRole(User.Role.CUSTOMER);
+        user.setCreditCard(registrationDto.getCreditCard());
+        user.setExpiryDate(registrationDto.getExpiryDate());
+        user.setCountry(registrationDto.getCountry());
+        user.setProvince(registrationDto.getProvince());
+        user.setAddress(registrationDto.getAddress());
+        user.setPostalCode(registrationDto.getPostalCode());
 
-        logger.debug("Hashed password for user '{}': {}", registrationDto.getUsername(), hashedPassword);
-
-        // Save user to the database
         try {
             User savedUser = userRepository.save(user);
             logger.info("User '{}' registered successfully with ID {}", savedUser.getUsername(), savedUser.getUserId());
@@ -99,13 +100,9 @@ public class UserServiceImpl implements UserService {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
 
-            // Verify old password
             if (passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
-                // Hash and set the new password
                 String hashedNewPassword = passwordEncoder.encode(newPassword);
                 user.setPasswordHash(hashedNewPassword);
-
-                // Save the user with the updated password
                 userRepository.save(user);
                 logger.info("Password successfully changed for user: {}", username);
                 return true;
@@ -126,7 +123,7 @@ public class UserServiceImpl implements UserService {
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            userRepository.delete(user); // Delete the user from the database
+            userRepository.delete(user);
             logger.info("User '{}' deleted successfully", username);
         } else {
             logger.error("User '{}' not found for deletion", username);
@@ -134,4 +131,67 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User updateUserProfile(String username, UserUpdateDTO updateDto) {
+        logger.info("Updating profile for user: {}", username);
+        Optional<User> userOpt = userRepository.findByUsername(username);
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            if (updateDto.getUsername() != null && !updateDto.getUsername().equals(user.getUsername())) {
+                if (userRepository.existsByUsername(updateDto.getUsername())) {
+                    throw new UsernameAlreadyExistsException("Username '" + updateDto.getUsername() + "' is already taken.");
+                }
+                user.setUsername(updateDto.getUsername());
+            }
+
+            if (updateDto.getEmail() != null && !updateDto.getEmail().equals(user.getEmail())) {
+                if (userRepository.existsByEmail(updateDto.getEmail())) {
+                    throw new EmailAlreadyExistsException("Email '" + updateDto.getEmail() + "' is already registered.");
+                }
+                user.setEmail(updateDto.getEmail());
+            }
+
+            if (updateDto.getPhone() != null) {
+                user.setPhone(updateDto.getPhone());
+            }
+
+            if (updateDto.getCreditCard() != null) {
+                user.setCreditCard(updateDto.getCreditCard());
+            }
+
+            if (updateDto.getExpiryDate() != null) {
+                user.setExpiryDate(updateDto.getExpiryDate());
+            }
+
+            if (updateDto.getAddress() != null) {
+                user.setAddress(updateDto.getAddress());
+            }
+
+            if (updateDto.getPostalCode() != null) {
+                user.setPostalCode(updateDto.getPostalCode());
+            }
+
+            if (updateDto.getCountry() != null) {
+                user.setCountry(updateDto.getCountry());
+            }
+
+            if (updateDto.getProvince() != null) {
+                user.setProvince(updateDto.getProvince());
+            }
+
+            try {
+                User updatedUser = userRepository.save(user);
+                logger.info("User '{}' profile updated successfully.", username);
+                return updatedUser;
+            } catch (Exception e) {
+                logger.error("Error updating profile for user '{}': {}", username, e.getMessage());
+                throw e;
+            }
+        } else {
+            logger.error("User '{}' not found for profile update.", username);
+            throw new IllegalArgumentException("User not found");
+        }
+    }
 }

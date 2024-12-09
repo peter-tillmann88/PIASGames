@@ -2,7 +2,6 @@ package com.eecs4413final.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -31,28 +30,33 @@ public class User {
     @Column(nullable = false, updatable = false)
     private final LocalDateTime createdAt;
 
-    // Enum for Role
+    @Column(length = 16, nullable = true)
+    private String creditCard;
+
+    @Column(length = 5, nullable = true)
+    private String expiryDate;
+
+    @Column(length = 50, nullable = true)
+    private String country;
+
+    @Column(length = 50, nullable = true)
+    private String province;
+
+    @Column(length = 255, nullable = true)
+    private String address;
+
+    @Column(length = 20, nullable = true)
+    private String postalCode;
+
     public enum Role {
         CUSTOMER, ADMIN
     }
 
-    // Default constructor
     public User() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Parameterized constructor
-    public User(String username, String passwordHash, String email, String phone, Role role) {
-        this.username = username;
-        this.passwordHash = passwordHash;
-        this.email = email;
-        this.phone = phone;
-        this.role = role;
-        this.createdAt = LocalDateTime.now();
-    }
-
     // Getters and Setters
-
     public Long getUserId() {
         return userId;
     }
@@ -105,34 +109,51 @@ public class User {
         return createdAt;
     }
 
-    // toString method
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userID=" + userId +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", role=" + role +
-                ", createdAt=" + createdAt +
-                '}';
+    public String getCreditCard() {
+        return creditCard;
     }
 
-    // equals and hashCode methods
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        return Objects.equals(userId, user.userId);
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
     }
 
-    @Override
-    public int hashCode() {
-        return userId != null ? userId.hashCode() : 0;
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 }

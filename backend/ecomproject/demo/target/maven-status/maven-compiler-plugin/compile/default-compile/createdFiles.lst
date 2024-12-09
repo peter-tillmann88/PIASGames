@@ -54,6 +54,7 @@ com\eecs4413final\demo\config\SecurityConfig.class
 com\eecs4413final\demo\VGameStoreApplication.class
 com\eecs4413final\demo\model\Product.class
 com\eecs4413final\demo\repository\UserRepository.class
+com\eecs4413final\demo\dto\UserUpdateDTO.class
 com\eecs4413final\demo\exception\ProductNotFoundException.class
 com\eecs4413final\demo\HomePageController.class
 com\eecs4413final\demo\service\CategoryService.class
