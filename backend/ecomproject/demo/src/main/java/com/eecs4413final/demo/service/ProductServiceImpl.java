@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product addProduct(ProductDTO productDTO) {
-        // Original method without images
+        // Create new product instance
         Product newProduct = new Product();
         newProduct.setName(productDTO.getName());
         newProduct.setDeveloper(productDTO.getDeveloper());
@@ -48,18 +48,22 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setSaleMod(productDTO.getSaleMod());
         newProduct.setPlatform(productDTO.getPlatform());
 
+        // Handle categories
         Set<Categories> categories = new HashSet<>();
-        for (Categories category : productDTO.getCategories()) {
-            if (category.getCategoryId() == null) {
+        for (Long categoryId : productDTO.getCategoryIds()) {
+            if (categoryId == null) {
                 throw new IllegalArgumentException("Category ID cannot be null");
             }
-            Categories existingCategory = categoriesRepository.findById(category.getCategoryId())
-                    .orElseThrow(() -> new CategoryNotFoundException("Category not found for ID: " + category.getCategoryId()));
+            Categories existingCategory = categoriesRepository.findById(categoryId)
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found for ID: " + categoryId));
             categories.add(existingCategory);
         }
         newProduct.setCategoryList(categories);
 
-        return productRepository.save(newProduct);
+        // Save product to generate product ID
+        Product savedProduct = productRepository.save(newProduct);
+        System.out.println("Product saved with ID: " + savedProduct.getProductId());
+        return savedProduct;
     }
 
     @Override
@@ -69,10 +73,14 @@ public class ProductServiceImpl implements ProductService {
 
         // If images are provided, upload them and associate with product
         if (images != null && !images.isEmpty()) {
+            System.out.println("Uploading images for product ID: " + product.getProductId());
             imageService.addImages(product.getProductId(), images);
             // Reload product to get updated images
             product = productRepository.findById(product.getProductId())
                     .orElseThrow(() -> new ProductNotFoundException("Product not found after image upload"));
+            System.out.println("Images associated with product ID: " + product.getProductId());
+        } else {
+            System.out.println("No images provided for product ID: " + product.getProductId());
         }
 
         return product;
@@ -110,7 +118,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getByName(String name) {
-        return productRepository.findByName(name);
+        Product product = productRepository.findByName(name);
+        if (product != null) {
+            return product;
+        } else {
+            throw new ProductNotFoundException("Product not found with name: " + name);
+        }
     }
 
     @Override
@@ -119,7 +132,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getByCategoryListIn(Set<Categories> categories) {
+    public List<Product> getByCategoryListIn(Set<Long> categoryIds) {
+        Set<Categories> categories = new HashSet<>();
+        for (Long categoryId : categoryIds) {
+            Categories category = categoriesRepository.findById(categoryId)
+                    .orElseThrow(() -> new CategoryNotFoundException("Category not found for ID: " + categoryId));
+            categories.add(category);
+        }
         return productRepository.findByCategoryListIn(categories);
     }
 
@@ -137,6 +156,12 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
         if (product != null) {
+            List<Image> productImages = product.getImages();
+            // Use the imageService to delete images so that files on Supabase are also deleted
+            for (Image image: productImages) {
+                imageService.deleteById(image.getId()); // This triggers deletion from Supabase
+            }
+            // Now delete the product
             productRepository.deleteById(productId);
         } else {
             throw new ProductNotFoundException("Product not found with id: " + productId);

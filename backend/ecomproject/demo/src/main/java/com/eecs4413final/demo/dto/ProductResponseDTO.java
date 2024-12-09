@@ -32,7 +32,7 @@ public class ProductResponseDTO {
 
     private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
 
-    private List<Image> images;
+    private List<ImageDTO> images;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -44,7 +44,7 @@ public class ProductResponseDTO {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ProductResponseDTO(Long id, String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, List<Image> images, String platform) {
+    public ProductResponseDTO(Long id, String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, List<ImageDTO> images, String platform) {
         this.productId = id;
         this.name = name;
         this.developer = developer;
@@ -128,11 +128,11 @@ public class ProductResponseDTO {
         this.stock = quantity;
     }
 
-    public List<Image> getImages() {
+    public List<ImageDTO> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<ImageDTO> images) {
         this.images = images;
     }
 

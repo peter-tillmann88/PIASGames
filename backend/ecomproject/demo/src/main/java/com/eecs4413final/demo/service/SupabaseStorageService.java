@@ -1,5 +1,6 @@
 package com.eecs4413final.demo.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ public class SupabaseStorageService {
     @Value("${SUPABASE_API_KEY}")
     private String supabaseApiKey;
 
+    @Autowired
     public SupabaseStorageService(@Value("${SUPABASE_URL}") String supabaseUrl,
                                   @Value("${SUPABASE_API_KEY}") String supabaseApiKey) {
         this.webClient = WebClient.builder()
@@ -40,6 +42,7 @@ public class SupabaseStorageService {
      * @throws IOException If an I/O error occurs.
      */
     public Mono<String> uploadImage(MultipartFile file, String fileName) throws IOException {
+        System.out.println("Uploading image: " + fileName);
         // Convert MultipartFile to ByteArrayResource
         ByteArrayResource resource = new ByteArrayResource(file.getBytes()) {
             @Override
@@ -54,6 +57,8 @@ public class SupabaseStorageService {
                 .bodyValue(resource)
                 .retrieve()
                 .bodyToMono(String.class)
+                .doOnSuccess(response -> System.out.println("Image uploaded successfully: " + response))
+                .doOnError(error -> System.err.println("Error uploading image: " + error.getMessage()))
                 .map(response -> supabaseUrl + "/storage/v1/object/public/product-images/" + fileName);
     }
 
@@ -64,9 +69,12 @@ public class SupabaseStorageService {
      * @return A Mono signaling completion.
      */
     public Mono<Void> deleteImage(String fileName) {
+        System.out.println("Deleting image: " + fileName);
         return webClient.delete()
                 .uri("/storage/v1/object/product-images/" + fileName)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(Void.class)
+                .doOnSuccess(aVoid -> System.out.println("Image deleted successfully: " + fileName))
+                .doOnError(error -> System.err.println("Error deleting image: " + error.getMessage()));
     }
 }

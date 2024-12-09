@@ -15,8 +15,6 @@ public class CategoriesDTO {
     @Size(min = 10, max = 250, message = "Description must be between 10 and 250 characters")
     private String description;
 
-    private Set<Product> products;
-
     // Getters and Setters
 
     public String getName() {
@@ -33,13 +31,5 @@ public class CategoriesDTO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Set<Product>  getProducts(){
-        return products;
-    }
-
-    public void setProducts(Set<Product> products){
-        this.products = products;
     }
 }

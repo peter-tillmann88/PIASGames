@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public  Categories addCategory(Categories category){
+    public Categories addCategory(Categories category){
         if(categoriesRepository.findByName(category.getName()) != null){
             throw new CategoryExistsException("Category already exists with the name: " + category.getName());
         }
@@ -54,16 +54,17 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Categories addCategory(CategoriesDTO category) {
+    public Categories addCategory(CategoriesDTO categoryDTO) {
         // Check if a category with the same name already exists
-        if (categoriesRepository.findByName(category.getName()) != null) {
-            throw new CategoryExistsException("Category already exists with the name: " + category.getName());
+        if (categoriesRepository.findByName(categoryDTO.getName()) != null) {
+            throw new CategoryExistsException("Category already exists with the name: " + categoryDTO.getName());
         }
 
         Categories newCat = new Categories();
-        newCat.setName(category.getName());
-        newCat.setDescription(category.getDescription());
-        newCat.setProducts(category.getProducts());
+        newCat.setName(categoryDTO.getName());
+        newCat.setDescription(categoryDTO.getDescription());
+        // Removed the line below to prevent errors
+        // newCat.setProducts(categoryDTO.getProducts());
 
         return categoriesRepository.save(newCat);
     }

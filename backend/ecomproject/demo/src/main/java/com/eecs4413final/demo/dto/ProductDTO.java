@@ -1,6 +1,5 @@
 package com.eecs4413final.demo.dto;
 
-import com.eecs4413final.demo.model.Categories;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,9 +33,12 @@ public class ProductDTO {
     private String platform;
 
     @NotNull(message = "Product categories are required")
-    private List<Categories> categories;
+    private List<Long> categoryIds; // Changed from List<Categories> to List<Long>
+
+    private List<String> imageNames;
 
     // Getters and Setters
+
     public String getDeveloper() {
         return developer;
     }
@@ -93,15 +95,19 @@ public class ProductDTO {
         this.platform = platform;
     }
 
-    public List<Categories> getCategories() {
-        return categories;
+    public List<Long> getCategoryIds() {
+        return categoryIds;
     }
 
-    public void setCategories(List<Categories> categories) {
-        this.categories = categories;
+    public void setCategoryIds(List<Long> categoryIds) {
+        this.categoryIds = categoryIds;
     }
 
-    public void addCategory(Categories category){
-        this.categories.add(category);
+    public List<String> getImageNames() {
+        return imageNames;
+    }
+
+    public void setImageNames(List<String> imageNames) {
+        this.imageNames = imageNames;
     }
 }

@@ -1,9 +1,6 @@
-// src/main/java/com/eecs4413final/demo/model/Categories.java
-
 package com.eecs4413final.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,35 +11,25 @@ public class Categories {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "categoryid")
     private Long categoryId;
 
-    @Column(name = "name", unique = true, nullable = false, length = 100)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @ManyToMany(mappedBy = "categoryList")
-    @JsonBackReference
-    private Set<Product> products = new HashSet<>(); // Initialize to prevent NullPointerException
+    @JsonIgnore // Prevents serialization of products to avoid circular references
+    private Set<Product> products = new HashSet<>();
 
-    // Constructors
-    public Categories(String name, String description, Set<Product> products) {
-        this.name = name;
-        this.description = description;
-        this.products = products;
-    }
+    // Constructors, Getters, Setters
+
+    public Categories() {}
 
     public Categories(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Categories() {
-    }
-
-    // Getters and Setters
     public Long getCategoryId() {
         return categoryId;
     }
@@ -74,25 +61,4 @@ public class Categories {
     public void setProducts(Set<Product> products) {
         this.products = products;
     }
-
-    // Helper methods to manage bidirectional relationship
-    public void addProduct(Product product){
-        this.products.add(product);
-        product.getCategoryList().add(this);
-    }
-
-    public void removeProduct(Product product){
-        this.products.remove(product);
-        product.getCategoryList().remove(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Categories{"
-            + "categoryID=" + categoryId
-            + ", name='" + name + '\''
-            + ", description='" + description + '\''
-            + ", products=" + products
-            + '}';
-        }
 }

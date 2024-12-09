@@ -17,7 +17,7 @@ public interface ProductService {
     List<Product> getByCategoryAndPlatform(String category, String platform);
     Product getByName(String name);
     List<Product> getByPlatformAndName(String platform, String name);
-    List<Product> getByCategoryListIn(Set<Categories> categories);
+    public List<Product> getByCategoryListIn(Set<Long> categoryIds);
 
     Product getById(Long productId);
     void deleteById(Long productId);

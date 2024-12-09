@@ -64,6 +64,7 @@ public class ImageServiceImpl implements ImageService{
 
     @Override
     public ImageDTO addImage(Long productId, MultipartFile file) throws Exception {
+        System.out.println("Adding image for product ID: " + productId);
         validateImage(file);
         // Find the product
         Product product = productRepository.findById(productId)
@@ -71,10 +72,12 @@ public class ImageServiceImpl implements ImageService{
 
         // Generate a unique filename
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        System.out.println("Generated file name: " + fileName);
 
         // Upload image to Supabase Storage and get the URL
         Mono<String> imageUrlMono = storageService.uploadImage(file, fileName);
         String imageUrl = imageUrlMono.block(); // Blocking for simplicity
+        System.out.println("Uploaded image URL: " + imageUrl);
 
         // Create and save the Image entity
         Image image = new Image();
@@ -84,6 +87,7 @@ public class ImageServiceImpl implements ImageService{
         image.setProduct(product);
 
         Image savedImage = imageRepository.save(image);
+        System.out.println("Saved image with ID: " + savedImage.getId());
 
         // Convert to DTO
         ImageDTO imageDTO = new ImageDTO();
@@ -97,11 +101,12 @@ public class ImageServiceImpl implements ImageService{
 
     @Override
     public List<ImageDTO> addImages(Long productId, List<MultipartFile> files){
+        System.out.println("Adding multiple images for product ID: " + productId);
         return files.stream().map(file -> {
             try {
                 return addImage(productId, file);
             } catch (Exception e) {
-                throw new RuntimeException("Failed to upload image", e);
+                throw new RuntimeException("Failed to upload image: " + file.getOriginalFilename(), e);
             }
         }).collect(Collectors.toList());
     }
