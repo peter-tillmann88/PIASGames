@@ -22,8 +22,14 @@ public class UserRegistrationDTO {
     @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Phone number is invalid")
     private String phone;
 
-    // Getters and Setters
+    private String creditCard;
+    private String expiryDate;
+    private String country;
+    private String province;
+    private String address;
+    private String postalCode;
 
+    // Getters and Setters
     public String getUsername() {
         return username;
     }
@@ -36,7 +42,6 @@ public class UserRegistrationDTO {
         return password;
     }
 
-    // Ensure password is not exposed in responses
     public void setPassword(String password) {
         this.password = password;
     }
@@ -45,7 +50,6 @@ public class UserRegistrationDTO {
         return email;
     }
 
-    // Ensure email is properly validated
     public void setEmail(String email) {
         this.email = email;
     }
@@ -54,8 +58,55 @@ public class UserRegistrationDTO {
         return phone;
     }
 
-    // Optional field; validate if present
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 }
