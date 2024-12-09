@@ -229,9 +229,7 @@ function Profile() {
                         </>
                     ) : (
                         <>
-                            <p className="mb-4 text-lg">
-                                <strong>Username:</strong> {userInfo.username || 'N/A'}
-                            </p>
+                        
                             <p className="mb-4 text-lg">
                                 <strong>Email:</strong> {userInfo.email || 'N/A'}
                             </p>
