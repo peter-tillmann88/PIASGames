@@ -5,6 +5,8 @@ import com.eecs4413final.demo.dto.UserUpdateDTO;
 import com.eecs4413final.demo.model.User;
 import java.util.Optional;
 
+
+
 public interface UserService {
 
     User registerUser(UserRegistrationDTO registrationDto);

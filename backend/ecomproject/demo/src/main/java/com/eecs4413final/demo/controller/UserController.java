@@ -4,6 +4,9 @@ import com.eecs4413final.demo.dto.ChangePasswordDTO;
 import com.eecs4413final.demo.dto.UserRegistrationDTO;
 import com.eecs4413final.demo.dto.UserResponseDTO;
 import com.eecs4413final.demo.dto.UserUpdateDTO;
+
+
+
 import com.eecs4413final.demo.exception.EmailAlreadyExistsException;
 import com.eecs4413final.demo.exception.UsernameAlreadyExistsException;
 import com.eecs4413final.demo.model.User;
@@ -137,5 +140,10 @@ public class UserController {
         }
     }
 
-    
+    @GetMapping("/wishlist")
+    public ResponseEntity<List<?>> getWishlist(@RequestParam String username) {
+        // Placeholder for wishlist retrieval logic
+        // Replace '?' with your actual WishlistItemDTO or appropriate class once implemented
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
 }
