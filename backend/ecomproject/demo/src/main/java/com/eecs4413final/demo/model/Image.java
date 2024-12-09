@@ -1,6 +1,5 @@
 package com.eecs4413final.demo.model;
 
-import java.sql.Blob;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,78 +7,68 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long imageId;
+    private Long id;
+
     private String fileName;
+
     private String fileType;
 
-    @Lob
-    private Blob img;
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "productID")
     private Product product;
 
-    public Image(){
-
+    // Constructors
+    public Image() {
     }
 
-        // Parameterized Constructor
-    public Image(String fileName, String fileType, Blob img, Product product) {
+    public Image(String fileName, String fileType, String imageUrl, Product product) {
         this.fileName = fileName;
         this.fileType = fileType;
-        this.img = img;
+        this.imageUrl = imageUrl;
         this.product = product;
     }
 
     // Getters and Setters
+
     public Long getId() {
-        return imageId;
+        return id;
     }
 
-    public void setId(Long id) {
-        this.imageId = id;
-    }
+    // ... other getters and setters
 
     public String getFileName() {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(String fileName){
         this.fileName = fileName;
     }
 
-    public String getFileType() {
+    public String getFileType(){
         return fileType;
     }
 
-    public void setFileType(String fileType) {
+    public void setFileType(String fileType){
         this.fileType = fileType;
     }
 
-    public Blob getImg() {
-        return img;
+    public String getImageUrl(){
+        return imageUrl;
     }
 
-    public void setImg(Blob img) {
-        this.img = img;
+    public void setImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
     }
 
-    public Product getProduct() {
+    public Product getProduct(){
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(Product product){
         this.product = product;
     }
-    @Override
-    public String toString() {
-        return "Image{"
-                + "imageId=" + imageId
-                + ", fileName='" + fileName + '\''
-                + ", fileType='" + fileType + '\''
-                + ", img=" + img
-                + ", productID=" + product
-                + '}';
-    }
-}
 
+    // toString, equals, hashCode
+}

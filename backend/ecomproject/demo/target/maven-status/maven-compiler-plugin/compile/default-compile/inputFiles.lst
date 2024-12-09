@@ -1,66 +1,74 @@
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ShoppingCartService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\ProductRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\UserRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ProductServiceImpl.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\CategoryNotFoundException.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\CategoryService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\util\JwtUtil.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\controller\UserController.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\WishlistItem.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Image.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Product.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\WishlistService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\HomePageController.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Address.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\BlacklistService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\UserResponseDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\ProductNotFoundException.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\WishlistServiceImpl.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\ImageRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Customer.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Wishlist.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\UserServiceImpl.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\UserRegistrationDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\CategoriesDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ImageService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\ProductDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Review.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\CustomerRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\UsernameAlreadyExistsException.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ProductService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\ChangePasswordDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\CategoryExistsException.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ShoppingCartItemServiceImpl.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\PaymentStatus.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\CategoriesRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ShoppingCartServiceImpl.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\ShoppingCartNotFoundException.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\AdministratorRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Categories.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\WishlistItemRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Order.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\PaymentMethod.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\controller\WishlistController.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\WishlistRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\User.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\GlobalExceptionHandler.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\OrderItem.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\ShoppingCart.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\ShoppingCartItemRepository.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\ShoppingCartItems.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\UserService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Administrator.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ShoppingCartItemService.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\controller\AuthController.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\CategoryServiceImpl.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\VGameStoreApplication.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\WishlistDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\LoginRequestDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\ErrorResponse.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\model\Payment.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\service\ImageServiceImpl.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\ImageNotFoundException.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\exception\EmailAlreadyExistsException.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\config\SecurityConfig.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\dto\ImageDTO.java
-C:\Users\Peter\Documents\GitHub\Ecommmerce-webapp\backend\ecomproject\demo\src\main\java\com\eecs4413final\demo\repository\ShoppingCartRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/UserController.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/config/SecurityConfig.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Administrator.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/User.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/BlacklistService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/AuthController.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Address.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ImageServiceImpl.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/ErrorResponse.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ShoppingCartItemServiceImpl.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ProductService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/EmailAlreadyExistsException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/config/EnvConfig.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/UserRegistrationDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/ProductRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Customer.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/CategoryService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ChangePasswordDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/ShoppingCart.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/CategoryNotFoundException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Payment.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Review.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/ImageNotFoundException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ShoppingCartItemService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Image.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/HomePageController.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/AdministratorRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/ShoppingCartNotFoundException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/UserRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Order.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/ProductController.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/UserServiceImpl.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/WishlistItemRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/CategoryController.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/WishlistDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/CategoriesResponseDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/CustomerRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/ShoppingCartItemRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/WishlistRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/OrderItem.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/WishlistItem.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/CategoriesDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Product.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/LoginRequestDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/WishlistController.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/PaymentMethod.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/GlobalExceptionHandler.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/UsernameAlreadyExistsException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ImageService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/CategoryExistsException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ProductServiceImpl.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ShoppingCartServiceImpl.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ImageDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ShoppingCartService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/WishlistServiceImpl.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/ShoppingCartRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/UserService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Categories.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ObjectResponseDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/PaymentStatus.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Wishlist.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/ImageRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/SupabaseStorageService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/ImageTooLargeException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/VGameStoreApplication.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ProductResponseDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ProductDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/ShoppingCartItems.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/CategoryServiceImpl.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/ProductNotFoundException.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/util/JwtUtil.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/WishlistService.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/UserResponseDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/CategoriesRepository.java

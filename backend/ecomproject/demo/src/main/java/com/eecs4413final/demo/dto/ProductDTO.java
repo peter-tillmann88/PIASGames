@@ -1,7 +1,6 @@
 package com.eecs4413final.demo.dto;
 
 import com.eecs4413final.demo.model.Categories;
-import com.eecs4413final.demo.model.Image;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +8,6 @@ import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 public class ProductDTO {
 
@@ -30,7 +28,6 @@ public class ProductDTO {
     @Min(value = 0, message = "Product stock must be non-negative")
     private int stock;
 
-
     private float saleMod;
 
     @NotBlank(message = "Product platform is required")
@@ -38,7 +35,6 @@ public class ProductDTO {
 
     @NotNull(message = "Product categories are required")
     private List<Categories> categories;
-    private List<String> imageNames;
 
     // Getters and Setters
     public String getDeveloper() {
@@ -97,11 +93,15 @@ public class ProductDTO {
         this.platform = platform;
     }
 
-    public void addCategory(Categories categories){
-        this.categories.add(categories);
-    }
-
     public List<Categories> getCategories() {
         return categories;
+    }
+
+    public void setCategories(List<Categories> categories) {
+        this.categories = categories;
+    }
+
+    public void addCategory(Categories category){
+        this.categories.add(category);
     }
 }
