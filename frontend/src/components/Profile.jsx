@@ -1,63 +1,88 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Header from '../screen/homepage/Header';
+import Footer from '../components/Footer';
 
 function Profile() {
     const [userInfo, setUserInfo] = useState({
-        name: '',
+        username: '',
         email: '',
-        address: '',
-        creditCard: ''
+        phone: '',
+        role: '',
+        createdAt: ''
     });
 
+    const [username, setUsername] = useState('');
+
     useEffect(() => {
-        // Simulate fetching user info from an API
-        const user = JSON.parse(localStorage.getItem('userInfo')) || {};
-        setUserInfo(user);
+        const savedUsername = localStorage.getItem('username');
+        if (savedUsername) {
+            setUsername(savedUsername);
+            fetchUserProfile(savedUsername);
+        }
     }, []);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setUserInfo({ ...userInfo, [name]: value });
+    const fetchUserProfile = async (username) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/users/profile`, {
+                params: { username }
+            });
+            setUserInfo(response.data);
+        } catch (error) {
+            alert('Error fetching user profile');
+        }
     };
 
-    const handleSave = () => {
-        // Save updated info to API or localStorage
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
-        alert('Profile updated!');
+    const handleDeleteAccount = async () => {
+        try {
+            await axios.delete(`http://localhost:8080/api/users/profile`, {
+                params: { username }
+            });
+            alert('Account deleted successfully');
+            localStorage.removeItem('username');
+            setUserInfo({
+                username: '',
+                email: '',
+                phone: '',
+                role: '',
+                createdAt: ''
+            });
+        } catch (error) {
+            alert('Error deleting account');
+        }
     };
 
     return (
-        <div className="p-6">
-            <h1>Account Settings</h1>
-            <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={userInfo.name}
-                onChange={handleInputChange}
-            />
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={userInfo.email}
-                onChange={handleInputChange}
-            />
-            <input
-                type="text"
-                name="address"
-                placeholder="Address"
-                value={userInfo.address}
-                onChange={handleInputChange}
-            />
-            <input
-                type="text"
-                name="creditCard"
-                placeholder="Credit Card Info"
-                value={userInfo.creditCard}
-                onChange={handleInputChange}
-            />
-            <button onClick={handleSave}>Save</button>
-        </div>
+        <>
+            <Header />
+            <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 py-12">
+                <h2 className="text-3xl font-bold mb-6">Profile</h2>
+                <div className="bg-white p-6 rounded shadow-lg w-full max-w-4xl">
+                    <p className="mb-4 text-lg">
+                        <strong>Username:</strong> {userInfo.username || 'N/A'}
+                    </p>
+                    <p className="mb-4 text-lg">
+                        <strong>Email:</strong> {userInfo.email || 'N/A'}
+                    </p>
+                    <p className="mb-4 text-lg">
+                        <strong>Phone:</strong> {userInfo.phone || 'N/A'}
+                    </p>
+                    <p className="mb-4 text-lg">
+                        <strong>Role:</strong> {userInfo.role || 'N/A'}
+                    </p>
+                    <p className="mb-4 text-lg">
+                        <strong>Created At:</strong> {userInfo.createdAt || 'N/A'}
+                    </p>
+                    <button
+                        onClick={handleDeleteAccount}
+                        className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-700"
+                    >
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+            <Footer />
+        </>
     );
 }
 

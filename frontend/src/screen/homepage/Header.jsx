@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logo.svg'; // Import logo from assets
-import cartIcon from '../../assets/img/cart-icon.svg';  // Cart icon (replace with your actual cart icon)
+import cartIcon from '../../assets/img/cart-icon.svg'; // Cart icon
 import SearchBar from '../../components/SearchBar';
 
 function Header() {
@@ -9,18 +9,17 @@ function Header() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Simulate fetching auth state (this could be from localStorage or API)
-        const authStatus = localStorage.getItem('authStatus'); // Example check
-        if (authStatus === 'loggedIn') {
-            setIsAuthenticated(true);
-        }
+        // Check for accessToken to determine login state
+        const accessToken = localStorage.getItem('accessToken');
+        setIsAuthenticated(!!accessToken); // Update login state
     }, []);
 
     const handleSignOut = () => {
-        // Remove authentication status from localStorage or your authentication method
-        localStorage.removeItem('authStatus');
+        // Remove tokens from localStorage
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         setIsAuthenticated(false);
-        navigate('/'); // Redirect to home page after logout
+        navigate('/'); // Redirect to home page
     };
 
     return (
@@ -46,7 +45,6 @@ function Header() {
 
                 {/* Right-aligned buttons and Cart Icon */}
                 <div className="flex items-center space-x-4 ml-4">
-                    {/* Login/SignUp buttons or Profile and SignOut buttons */}
                     {!isAuthenticated ? (
                         <>
                             <Link to="/login">
