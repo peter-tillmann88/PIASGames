@@ -6,9 +6,11 @@ import com.eecs4413final.demo.exception.CategoryNotFoundException;
 import com.eecs4413final.demo.model.Categories;
 import com.eecs4413final.demo.repository.CategoriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CategoryServiceImpl implements CategoryService{
 
     private final CategoriesRepository categoriesRepository;
@@ -44,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public  Categories addCategory(Categories category){
+    public Categories addCategory(Categories category){
         if(categoriesRepository.findByName(category.getName()) != null){
             throw new CategoryExistsException("Category already exists with the name: " + category.getName());
         }
@@ -52,9 +54,21 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public  Categories addCategory(CategoriesDTO category){//probably not needed
-        return null;
+    public Categories addCategory(CategoriesDTO categoryDTO) {
+        // Check if a category with the same name already exists
+        if (categoriesRepository.findByName(categoryDTO.getName()) != null) {
+            throw new CategoryExistsException("Category already exists with the name: " + categoryDTO.getName());
+        }
+
+        Categories newCat = new Categories();
+        newCat.setName(categoryDTO.getName());
+        newCat.setDescription(categoryDTO.getDescription());
+        // Removed the line below to prevent errors
+        // newCat.setProducts(categoryDTO.getProducts());
+
+        return categoriesRepository.save(newCat);
     }
+
 
     @Override
     public void deleteById(Long id){

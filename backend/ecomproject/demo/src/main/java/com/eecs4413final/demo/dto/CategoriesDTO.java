@@ -1,7 +1,10 @@
 package com.eecs4413final.demo.dto;
 
+import com.eecs4413final.demo.model.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.Set;
 
 public class CategoriesDTO {
 

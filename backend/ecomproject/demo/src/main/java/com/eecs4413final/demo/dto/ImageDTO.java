@@ -3,9 +3,24 @@ package com.eecs4413final.demo.dto;
 public class ImageDTO {
     private Long id;
     private String fileName;
+    private String fileType;
+    private String imageUrl;
 
-    public Long getId(){
-        return this.id;
+    // Constructors
+    public ImageDTO() {
+    }
+
+    public ImageDTO(Long id, String fileName, String fileType, String imageUrl) {
+        this.id = id;
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.imageUrl = imageUrl;
+    }
+
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id){
@@ -13,11 +28,26 @@ public class ImageDTO {
     }
 
     public String getFileName(){
-        return this.fileName;
+        return fileName;
     }
 
-    public void setFileName(String name){
-        this.fileName = name;
+    public void setFileName(String fileName){
+        this.fileName = fileName;
     }
 
+    public String getFileType(){
+        return fileType;
+    }
+
+    public void setFileType(String fileType){
+        this.fileType = fileType;
+    }
+
+    public String getImageUrl(){
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
 }

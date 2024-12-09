@@ -7,9 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ImageService {
-
     Image getById(Long id);
     void deleteById(Long id);
-    List<ImageDTO> addImages(Long productId, List<MultipartFile> files);
-    public ImageDTO addImage(ImageDTO image);
+    ImageDTO addImage(Long productId, MultipartFile file) throws Exception;
+    List<ImageDTO> addImages(Long productId, List<MultipartFile> files) throws Exception;
 }

@@ -2,6 +2,8 @@
 
 package com.eecs4413final.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,7 +18,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "productID")
+    @Column(name = "productid")
     private Long productId;
 
     @Column(name = "name", nullable = false, length = 100)
@@ -43,9 +45,11 @@ public class Product {
 
     @ManyToMany
     @JoinTable(
-            name = "Product_Categories",
-            joinColumns = @JoinColumn(name = "productID"),
-            inverseJoinColumns = @JoinColumn(name = "categoryID"))
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "productid"),
+            inverseJoinColumns = @JoinColumn(name = "categoryid")
+    )
+    @JsonManagedReference
     private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true) //removes all images when item deleted
@@ -188,20 +192,16 @@ public class Product {
         image.setProduct(null);
     }
 
-    public void setMod(float mod){
-        this.saleMod = mod;
-    }
-
-    public float getMod(){
-        return saleMod;
-    }
-
     public void setPlatform(String platform){
         this.platform = platform;
     }
 
     public String getPlatform(){
         return platform;
+    }
+
+    public float getSaleMod(){
+        return saleMod;
     }
 
     // toString, equals, hashCode
@@ -235,5 +235,9 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(productId);
+    }
+
+    public void setSaleMod(float saleMod) {
+        this.saleMod = saleMod;
     }
 }
