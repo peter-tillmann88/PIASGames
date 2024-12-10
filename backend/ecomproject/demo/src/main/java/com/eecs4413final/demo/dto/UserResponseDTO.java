@@ -9,7 +9,7 @@ public class UserResponseDTO {
     private String username;
     private String email;
     private String phone;
-    private User.Role role;
+    private String role;
     private LocalDateTime createdAt;
     private String creditCard;
     private String expiryDate;
@@ -18,7 +18,7 @@ public class UserResponseDTO {
     private String address;
     private String postalCode;
 
-    public UserResponseDTO(Long userID, String username, String email, String phone, User.Role role,
+    public UserResponseDTO(Long userID, String username, String email, String phone, String role,
                            LocalDateTime createdAt, String creditCard, String expiryDate, 
                            String country, String province, String address, String postalCode) {
         this.userID = userID;
@@ -68,11 +68,11 @@ public class UserResponseDTO {
         this.phone = phone;
     }
 
-    public User.Role getRole() {
+    public String getRole() {
         return role;
     }
     
-    public void setRole(User.Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

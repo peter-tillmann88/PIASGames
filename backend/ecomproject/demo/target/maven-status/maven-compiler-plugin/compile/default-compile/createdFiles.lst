@@ -23,6 +23,7 @@ com/eecs4413final/demo/service/ShoppingCartItemServiceImpl.class
 com/eecs4413final/demo/model/PaymentMethod.class
 com/eecs4413final/demo/dto/UserResponseDTO.class
 com/eecs4413final/demo/exception/ErrorResponse.class
+com/eecs4413final/demo/dto/UserUpdateDTO.class
 com/eecs4413final/demo/model/WishlistItem.class
 com/eecs4413final/demo/service/ImageServiceImpl.class
 com/eecs4413final/demo/dto/WishlistDTO.class
