@@ -47,12 +47,13 @@ public class AuthController {
 
                 logger.info("JWT tokens generated for user: {}", user.getUsername());
 
-                // Return tokens
-                Map<String, String> tokens = new HashMap<>();
-                tokens.put("accessToken", accessToken);
-                tokens.put("refreshToken", refreshToken);
+                // Return tokens along with user role
+                Map<String, String> response = new HashMap<>();
+                response.put("accessToken", accessToken);
+                response.put("refreshToken", refreshToken);
+                response.put("role", user.getRole()); // Include the user's role in the response
 
-                return ResponseEntity.ok(tokens);
+                return ResponseEntity.ok(response);
             } catch (Exception e) {
                 logger.error("Error generating JWT tokens for user '{}': {}", user.getUsername(), e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

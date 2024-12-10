@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(passwordEncoder.encode(registrationDto.getPassword()));
         user.setEmail(registrationDto.getEmail());
         user.setPhone(registrationDto.getPhone());
-        user.setRole(User.Role.CUSTOMER);
+        user.setRole("CUSTOMER");
         user.setCreditCard(registrationDto.getCreditCard());
         user.setExpiryDate(registrationDto.getExpiryDate());
         user.setCountry(registrationDto.getCountry());

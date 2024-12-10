@@ -14,7 +14,12 @@ function LoginPage() {
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
-            navigate('/home');
+            const role = localStorage.getItem('role');
+            if (role === 'ADMIN') {
+                navigate('/admin-dashboard');
+            } else {
+                navigate('/home');
+            }
         }
     }, [navigate]);
 
@@ -34,15 +39,20 @@ function LoginPage() {
                 password,
             });
 
-            // Extract tokens from the response
-            const { accessToken, refreshToken } = response.data;
+            // Extract tokens and role from the response
+            const { accessToken, refreshToken, role } = response.data;
 
-            // Save tokens to localStorage
+            // Save tokens and role to localStorage
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('role', role);
 
-            // Refresh the page to update Header's state
-            window.location.reload();
+            // Redirect based on the role
+            if (role === 'ADMIN') {
+                navigate('/admin-dashboard'); // Redirect to admin dashboard
+            } else {
+                navigate('/home'); // Redirect to home for customers
+            }
         } catch (err) {
             console.error('Login failed:', err.response || err.message);
             if (err.response && err.response.status === 401) {

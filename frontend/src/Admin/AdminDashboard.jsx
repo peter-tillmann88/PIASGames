@@ -1,24 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Header from '../screen/homepage/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/Sidebar';
 
 function AdminDashboard() {
-    const [isAdmin, setIsAdmin] = useState(false);
+    const navigate = useNavigate();
+    const [isAdmin, setIsAdmin] = useState(null); // Loading state for role verification
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const decodedToken = JSON.parse(atob(token.split('.')[1]));  // Decode JWT
-            if (decodedToken.admin) {
-                setIsAdmin(true);
-            }
+        const role = localStorage.getItem('role');
+        if (role === 'ADMIN') {
+            setIsAdmin(true); // Set as admin
+            console.log("THIS IS ADMIN");
+        } else {
+            setIsAdmin(false); // Not an admin
+            setTimeout(() => navigate('/'), 2000); // Redirect after 2 seconds
         }
-    }, []);
+    }, [navigate]);
 
-    if (!isAdmin) {
-        return <Redirect to="/" />; // Redirect if not admin
+    if (isAdmin === null) {
+        // Show a loading indicator while verifying the role
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
+    if (isAdmin === false) {
+        // Show an optional "Access Denied" message before redirecting
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <p>Access Denied. Redirecting to homepage...</p>
+            </div>
+        );
     }
 
     return (
