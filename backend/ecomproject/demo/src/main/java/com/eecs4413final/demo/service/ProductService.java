@@ -27,4 +27,5 @@ public interface ProductService {
 
     // New addProduct that also handles images
     Product addProduct(ProductDTO productDTO, List<MultipartFile> images) throws Exception;
+    List<Product> searchProductsByName(String query);
 }

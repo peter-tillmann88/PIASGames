@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../screen/homepage/Header';  // Ensure correct import
-import Sidebar from '../../components/Sidebar2';  // Ensure correct import
+import Sidebar from '../../components/Sidebar';  // Ensure correct import
 import GameCard from '../../components/GameCard';  // Ensure correct import
 import Footer from '../../components/Footer';  // Ensure correct import
 
