@@ -34,7 +34,7 @@ function Sidebar({ onFilterChange }) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
                 const data = await response.json();
-                setCategories(data);
+                setCategories(data.object); // Updated here
             } catch (error) {
                 console.error('Error fetching categories:', error);
                 setCategoriesError('Failed to load categories.');
@@ -69,7 +69,7 @@ function Sidebar({ onFilterChange }) {
     return (
         <div className="bg-white p-4 rounded-md shadow-md">
             <h3 className="text-lg font-semibold">Filter Products</h3>
-            
+
             {/* Category Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Category</label>

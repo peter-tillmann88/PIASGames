@@ -32,12 +32,12 @@ private final CategoryService categoryService;
         try{
             List<Categories> categories = categoryService.getAllCategories();
             ObjectResponseDTO response = new ObjectResponseDTO("Found", categories);
-            return new ResponseEntity<>(response, HttpStatus.FOUND);
+            return new ResponseEntity<>(response, HttpStatus.OK); // Changed to OK
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
     @PostMapping("/add")
     public ResponseEntity<CategoriesResponseDTO> addCategory(@Valid @RequestBody CategoriesDTO category) {
