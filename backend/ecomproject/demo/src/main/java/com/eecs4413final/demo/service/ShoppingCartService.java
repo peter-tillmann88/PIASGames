@@ -10,5 +10,6 @@ public interface ShoppingCartService {
     void clearCart(Long cartId);
     BigDecimal getTotalPrice(Long cartId);
     ShoppingCart getCartByUser(Long userId);
+    ShoppingCart makeNewCart(Long userId);
 
 }

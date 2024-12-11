@@ -7,7 +7,7 @@ import java.util.List;
 public interface ShoppingCartItemService {
 
     void addItemToCart(Long cartId, Long productId, int quantity);
-    void remvoveItemFromCart(Long cartId, Long productId, int quantity);
-    void remvoveItemFromCart(Long cartId, Long productId);
+    void removeItemFromCart(Long cartId, Long productId, int quantity);
+    void removeItemFromCart(Long cartId, Long productId);
     ShoppingCartItems getCartItem(Long cartId, Long productId);
 }
