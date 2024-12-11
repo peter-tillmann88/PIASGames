@@ -9,11 +9,20 @@ function GameCard({ game }) {
         // Fetch signed URL dynamically if images exist
         async function fetchSignedUrl() {
             if (game.images && game.images.length > 0) {
-                const fileName = game.images[0].imageUrl; // Assuming imageUrl holds the file name
+                // Extract the file name from the full URL or path
+                let fileName = game.images[0].imageUrl;
+
+                // Remove extra parts of the URL if necessary
+                if (fileName.includes('/')) {
+                    fileName = fileName.split('/').pop(); // Get the last part of the URL
+                }
+
+                // Decode URL-encoded characters (like %20 for spaces)
+                fileName = decodeURIComponent(fileName);
 
                 try {
                     // Call the API to get the signed URL
-                    const response = await fetch(`/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
+                    const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
 
                     if (response.ok) {
                         const data = await response.json();
