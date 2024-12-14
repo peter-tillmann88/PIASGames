@@ -1,19 +1,59 @@
-import React, { useState } from 'react';
+// Sidebar.js
+import React, { useState, useEffect } from 'react';
 
 function Sidebar({ onFilterChange }) {
+    // Hardcoded Platforms
+    const platforms = [
+        "PC",
+        "Nintendo Switch",
+        "PS4",
+        "PS5",
+        "Xbox Series X"
+    ];
+
+    // State for Categories
+    const [categories, setCategories] = useState([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
+    const [categoriesError, setCategoriesError] = useState(null);
+
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectedGenre, setSelectedGenre] = useState('');
+    const [selectedPlatform, setSelectedPlatform] = useState('');
     const [selectedPrice, setSelectedPrice] = useState('');
     const [selectedSort, setSelectedSort] = useState('');
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/categories/all', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                const data = await response.json();
+                setCategories(data.object); // Updated here
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                setCategoriesError('Failed to load categories.');
+            } finally {
+                setCategoriesLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     const handleCategoryChange = (e) => {
         setSelectedCategory(e.target.value);
         onFilterChange('category', e.target.value);
     };
 
-    const handleGenreChange = (e) => {
-        setSelectedGenre(e.target.value);
-        onFilterChange('genre', e.target.value);
+    const handlePlatformChange = (e) => {
+        setSelectedPlatform(e.target.value);
+        onFilterChange('platform', e.target.value);
     };
 
     const handlePriceChange = (e) => {
@@ -30,39 +70,47 @@ function Sidebar({ onFilterChange }) {
         <div className="bg-white p-4 rounded-md shadow-md">
             <h3 className="text-lg font-semibold">Filter Products</h3>
 
-            {/* Category filter */}
+            {/* Category Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Category</label>
-                <select
-                    value={selectedCategory}
-                    onChange={handleCategoryChange}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                >
-                    <option value="">All Categories</option>
-                    <option value="xbox">Xbox</option>
-                    <option value="playstation">PlayStation</option>
-                    <option value="pc">PC</option>
-                    <option value="switch">Switch</option>
-                </select>
+                {categoriesLoading ? (
+                    <div className="mt-1 text-sm text-gray-500">Loading categories...</div>
+                ) : categoriesError ? (
+                    <div className="mt-1 text-sm text-red-500">{categoriesError}</div>
+                ) : (
+                    <select
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map((category) => (
+                            <option key={category.categoryId} value={category.name}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                )}
             </div>
 
-            {/* Genre filter */}
+            {/* Platform Filter */}
             <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700">Genre</label>
+                <label className="block text-sm font-medium text-gray-700">Platform</label>
                 <select
-                    value={selectedGenre}
-                    onChange={handleGenreChange}
+                    value={selectedPlatform}
+                    onChange={handlePlatformChange}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 >
-                    <option value="">All Genres</option>
-                    <option value="action">Action</option>
-                    <option value="adventure">Adventure</option>
-                    <option value="rpg">RPG</option>
-                    <option value="sports">Sports</option>
+                    <option value="">All Platforms</option>
+                    {platforms.map((platform, index) => (
+                        <option key={index} value={platform}>
+                            {platform}
+                        </option>
+                    ))}
                 </select>
             </div>
 
-            {/* Price filter */}
+            {/* Price Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Price</label>
                 <select
@@ -76,7 +124,7 @@ function Sidebar({ onFilterChange }) {
                 </select>
             </div>
 
-            {/* Sorting by Name */}
+            {/* Sort By Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Sort By</label>
                 <select
@@ -91,6 +139,7 @@ function Sidebar({ onFilterChange }) {
             </div>
         </div>
     );
+
 }
 
 export default Sidebar;

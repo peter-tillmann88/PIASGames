@@ -167,4 +167,10 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException("Product not found with id: " + productId);
         }
     }
+
+    @Override
+    public List<Product> searchProductsByName(String query) {
+        // Use the correctly defined repository method
+        return productRepository.findByNameContainingIgnoreCase(query);
+    }
 }

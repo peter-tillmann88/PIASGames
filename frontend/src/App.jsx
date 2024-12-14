@@ -11,7 +11,7 @@ import PlaystationPage from './screen/playstation/PlaystationPage';
 import PcPage from './screen/pc/PcPage';
 import SwitchPage from './screen/switch/SwitchPage';
 import Footer from "./components/Footer.jsx";
-import SearchResultsPage from "./components/SearchResultsPage.jsx";
+import SearchPage from "./components/SearchPage.jsx";
 import RegisterPage from './components/Register';
 import ProfilePage from './components/Profile';
 import AdminDashboard from './Admin/AdminDashboard';
@@ -29,8 +29,9 @@ function App() {
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/game/:id" element={<GameDetailPage />} />
             <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+            <Route path="/gamedetailpage/:id" element={<GameDetailPage />} />
             <Route path="/footer" element={<Footer />} />
-            <Route path="/search" element={<SearchResultsPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} /> {/* Admin Dashboard */}

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+@CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
@@ -30,12 +32,12 @@ private final CategoryService categoryService;
         try{
             List<Categories> categories = categoryService.getAllCategories();
             ObjectResponseDTO response = new ObjectResponseDTO("Found", categories);
-            return new ResponseEntity<>(response, HttpStatus.FOUND);
+            return new ResponseEntity<>(response, HttpStatus.OK); // Changed to OK
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
     @PostMapping("/add")
     public ResponseEntity<CategoriesResponseDTO> addCategory(@Valid @RequestBody CategoriesDTO category) {

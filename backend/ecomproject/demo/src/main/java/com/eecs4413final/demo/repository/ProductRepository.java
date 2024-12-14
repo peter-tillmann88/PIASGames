@@ -21,4 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByPlatformAndName(String platform, String name);
 
     boolean existsByName(String name);
+
+    // Correctly placed method without nesting
+    List<Product> findByNameContainingIgnoreCase(String name);
 }

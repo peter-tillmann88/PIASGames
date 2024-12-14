@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Use useNavigate for React Router v6+
+import { useNavigate } from 'react-router-dom';
 
 function SearchBar() {
     const [query, setQuery] = useState('');
-    const navigate = useNavigate(); // useNavigate for React Router v6+
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
         e.preventDefault();
         if (query.trim()) {
-            navigate(`/search?query=${query}`); // Navigating to the search page with query params
+            navigate(`/search?query=${encodeURIComponent(query.trim())}`);
         }
     };
 
@@ -18,7 +18,7 @@ function SearchBar() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search for games..."
+                placeholder="Search for products..."
                 className="px-4 py-2 rounded bg-gray-700 text-white"
             />
             <button type="submit" className="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-700">

@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -191,6 +191,47 @@ public class ProductController {
         } catch (Exception e) {
             responseDTO.setMessage("An unexpected error occurred: " + e.getMessage());
             return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String query) {
+        try {
+            List<Product> products = productService.searchProductsByName(query);
+
+            // Map each Product entity to ProductResponseDTO
+            List<ProductResponseDTO> productDTOs = products.stream()
+                    .map(product -> {
+                        List<ImageDTO> imageDTOs = product.getImages() != null
+                                ? product.getImages().stream()
+                                .map(image -> new ImageDTO(
+                                        image.getId(),
+                                        image.getFileName(),
+                                        image.getFileType(),
+                                        image.getImageUrl()))
+                                .collect(Collectors.toList())
+                                : null;
+
+                        Set<Categories> categories = product.getCategoryList();
+
+                        return new ProductResponseDTO(
+                                product.getProductId(),
+                                product.getName(),
+                                product.getDeveloper(),
+                                product.getDescription(),
+                                product.getPrice(),
+                                product.getStock(),
+                                product.getSaleMod(),
+                                categories,
+                                imageDTOs,
+                                product.getPlatform()
+                        );
+                    })
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(productDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
