@@ -55,7 +55,7 @@ function LoginPage() {
             }
         } catch (err) {
             console.error('Login failed:', err.response || err.message);
-            if (err.response && err.response.status === 401) { //adding random comments to push this normally
+            if (err.response && err.response.status === 401) {
                 setError('Invalid username or password');
             } else {
                 setError('An error occurred while logging in. Please try again.');
@@ -102,6 +102,17 @@ function LoginPage() {
                     >
                         Log In
                     </button>
+
+                    <div className="mt-4 text-center">
+                        <p>Don't have an account?</p>
+                        <button
+                            type="button"
+                            onClick={() => navigate('/register')} // Navigate to RegisterPage
+                            className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-700 mt-2"
+                        >
+                            Register
+                        </button>
+                    </div>
                 </form>
             </div>
             <Footer />
