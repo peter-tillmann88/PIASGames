@@ -47,6 +47,9 @@ public class User {
     @Column(length = 20, nullable = true)
     private String postalCode;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ShoppingCart cart;
+
     public enum Role {
         CUSTOMER, ADMIN
     }
@@ -154,5 +157,13 @@ public class User {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public ShoppingCart getCart() {
+        return cart;
+    }
+
+    public void setCart(ShoppingCart cart) {
+        this.cart = cart;
     }
 }

@@ -9,7 +9,9 @@ import com.eecs4413final.demo.dto.UserUpdateDTO;
 
 import com.eecs4413final.demo.exception.EmailAlreadyExistsException;
 import com.eecs4413final.demo.exception.UsernameAlreadyExistsException;
+import com.eecs4413final.demo.model.ShoppingCart;
 import com.eecs4413final.demo.model.User;
+import com.eecs4413final.demo.service.ShoppingCartService;
 import com.eecs4413final.demo.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,28 +30,29 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ShoppingCartService shoppingCartService) {
         this.userService = userService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDto) {
-        User registeredUser = userService.registerUser(registrationDto);
+            User registeredUser = userService.registerUser(registrationDto);
 
-        UserResponseDTO responseDto = new UserResponseDTO(
-                registeredUser.getUserId(),
-                registeredUser.getUsername(),
-                registeredUser.getEmail(),
-                registeredUser.getPhone(),
-                registeredUser.getRole(),
-                registeredUser.getCreatedAt(),
-                registeredUser.getCreditCard(),
-                registeredUser.getExpiryDate(),
-                registeredUser.getCountry(),
-                registeredUser.getProvince(),
-                registeredUser.getAddress(),
-                registeredUser.getPostalCode()
-        );
+
+            UserResponseDTO responseDto = new UserResponseDTO(
+                    registeredUser.getUserId(),
+                    registeredUser.getUsername(),
+                    registeredUser.getEmail(),
+                    registeredUser.getPhone(),
+                    registeredUser.getRole(),
+                    registeredUser.getCreatedAt(),
+                    registeredUser.getCreditCard(),
+                    registeredUser.getExpiryDate(),
+                    registeredUser.getCountry(),
+                    registeredUser.getProvince(),
+                    registeredUser.getAddress(),
+                    registeredUser.getPostalCode()
+            );
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }

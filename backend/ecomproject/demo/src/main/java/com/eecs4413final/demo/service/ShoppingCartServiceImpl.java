@@ -4,18 +4,26 @@ import com.eecs4413final.demo.exception.ShoppingCartNotFoundException;
 import com.eecs4413final.demo.model.Product;
 import com.eecs4413final.demo.model.ShoppingCart;
 import com.eecs4413final.demo.model.ShoppingCartItems;
+import com.eecs4413final.demo.model.User;
 import com.eecs4413final.demo.repository.ShoppingCartRepository;
+import com.eecs4413final.demo.repository.UserRepository;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Set;
 
+@Service
 public class ShoppingCartServiceImpl implements ShoppingCartService{
 
 
     private final ShoppingCartRepository shoppingCartRepository;
 
-    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository) {
+
+    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, UserRepository userRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
+
     }
 
 
@@ -59,6 +67,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
         return shoppingCartRepository.findByUser_UserId(userId);
     }
 
+    @Override
+    public ShoppingCart makeNewCart(Long userId){
+        ShoppingCart cart = new ShoppingCart(userId);
+        cart.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        shoppingCartRepository.save(cart);
+        return cart;
+    }
 
-    //might need a create shopping cart method
 }

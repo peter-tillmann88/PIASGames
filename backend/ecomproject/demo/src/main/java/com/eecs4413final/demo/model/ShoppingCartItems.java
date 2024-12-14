@@ -1,12 +1,13 @@
 package com.eecs4413final.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "ShoppingCartItems")
+@Table(name = "shoppingcartitems")
 public class ShoppingCartItems {
 
 
@@ -16,7 +17,8 @@ public class ShoppingCartItems {
     private Long cartItemId;
 
     @ManyToOne
-    @JoinColumn(name = "cartID", nullable = false)
+    @JoinColumn(name = "cartid",referencedColumnName = "cartid", nullable = false)
+    @JsonIgnore
     private ShoppingCart shoppingCart;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -97,6 +99,17 @@ public class ShoppingCartItems {
     }
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+    @Override public String toString() {
+        return "ShoppingCartItems{"
+                + "cartItemID=" + cartItemId
+                + ", shoppingCartID=" + shoppingCart
+                + ", product=" + product
+                + ", quantity=" + quantity
+                + ", addedAt=" + addedAt
+                + ", unitPrice=" + unitPrice
+                + ", totalPrice=" + totalPrice
+                + '}';
     }
 
 }

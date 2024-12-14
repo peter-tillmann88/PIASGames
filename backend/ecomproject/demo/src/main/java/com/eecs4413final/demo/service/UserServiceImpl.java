@@ -4,6 +4,7 @@ import com.eecs4413final.demo.dto.UserRegistrationDTO;
 import com.eecs4413final.demo.dto.UserUpdateDTO;
 import com.eecs4413final.demo.exception.EmailAlreadyExistsException;
 import com.eecs4413final.demo.exception.UsernameAlreadyExistsException;
+import com.eecs4413final.demo.model.ShoppingCart;
 import com.eecs4413final.demo.model.User;
 import com.eecs4413final.demo.repository.UserRepository;
 import org.slf4j.Logger;
@@ -21,11 +22,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final ShoppingCartService shoppingCartService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ShoppingCartService shoppingCartService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @Override
@@ -55,9 +58,17 @@ public class UserServiceImpl implements UserService {
         user.setAddress(registrationDto.getAddress());
         user.setPostalCode(registrationDto.getPostalCode());
 
+
         try {
             User savedUser = userRepository.save(user);
+            ShoppingCart cart = shoppingCartService.makeNewCart(savedUser.getUserId());
+            savedUser.setCart(cart);
+            cart.setUser(savedUser);
+
+
+            userRepository.save(savedUser);
             logger.info("User '{}' registered successfully with ID {}", savedUser.getUsername(), savedUser.getUserId());
+
             return savedUser;
         } catch (Exception e) {
             logger.error("Error saving user '{}': {}", registrationDto.getUsername(), e.getMessage());
