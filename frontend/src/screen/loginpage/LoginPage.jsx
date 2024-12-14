@@ -18,7 +18,7 @@ function LoginPage() {
             if (role === 'ADMIN') {
                 navigate('/admin-dashboard');
             } else {
-                navigate('/home');
+                navigate('/');
             }
         }
     }, [navigate]);
@@ -51,7 +51,7 @@ function LoginPage() {
             if (role === 'ADMIN') {
                 navigate('/admin-dashboard'); // Redirect to admin dashboard
             } else {
-                navigate('/home'); // Redirect to home for customers
+                navigate('/'); // Redirect to home for customers
             }
         } catch (err) {
             console.error('Login failed:', err.response || err.message);

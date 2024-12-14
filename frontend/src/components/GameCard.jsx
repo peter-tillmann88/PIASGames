@@ -2,31 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function GameCard({ game }) {
-    // State to manage the current image source
-    const [imageSrc, setImageSrc] = useState('/placeholder.jpg'); // Default to placeholder
+    const [imageSrc, setImageSrc] = useState('/placeholder.jpg'); // Default placeholder
 
     useEffect(() => {
-        // Fetch signed URL dynamically if images exist
         async function fetchSignedUrl() {
             if (game.images && game.images.length > 0) {
-                // Extract the file name from the full URL or path
                 let fileName = game.images[0].imageUrl;
 
-                // Remove extra parts of the URL if necessary
                 if (fileName.includes('/')) {
-                    fileName = fileName.split('/').pop(); // Get the last part of the URL
+                    fileName = fileName.split('/').pop();
                 }
 
-                // Decode URL-encoded characters (like %20 for spaces)
                 fileName = decodeURIComponent(fileName);
 
                 try {
-                    // Call the API to get the signed URL
                     const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
 
                     if (response.ok) {
                         const data = await response.json();
-                        setImageSrc(data.signedUrl); // Set the signed URL as the image source
+                        setImageSrc(data.signedUrl);
                     } else {
                         console.error('Failed to fetch signed URL:', await response.text());
                     }
@@ -37,39 +31,31 @@ function GameCard({ game }) {
         }
 
         fetchSignedUrl();
-    }, [game.images]); // Dependency ensures it runs only when the images array changes
+    }, [game.images]);
 
-    // Generate categories text
     const categoriesText = (Array.isArray(game.categoryList) && game.categoryList.length > 0)
         ? game.categoryList.map(cat => cat.name).join(', ')
         : 'No category';
 
-    // Generate platform text
     const platformText = game.platform ? game.platform : 'No platform';
 
     return (
-        <Link to={`/gamedetailpage/${game.productId}`} className="block">
-            <div className="bg-white p-2 rounded-md shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer">
-                {/* Image with fallback */}
+        <Link to={`/gamedetailpage/${game.productId}`} className="block text-center">
+            {/* Image Section */}
+            <div className="relative w-full h-[300px]">
                 <img
                     src={imageSrc}
                     alt={game.name}
-                    className="w-full h-40 object-cover rounded-md"
-                    onError={() => setImageSrc('/placeholder.jpg')} // Fallback to placeholder
+                    className="w-full h-full object-contain"
+                    onError={() => setImageSrc('/placeholder.jpg')}
                 />
-
-                {/* Game Name */}
-                <h2 className="text-lg font-semibold mt-2">{game.name}</h2>
-
-                {/* Categories */}
-                <p className="text-xs text-gray-600 mt-1">Categories: {categoriesText}</p>
-
-                {/* Platform */}
-                <p className="text-xs text-gray-600 mt-0.5">Platform: {platformText}</p>
-
-                {/* Price */}
-                <p className="text-md font-bold text-gray-800 mt-1">${game.price.toFixed(2)}</p>
             </div>
+
+            {/* Game Info Section */}
+            <h2 className="text-base font-medium mt-2 truncate">{game.name}</h2>
+            <p className="text-xs text-gray-500 mt-1">Categories: {categoriesText}</p>
+            <p className="text-xs text-gray-500 mt-1">Platform: {platformText}</p>
+            <p className="text-lg font-bold text-gray-700 mt-2">${game.price.toFixed(2)}</p>
         </Link>
     );
 }
