@@ -9,12 +9,12 @@ function GameDetailPage() {
     const [imageUrls, setImageUrls] = useState(['/placeholder.jpg']);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [quantity, setQuantity] = useState(1);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // Helper function to fetch signed URLs for all images
     const fetchSignedUrls = async (images) => {
         const signedUrlPromises = images.map(async (image) => {
             let fileName = image.imageUrl;
-            // If there's a path involved, extract the filename:
             if (fileName.includes('/')) {
                 fileName = fileName.split('/').pop();
             }
@@ -42,10 +42,8 @@ function GameDetailPage() {
                 }
                 const data = await response.json();
 
-                // Set game details
                 setGame(data);
 
-                // If we have images, fetch signed URLs
                 if (data.images && data.images.length > 0) {
                     const urls = await fetchSignedUrls(data.images);
                     setImageUrls(urls);
@@ -62,7 +60,33 @@ function GameDetailPage() {
         fetchGame();
     }, [id]);
 
-    // Conditional Rendering based on state
+    const handleQuantityChange = (e) => {
+        const value = e.target.value === '' ? '' : Math.max(1, Math.min(game.stock, Number(e.target.value)));
+        setQuantity(value);
+    };
+
+    const handleBlur = () => {
+        if (quantity === '' || quantity < 1) {
+            setQuantity(1);
+        }
+    };
+
+    const incrementQuantity = () => {
+        setQuantity((prev) => Math.min(prev + 1, game.stock));
+    };
+
+    const decrementQuantity = () => {
+        setQuantity((prev) => Math.max(prev - 1, 1));
+    };
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? imageUrls.length - 1 : prevIndex - 1));
+    };
+
+    const handleNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex === imageUrls.length - 1 ? 0 : prevIndex + 1));
+    };
+
     if (loading) {
         return (
             <div className="flex flex-col min-h-screen">
@@ -99,7 +123,6 @@ function GameDetailPage() {
         );
     }
 
-    // Extract categories text
     const categoriesText = (Array.isArray(game.categoryList) && game.categoryList.length > 0)
         ? game.categoryList.map(cat => cat.name).join(', ')
         : 'No categories';
@@ -110,17 +133,33 @@ function GameDetailPage() {
             <main className="flex-grow flex items-center justify-center">
                 <div className="max-w-4xl w-full p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Images Section */}
-                        <div className="flex flex-col space-y-4">
-                            {imageUrls.map((url, index) => (
-                                <ImageWithFallback
-                                    key={index}
-                                    src={url}
-                                    alt={`${game.name} Image ${index + 1}`}
-                                    className="w-full h-40 object-cover rounded-md"
+                        {/* Image Carousel */}
+                        <div className="relative w-full flex flex-col items-center justify-center">
+                            <div className="relative w-full h-[400px] flex items-center justify-center">
+                                <button
+                                    onClick={handlePrevImage}
+                                    className="absolute left-0 bg-gray-200 text-gray-800 px-2 py-1 rounded-full hover:bg-gray-300"
+                                >
+                                    &#8249;
+                                </button>
+                                <img
+                                    src={imageUrls[currentImageIndex]}
+                                    alt={`${game.name} Image ${currentImageIndex + 1}`}
+                                    className="w-full h-full object-contain rounded-md p-2"
                                 />
-                            ))}
+                                <button
+                                    onClick={handleNextImage}
+                                    className="absolute right-0 bg-gray-200 text-gray-800 px-2 py-1 rounded-full hover:bg-gray-300"
+                                >
+                                    &#8250;
+                                </button>
+                            </div>
+                            {/* Image Count */}
+                            <div className="mt-2 text-sm text-gray-600">
+                                Image {currentImageIndex + 1}/{imageUrls.length}
+                            </div>
                         </div>
+
                         {/* Details Section */}
                         <div className="flex flex-col justify-center">
                             <h1 className="text-3xl font-bold">{game.name}</h1>
@@ -130,7 +169,43 @@ function GameDetailPage() {
                             <p className="text-sm text-gray-600 mt-1">Platform: {game.platform}</p>
                             <p className="text-sm text-gray-600 mt-1">Categories: {categoriesText}</p>
                             <p className="text-md text-gray-800 mt-4">{game.description}</p>
-                            <button className="bg-blue-500 px-4 py-2 mt-6 rounded text-white hover:bg-blue-700">
+
+                            {/* Quantity Section */}
+                            <div className="mt-4">
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Quantity:
+                                </label>
+                                <div className="flex items-center mt-2 space-x-2">
+                                    <button
+                                        onClick={decrementQuantity}
+                                        className="px-2 py-1 border rounded-md bg-gray-200 hover:bg-gray-300"
+                                        disabled={quantity <= 1}
+                                    >
+                                        -
+                                    </button>
+                                    <input
+                                        type="number"
+                                        value={quantity}
+                                        min="1"
+                                        max={game.stock}
+                                        onChange={handleQuantityChange}
+                                        onBlur={handleBlur}
+                                        className="w-20 p-2 text-center border border-gray-300 rounded-md"
+                                    />
+                                    <button
+                                        onClick={incrementQuantity}
+                                        className="px-2 py-1 border rounded-md bg-gray-200 hover:bg-gray-300"
+                                        disabled={quantity >= game.stock}
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button
+                                className={`bg-blue-500 px-4 py-2 mt-6 rounded text-white hover:bg-blue-700 ${quantity > game.stock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={quantity > game.stock}
+                            >
                                 Add to Cart
                             </button>
                         </div>
@@ -139,27 +214,6 @@ function GameDetailPage() {
             </main>
             <Footer />
         </div>
-    );
-}
-
-// Custom Image component with fallback logic
-function ImageWithFallback({ src, alt, className }) {
-    const [imgSrc, setImgSrc] = useState(src);
-
-    const handleError = () => {
-        if (imgSrc !== '/placeholder.jpg') {
-            setImgSrc('/placeholder.jpg');
-        }
-    };
-
-    return (
-        <img
-            src={imgSrc}
-            alt={alt}
-            className={className}
-            onError={handleError}
-            loading="lazy"
-        />
     );
 }
 
