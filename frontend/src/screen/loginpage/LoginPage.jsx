@@ -55,7 +55,7 @@ function LoginPage() {
             }
         } catch (err) {
             console.error('Login failed:', err.response || err.message);
-            if (err.response && err.response.status === 401) {
+            if (err.response && err.response.status === 401) { //adding random comments to push this normally
                 setError('Invalid username or password');
             } else {
                 setError('An error occurred while logging in. Please try again.');

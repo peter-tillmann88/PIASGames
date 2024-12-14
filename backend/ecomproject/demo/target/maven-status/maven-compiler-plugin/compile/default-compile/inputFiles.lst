@@ -4,10 +4,12 @@
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/PaymentStatus.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ProductDTO.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Image.java
+/Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ShoppingCartItemDTO.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/SupabaseStorageService.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ShoppingCartItemServiceImpl.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/GlobalExceptionHandler.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/WishlistDTO.java
+/Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ShoppingCartResponseDTO.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/ShoppingCartRepository.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/ProductRepository.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/ShoppingCart.java
@@ -42,6 +44,7 @@
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/AuthController.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/ShoppingCartItems.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/UserUpdateDTO.java
+/Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ShoppingCartItemResponseDTO.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/CategoriesDTO.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/WishlistItem.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/CategoriesResponseDTO.java
@@ -66,10 +69,12 @@
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/ShoppingCartService.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/CategoryNotFoundException.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Categories.java
+/Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/ShoppingCartController.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Review.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Administrator.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/CategoryService.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/ProductController.java
+/Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/ShoppingCartItemController.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/UserRegistrationDTO.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/UserController.java
 /Users/arahankadakia/Downloads/Ecommmerce-webapp/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/exception/ErrorResponse.java

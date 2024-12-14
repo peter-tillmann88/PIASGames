@@ -2,6 +2,7 @@ com/eecs4413final/demo/model/User$Role.class
 com/eecs4413final/demo/model/User.class
 com/eecs4413final/demo/service/UserServiceImpl.class
 com/eecs4413final/demo/service/BlacklistService.class
+com/eecs4413final/demo/dto/ShoppingCartItemResponseDTO.class
 com/eecs4413final/demo/repository/UserRepository.class
 com/eecs4413final/demo/dto/ObjectResponseDTO.class
 com/eecs4413final/demo/dto/CategoriesResponseDTO.class
@@ -12,10 +13,12 @@ com/eecs4413final/demo/service/UserService.class
 com/eecs4413final/demo/dto/CategoriesDTO.class
 com/eecs4413final/demo/dto/ProductDTO.class
 com/eecs4413final/demo/repository/AdministratorRepository.class
+com/eecs4413final/demo/controller/ShoppingCartItemController.class
 com/eecs4413final/demo/controller/WishlistController.class
 com/eecs4413final/demo/exception/ShoppingCartNotFoundException.class
 com/eecs4413final/demo/exception/ImageTooLargeException.class
 com/eecs4413final/demo/service/CategoryService.class
+com/eecs4413final/demo/dto/ShoppingCartItemDTO.class
 com/eecs4413final/demo/util/JwtUtil.class
 com/eecs4413final/demo/repository/ProductRepository.class
 com/eecs4413final/demo/repository/ShoppingCartItemRepository.class
@@ -29,6 +32,7 @@ com/eecs4413final/demo/service/ImageServiceImpl.class
 com/eecs4413final/demo/dto/WishlistDTO.class
 com/eecs4413final/demo/exception/EmailAlreadyExistsException.class
 com/eecs4413final/demo/service/ProductService.class
+com/eecs4413final/demo/controller/ShoppingCartController.class
 com/eecs4413final/demo/model/Wishlist.class
 com/eecs4413final/demo/service/SupabaseStorageService.class
 com/eecs4413final/demo/dto/LoginRequestDTO.class
@@ -74,4 +78,5 @@ com/eecs4413final/demo/model/Payment.class
 com/eecs4413final/demo/dto/ImageDTO.class
 com/eecs4413final/demo/service/ShoppingCartItemService.class
 com/eecs4413final/demo/model/ShoppingCart.class
+com/eecs4413final/demo/dto/ShoppingCartResponseDTO.class
 com/eecs4413final/demo/model/Address.class
