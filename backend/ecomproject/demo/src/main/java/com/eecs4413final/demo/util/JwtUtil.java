@@ -12,12 +12,10 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // Base64-encoded secret key (ensure it's at least 256 bits for HS256)
     private final String SECRET_KEY_BASE64 = "xzuSgIedcMpuHaOs4jWNs5SkdWzFwO7ypn4oQ6O4a2Va7QZlQR7xMAI9Iw5G93HjA1y45Z6pRQhoKutxJUz5YQ==";
-    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15; // 15 minutes
-    private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7 days
+    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15;
+    private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7;
 
-    // SecretKey object
     private final SecretKey SECRET_KEY;
 
     public JwtUtil() {
@@ -25,7 +23,6 @@ public class JwtUtil {
         SECRET_KEY = Keys.hmacShaKeyFor(decodedKey);
     }
 
-    // Generate Access Token
     public String generateAccessToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -35,7 +32,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Generate Refresh Token
     public String generateRefreshToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -45,7 +41,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // Validate Token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -54,13 +49,11 @@ public class JwtUtil {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            // Log the exception
             System.err.println("Invalid JWT token: " + e.getMessage());
             return false;
         }
     }
 
-    // Extract Username from Token
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)

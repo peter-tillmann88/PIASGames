@@ -1,10 +1,13 @@
 package com.eecs4413final.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 public class User {
 
     @Id
@@ -29,36 +32,31 @@ public class User {
     @Column(nullable = false, updatable = false)
     private final LocalDateTime createdAt;
 
-    @Column(length = 16, nullable = true)
+    @Column(length = 16)
     private String creditCard;
 
-    @Column(length = 5, nullable = true)
+    @Column(length = 5)
     private String expiryDate;
 
-    @Column(length = 50, nullable = true)
+    @Column(length = 50)
     private String country;
 
-    @Column(length = 50, nullable = true)
+    @Column(length = 50)
     private String province;
 
-    @Column(length = 255, nullable = true)
+    @Column(length = 255)
     private String address;
 
-    @Column(length = 20, nullable = true)
+    @Column(length = 20)
     private String postalCode;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ShoppingCart cart;
 
-    public enum Role {
-        CUSTOMER, ADMIN
-    }
-
     public User() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public Long getUserId() {
         return userId;
     }

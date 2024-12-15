@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../../assets/img/logo.svg'; 
-import cartIcon from '../../assets/img/cart-icon.svg'; 
+import logo from '../../assets/img/logo.svg';
+import cartIcon from '../../assets/img/cart-icon.svg';
 import SearchBar from '../../components/SearchBar';
 
 function Header() {
@@ -14,10 +14,17 @@ function Header() {
     }, []);
 
     const handleSignOut = () => {
+        // Remove tokens and user-related local storage
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('tempCart'); // Clear guest cart (if any)
+
+        // Reset authentication state
         setIsAuthenticated(false);
-        navigate('/'); 
+
+        // Redirect to home page
+        navigate('/');
     };
 
     return (
@@ -26,7 +33,7 @@ function Header() {
                 {/* Logo Section */}
                 <div className="flex items-center flex-shrink-0">
                     <Link to="/">
-                        <img src={logo} alt="Logo" className="h-16 w-auto" /> {/* Adjusted height for better scaling */}
+                        <img src={logo} alt="Logo" className="h-16 w-auto" />
                     </Link>
                 </div>
 

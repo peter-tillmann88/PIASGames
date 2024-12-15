@@ -5,10 +5,13 @@ import com.eecs4413final.demo.dto.UserRegistrationDTO;
 import com.eecs4413final.demo.dto.UserResponseDTO;
 import com.eecs4413final.demo.dto.UserUpdateDTO;
 import com.eecs4413final.demo.dto.WishlistDTO;
+import com.eecs4413final.demo.exception.EmailAlreadyExistsException;
+import com.eecs4413final.demo.exception.UsernameAlreadyExistsException;
 import com.eecs4413final.demo.model.User;
 import com.eecs4413final.demo.model.WishlistItem;
 import com.eecs4413final.demo.service.UserService;
 import com.eecs4413final.demo.service.WishlistService;
+import com.eecs4413final.demo.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,17 +29,18 @@ public class UserController {
 
     private final UserService userService;
     private final WishlistService wishlistService;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public UserController(UserService userService, WishlistService wishlistService) {
+    public UserController(UserService userService, WishlistService wishlistService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.wishlistService = wishlistService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDto) {
         User registeredUser = userService.registerUser(registrationDto);
-
         UserResponseDTO responseDto = new UserResponseDTO(
                 registeredUser.getUserId(),
                 registeredUser.getUsername(),
@@ -56,7 +60,17 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserResponseDTO> getUserProfile(@RequestParam String username) {
+    public ResponseEntity<UserResponseDTO> getUserProfile(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validateToken(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String username = jwtUtil.extractUsername(token);
         Optional<User> userOpt = userService.findByUsername(username);
 
         if (userOpt.isPresent()) {
@@ -83,8 +97,20 @@ public class UserController {
 
     @PutMapping("/profile")
     public ResponseEntity<?> updateUserProfile(
-            @RequestParam String username,
+            @RequestHeader("Authorization") String authHeader,
             @Valid @RequestBody UserUpdateDTO updateDto) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validateToken(token)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String username = jwtUtil.extractUsername(token);
+
         try {
             User updatedUser = userService.updateUserProfile(username, updateDto);
             UserResponseDTO responseDto = new UserResponseDTO(
@@ -109,8 +135,20 @@ public class UserController {
 
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(
-            @RequestParam String username,
+            @RequestHeader("Authorization") String authHeader,
             @Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validateToken(token)) {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        String username = jwtUtil.extractUsername(token);
+
         try {
             boolean isChanged = userService.changePassword(username, changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
             if (isChanged) {
@@ -149,7 +187,18 @@ public class UserController {
     }
 
     @DeleteMapping("/profile")
-    public ResponseEntity<String> deleteUserAccount(@RequestParam String username) {
+    public ResponseEntity<String> deleteUserAccount(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validateToken(token)) {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        String username = jwtUtil.extractUsername(token);
+
         try {
             userService.deleteUserByUsername(username);
             return new ResponseEntity<>("User account deleted successfully", HttpStatus.OK);
@@ -175,5 +224,5 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-}
+    }
 }

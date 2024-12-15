@@ -1,11 +1,14 @@
 package com.eecs4413final.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
 @Table(name = "shopping_carts")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "cartId")
 public class ShoppingCart {
 
     @Id
@@ -29,10 +32,7 @@ public class ShoppingCart {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-
-    public ShoppingCart(){
-
-    }
+    public ShoppingCart() {}
 
     public ShoppingCart(Long customerId, Set<ShoppingCartItems> shoppingCartItems) {
         this.customerId = customerId;
@@ -42,7 +42,7 @@ public class ShoppingCart {
     public ShoppingCart(Long customerId) {
         this.customerId = customerId;
     }
-    // Getters and Setters
+
     public Long getCartId() {
         return cartId;
     }
@@ -55,7 +55,7 @@ public class ShoppingCart {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(Long customerId){
         this.customerId = customerId;
     }
 
@@ -63,7 +63,7 @@ public class ShoppingCart {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(Timestamp createdAt){
         this.createdAt = createdAt;
     }
 
@@ -71,7 +71,7 @@ public class ShoppingCart {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt){
         this.updatedAt = updatedAt;
     }
 
@@ -79,38 +79,23 @@ public class ShoppingCart {
         return shoppingCartItems;
     }
 
-    public void setShoppingCartItems(Set<ShoppingCartItems> shoppingCartItems) {
+    public void setShoppingCartItems(Set<ShoppingCartItems> shoppingCartItems){
         this.shoppingCartItems = shoppingCartItems;
-    }
-
-    public void setUser(User user){
-        this.user = user;
     }
 
     public User getUser() {
         return user;
     }
 
-        public void addShoppingCartItems(ShoppingCartItems item){
+    public void setUser(User user){
+        this.user = user;
+    }
+
+    public void addShoppingCartItems(ShoppingCartItems item){
         this.shoppingCartItems.add(item);
     }
 
     public void removeShoppingCartItems(ShoppingCartItems item){
         this.shoppingCartItems.remove(item);
     }
-
-    @Override
-    public String toString() {
-        return "ShoppingCart{"
-                + "cartID=" + cartId
-                + ", customerID=" + customerId
-                + ", createdAt=" + createdAt
-                + ", updatedAt=" + updatedAt
-                + ", shoppingCartItems=" + shoppingCartItems
-                + ", user=" + user
-                + '}';
-    }
-
-
 }
-

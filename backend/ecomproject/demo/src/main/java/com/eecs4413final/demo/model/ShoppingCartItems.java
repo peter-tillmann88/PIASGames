@@ -1,15 +1,15 @@
 package com.eecs4413final.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "shoppingcartitems")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "cartItemId")
 public class ShoppingCartItems {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +17,7 @@ public class ShoppingCartItems {
     private Long cartItemId;
 
     @ManyToOne
-    @JoinColumn(name = "cartid",referencedColumnName = "cartid", nullable = false)
-    @JsonIgnore
+    @JoinColumn(name = "cartid", referencedColumnName = "cartid", nullable = false)
     private ShoppingCart shoppingCart;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -34,9 +33,7 @@ public class ShoppingCartItems {
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
 
-    public ShoppingCartItems(){
-
-    }
+    public ShoppingCartItems(){}
 
     public ShoppingCartItems(ShoppingCart shoppingCart, Product product, Integer quantity, BigDecimal unitPrice, BigDecimal totalPrice) {
         this.shoppingCart = shoppingCart;
@@ -47,12 +44,11 @@ public class ShoppingCartItems {
         this.addedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // Getters and Setters
     public Long getCartItemId() {
         return cartItemId;
     }
 
-    public void setCartItemId(Long cartItemId) {
+    public void setCartItemId(Long cartItemId){
         this.cartItemId = cartItemId;
     }
 
@@ -60,15 +56,15 @@ public class ShoppingCartItems {
         return shoppingCart;
     }
 
-    public void setShoppingCart(ShoppingCart shoppingCart) {
+    public void setShoppingCart(ShoppingCart shoppingCart){
         this.shoppingCart = shoppingCart;
     }
 
-    public Product getProduct() {
+    public Product getProduct(){
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(Product product){
         this.product = product;
     }
 
@@ -76,7 +72,7 @@ public class ShoppingCartItems {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Integer quantity){
         this.quantity = quantity;
     }
 
@@ -84,32 +80,23 @@ public class ShoppingCartItems {
         return addedAt;
     }
 
-    public void setAddedAt(Timestamp addedAt) {
+    public void setAddedAt(Timestamp addedAt){
         this.addedAt = addedAt;
     }
 
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
-    public void setUnitPrice(BigDecimal unitPrice) {
+
+    public void setUnitPrice(BigDecimal unitPrice){
         this.unitPrice = unitPrice;
     }
+
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
-    public void setTotalPrice(BigDecimal totalPrice) {
+
+    public void setTotalPrice(BigDecimal totalPrice){
         this.totalPrice = totalPrice;
     }
-    @Override public String toString() {
-        return "ShoppingCartItems{"
-                + "cartItemID=" + cartItemId
-                + ", shoppingCartID=" + shoppingCart
-                + ", product=" + product
-                + ", quantity=" + quantity
-                + ", addedAt=" + addedAt
-                + ", unitPrice=" + unitPrice
-                + ", totalPrice=" + totalPrice
-                + '}';
-    }
-
 }

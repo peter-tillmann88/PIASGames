@@ -14,7 +14,9 @@ function Profile() {
         country: '',
         province: '',
         role: '',
-        createdAt: ''
+        createdAt: '',
+        userID: '',
+        username: '',
     });
 
     const [username, setUsername] = useState('');
@@ -32,14 +34,19 @@ function Profile() {
         }
     }, []);
 
-    const fetchUserProfile = async (username) => {
+    const fetchUserProfile = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/users/profile`, {
-                params: { username }
+            const token = localStorage.getItem('accessToken');
+
+            const response = await axios.get('http://localhost:8080/api/users/profile', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             setUserInfo(response.data);
         } catch (error) {
             alert('Error fetching user profile');
+            console.error(error);
         }
     };
 
@@ -77,6 +84,8 @@ function Profile() {
     const handleSaveChanges = async () => {
         try {
             await axios.put(`http://localhost:8080/api/users/profile`, {
+                userID: userInfo.userID,
+                username: userInfo.username,
                 email: userInfo.email,
                 phone: userInfo.phone,
                 creditCard: userInfo.creditCard,
@@ -120,7 +129,9 @@ function Profile() {
                 country: '',
                 province: '',
                 role: '',
-                createdAt: ''
+                createdAt: '',
+                userID: '',
+                username: '',
             });
         } catch (error) {
             alert('Error deleting account');
@@ -226,6 +237,9 @@ function Profile() {
                         </>
                     ) : (
                         <>
+                            <p className="mb-4 text-lg">
+                                <strong>User ID:</strong> {userInfo.userID || 'N/A'}
+                            </p>
                             <p className="mb-4 text-lg">
                                 <strong>Email:</strong> {userInfo.email || 'N/A'}
                             </p>

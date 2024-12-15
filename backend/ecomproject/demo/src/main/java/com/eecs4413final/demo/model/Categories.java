@@ -1,12 +1,14 @@
 package com.eecs4413final.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "Categories")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "categoryId")
 public class Categories {
 
     @Id
@@ -21,10 +23,7 @@ public class Categories {
     private String description;
 
     @ManyToMany(mappedBy = "categoryList")
-    @JsonIgnore // Prevents serialization of products to avoid circular references
     private Set<Product> products = new HashSet<>();
-
-    // Constructors, Getters, Setters
 
     public Categories() {}
 
