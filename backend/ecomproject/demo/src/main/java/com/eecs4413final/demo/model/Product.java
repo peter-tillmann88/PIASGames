@@ -167,9 +167,10 @@ public class Product {
         return updatedAt;
     }
 
-    public void setUpdatedAt() {
-        this.updatedAt = LocalDateTime.now();
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
+    
 
     // Helper methods to manage bidirectional relationship
     public void addCategory(Categories category) {

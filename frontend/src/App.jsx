@@ -15,6 +15,9 @@ import SearchPage from "./components/SearchPage.jsx";
 import RegisterPage from './components/Register';
 import ProfilePage from './components/Profile';
 import AdminDashboard from './Admin/AdminDashboard';
+import ManageCustomers from './Admin/ManageCustomersPage.jsx';
+import ManageInventory from './Admin/ManageInventoryPage.jsx';
+import Saleshistory from './Admin/SalesHistoryPage.jsx';
 
 function App() {
     return (
@@ -34,7 +37,10 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} /> {/* Admin Dashboard */}
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/manage-customers" element={<ManageCustomers />} /> 
+            <Route path="/sales-history" element={<Saleshistory />} /> 
+            <Route path="/manage-inventory" element={<ManageInventory />} />  
         </Routes>
     );
 }

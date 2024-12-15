@@ -9,13 +9,11 @@ function Header() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         const accessToken = localStorage.getItem('accessToken');
         setIsAuthenticated(!!accessToken);
     }, []);
 
     const handleSignOut = () => {
-
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         setIsAuthenticated(false);
@@ -25,19 +23,20 @@ function Header() {
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="flex items-center justify-between max-w-7xl mx-auto">
-                <div className="flex items-center">
+                {/* Logo Section */}
+                <div className="flex items-center flex-shrink-0">
                     <Link to="/">
-                        <img src={logo} alt="Logo" className="h-24 w-auto" />
+                        <img src={logo} alt="Logo" className="h-16 w-auto" /> {/* Adjusted height for better scaling */}
                     </Link>
                 </div>
 
-
-                <div className="flex-1 mx-4">
+                {/* Search Bar Section */}
+                <div className="flex-1 mx-6">
                     <SearchBar />
                 </div>
 
-
-                <div className="flex items-center space-x-4">
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-4 flex-shrink-0">
                     {!isAuthenticated ? (
                         <>
                             <Link to="/login">
@@ -60,7 +59,6 @@ function Header() {
                             </button>
                         </>
                     )}
-
                     <Link to="/cart">
                         <img
                             src={cartIcon}
