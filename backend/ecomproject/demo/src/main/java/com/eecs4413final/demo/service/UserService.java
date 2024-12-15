@@ -4,6 +4,8 @@ package com.eecs4413final.demo.service;
 import com.eecs4413final.demo.dto.UserRegistrationDTO;
 import com.eecs4413final.demo.dto.UserUpdateDTO;
 import com.eecs4413final.demo.model.User;
+
+import java.util.List;
 import java.util.Optional;
 
 
@@ -16,4 +18,5 @@ public interface UserService {
     boolean changePassword(String username, String oldPassword, String newPassword);
     void deleteUserByUsername(String username);
     User updateUserProfile(String username, UserUpdateDTO updateDto);
+    List<User> getAllUsers();
 }

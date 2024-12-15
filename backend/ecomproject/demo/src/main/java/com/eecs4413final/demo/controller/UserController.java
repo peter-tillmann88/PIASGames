@@ -130,6 +130,31 @@ public class UserController {
             return new ResponseEntity<>("Error changing password: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/all")
+public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+    try {
+        List<User> users = userService.getAllUsers();
+        List<UserResponseDTO> userResponseList = users.stream().map(user -> new UserResponseDTO(
+                user.getUserId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getRole(),
+                user.getCreatedAt(),
+                user.getCreditCard(),
+                user.getExpiryDate(),
+                user.getCountry(),
+                user.getProvince(),
+                user.getAddress(),
+                user.getPostalCode()
+        )).toList();
+
+        return new ResponseEntity<>(userResponseList, HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 
     @DeleteMapping("/profile")
     public ResponseEntity<String> deleteUserAccount(@RequestParam String username) {
