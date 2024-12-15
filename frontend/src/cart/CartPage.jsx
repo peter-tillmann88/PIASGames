@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
+    const [originalCartItems, setOriginalCartItems] = useState([]); // To track original quantities
     const [user, setUser] = useState(null);
     const [shippingOption, setShippingOption] = useState('regular');
     const navigate = useNavigate();
@@ -14,8 +15,6 @@ function CartPage() {
         const token = localStorage.getItem('accessToken');
         let userId = localStorage.getItem('userId');
 
-
-        // If token is available but userId is null, try to fetch user profile
         const fetchUserProfile = async () => {
             if (token && !userId) {
                 try {
@@ -31,13 +30,10 @@ function CartPage() {
                     }
 
                     const data = await response.json();
-                    // Assuming your API returns { "userID": someValue }
                     userId = data.userID;
-                    // Store userID in localStorage if you want to persist it
                     localStorage.setItem('userId', userId);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
-                    // If we fail to get user info, user stays null
                 }
             }
 
@@ -55,7 +51,6 @@ function CartPage() {
         if (user !== null) {
             fetchCartItems();
         } else {
-            // If user is null, handle guest cart
             const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
             const updatedTempCart = tempCart.map(item => ({ ...item, imageUrl: '/placeholder.jpg' }));
             setCartItems(updatedTempCart);
@@ -84,7 +79,7 @@ function CartPage() {
 
     const fetchCartItems = async () => {
         if (!user) {
-            return; // no user, guest cart is already handled
+            return;
         }
 
         try {
@@ -110,6 +105,7 @@ function CartPage() {
 
             const cartItemsWithImages = await fetchSignedUrls(cartItemsFromServer);
             setCartItems(cartItemsWithImages);
+            setOriginalCartItems(cartItemsWithImages.map(item => ({ ...item }))); // Save original state
         } catch (error) {
             console.error('Error fetching cart items:', error);
         }
@@ -125,10 +121,7 @@ function CartPage() {
         }
 
         try {
-            const productId = cartItems.find(item => item.cartItemId === cartItemId)?.productid;
-            if (!productId) return;
-
-            await fetch(`/api/cart-items/cart/${user.userId}/item/${productId}/del`, {
+            await fetch(`http://localhost:8080/api/cart/item/${cartItemId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${user.token}`,
@@ -140,12 +133,35 @@ function CartPage() {
         }
     };
 
+    const handleUpdateQuantities = async () => {
+        const updates = cartItems.filter((item, index) => {
+            return item.quantity !== originalCartItems[index].quantity;
+        });
+
+        const updatePromises = updates.map(async (item) => {
+            await fetch(`http://localhost:8080/api/cart/item/${item.cartItemId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({ quantity: item.quantity }),
+            });
+        });
+
+        try {
+            await Promise.all(updatePromises);
+        } catch (error) {
+            console.error('Error updating quantities:', error);
+        }
+    };
+
     const calculateSubtotal = () => {
         return cartItems.reduce((acc, item) => acc + item.unit_price * item.quantity, 0);
     };
 
     const calculateTax = (subtotal) => {
-        return subtotal * 0.13; // HST 13%
+        return subtotal * 0.13;
     };
 
     const calculateShipping = () => {
@@ -156,13 +172,14 @@ function CartPage() {
         return subtotal + tax + shipping;
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         if (!user) {
             alert('You must be logged in to proceed to checkout.');
             navigate('/login');
             return;
         }
 
+        await handleUpdateQuantities(); // Update quantities before checkout
         navigate('/checkout');
     };
 
@@ -175,11 +192,16 @@ function CartPage() {
                     <p>Your cart is empty.</p>
                 ) : (
                     <div>
-                        {cartItems.map((item) => (
+                        {cartItems.map((item, index) => (
                             <CartItem
                                 key={item.cartItemId}
                                 item={item}
                                 onRemove={handleRemoveItem}
+                                onQuantityChange={(newQuantity) => {
+                                    const updatedCart = [...cartItems];
+                                    updatedCart[index].quantity = newQuantity;
+                                    setCartItems(updatedCart);
+                                }}
                             />
                         ))}
                     </div>
@@ -234,4 +256,4 @@ function CartPage() {
     );
 }
 
-export default CartPage;
+export default CartPage;shab

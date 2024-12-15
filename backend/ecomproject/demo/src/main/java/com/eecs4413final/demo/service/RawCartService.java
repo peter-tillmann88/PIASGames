@@ -17,6 +17,18 @@ public class RawCartService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public boolean updateCartItemQuantity(Long cartItemId, int newQuantity) {
+        String sql = "UPDATE shoppingcartitems SET quantity = ? WHERE cart_itemid = ?";
+        int rowsAffected = jdbcTemplate.update(sql, newQuantity, cartItemId);
+        return rowsAffected > 0; // Return true if the update was successful
+    }
+
+    public boolean deleteCartItem(Long cartItemId) {
+        String sql = "DELETE FROM shoppingcartitems WHERE cart_itemid = ?";
+        int rowsAffected = jdbcTemplate.update(sql, cartItemId);
+        return rowsAffected > 0; // Return true if at least one row was deleted
+    }
+
     public String getCartItemsByUserId(Long userId) {
         String sql = "SELECT json_agg(json_build_object(" +
                 "'cartid', sci.cartid, " +

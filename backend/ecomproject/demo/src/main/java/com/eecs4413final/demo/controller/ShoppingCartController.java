@@ -30,6 +30,7 @@ public class ShoppingCartController {
         this.rawCartService = rawCartService;
     }
 
+
     @GetMapping("/{userId}/cart")
     public ResponseEntity<List<Map<String, Object>>> getAllProducts(@PathVariable Long userId) {
         try {
@@ -63,6 +64,40 @@ public class ShoppingCartController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/item/{cartItemId}")
+    public ResponseEntity<String> deleteCartItem(@PathVariable Long cartItemId) {
+        try {
+            boolean isDeleted = rawCartService.deleteCartItem(cartItemId);
+            if (isDeleted) {
+                return ResponseEntity.ok("Cart item deleted successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart item not found.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the cart item.");
+        }
+    }
+
+    @PutMapping("/item/{cartItemId}")
+    public ResponseEntity<String> updateCartItemQuantity(
+            @PathVariable Long cartItemId,
+            @RequestBody Map<String, Object> requestBody) {
+        try {
+            int newQuantity = (int) requestBody.get("quantity");
+
+            boolean isUpdated = rawCartService.updateCartItemQuantity(cartItemId, newQuantity);
+            if (isUpdated) {
+                return ResponseEntity.ok("Cart item quantity updated successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart item not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the cart item.");
+        }
+    }
+
 
     @DeleteMapping("/{userId}/clear")
     public ResponseEntity<ShoppingCartResponseDTO> clearCart(@PathVariable Long userId) {
