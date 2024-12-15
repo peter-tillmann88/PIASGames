@@ -20,6 +20,9 @@ public interface WishlistService {
     // Get all items in a wishlist
     List<WishlistItem> getWishlistItems(Long wishlistId);
 
-    // Convert WishlistItem to WishlistDTO (optional, depending on the API needs)
+    // Convert WishlistItem to WishlistDTO
     WishlistDTO convertToWishlistDTO(WishlistItem wishlistItem);
+
+    // NEW: Get wishlist items by user ID
+    List<WishlistItem> getWishlistItemsByUserId(Long userId);
 }

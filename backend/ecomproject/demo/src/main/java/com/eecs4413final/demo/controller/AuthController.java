@@ -112,5 +112,35 @@ public class AuthController {
             logger.error("Error refreshing token: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+
     }
+    @PostMapping("/verify")
+public ResponseEntity<Map<String, Object>> verifyToken(@RequestHeader("Authorization") String authHeader) {
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("valid", false, "message", "Invalid token format"));
+    }
+
+    String token = authHeader.substring(7);
+    try {
+        if (jwtUtil.validateToken(token)) {
+            String username = jwtUtil.extractUsername(token);
+            Optional<User> userOpt = userService.findByUsername(username);
+            if (userOpt.isPresent()) {
+                Long userId = userOpt.get().getUserId();
+                return ResponseEntity.ok(Map.of("valid", true, "username", username, "userId", userId));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("valid", false, "message", "User not found"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("valid", false, "message", "Token is invalid or expired"));
+        }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("valid", false, "message", e.getMessage()));
+    }
+}
+
 }

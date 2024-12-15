@@ -4,15 +4,11 @@ import com.eecs4413final.demo.dto.ChangePasswordDTO;
 import com.eecs4413final.demo.dto.UserRegistrationDTO;
 import com.eecs4413final.demo.dto.UserResponseDTO;
 import com.eecs4413final.demo.dto.UserUpdateDTO;
-
-
-
-import com.eecs4413final.demo.exception.EmailAlreadyExistsException;
-import com.eecs4413final.demo.exception.UsernameAlreadyExistsException;
-import com.eecs4413final.demo.model.ShoppingCart;
+import com.eecs4413final.demo.dto.WishlistDTO;
 import com.eecs4413final.demo.model.User;
-import com.eecs4413final.demo.service.ShoppingCartService;
+import com.eecs4413final.demo.model.WishlistItem;
 import com.eecs4413final.demo.service.UserService;
+import com.eecs4413final.demo.service.WishlistService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
@@ -28,31 +25,32 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final WishlistService wishlistService;
 
     @Autowired
-    public UserController(UserService userService, ShoppingCartService shoppingCartService) {
+    public UserController(UserService userService, WishlistService wishlistService) {
         this.userService = userService;
+        this.wishlistService = wishlistService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO registrationDto) {
-            User registeredUser = userService.registerUser(registrationDto);
+        User registeredUser = userService.registerUser(registrationDto);
 
-
-            UserResponseDTO responseDto = new UserResponseDTO(
-                    registeredUser.getUserId(),
-                    registeredUser.getUsername(),
-                    registeredUser.getEmail(),
-                    registeredUser.getPhone(),
-                    registeredUser.getRole(),
-                    registeredUser.getCreatedAt(),
-                    registeredUser.getCreditCard(),
-                    registeredUser.getExpiryDate(),
-                    registeredUser.getCountry(),
-                    registeredUser.getProvince(),
-                    registeredUser.getAddress(),
-                    registeredUser.getPostalCode()
-            );
+        UserResponseDTO responseDto = new UserResponseDTO(
+                registeredUser.getUserId(),
+                registeredUser.getUsername(),
+                registeredUser.getEmail(),
+                registeredUser.getPhone(),
+                registeredUser.getRole(),
+                registeredUser.getCreatedAt(),
+                registeredUser.getCreditCard(),
+                registeredUser.getExpiryDate(),
+                registeredUser.getCountry(),
+                registeredUser.getProvince(),
+                registeredUser.getAddress(),
+                registeredUser.getPostalCode()
+        );
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
@@ -104,10 +102,6 @@ public class UserController {
                     updatedUser.getPostalCode()
             );
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
-        } catch (UsernameAlreadyExistsException | EmailAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
@@ -124,54 +118,62 @@ public class UserController {
             } else {
                 return new ResponseEntity<>("Invalid old password", HttpStatus.UNAUTHORIZED);
             }
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("Error changing password: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/all")
-public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-    try {
-        List<User> users = userService.getAllUsers();
-        List<UserResponseDTO> userResponseList = users.stream().map(user -> new UserResponseDTO(
-                user.getUserId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getRole(),
-                user.getCreatedAt(),
-                user.getCreditCard(),
-                user.getExpiryDate(),
-                user.getCountry(),
-                user.getProvince(),
-                user.getAddress(),
-                user.getPostalCode()
-        )).toList();
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        try {
+            List<User> users = userService.getAllUsers();
+            List<UserResponseDTO> userResponseList = users.stream().map(user -> new UserResponseDTO(
+                    user.getUserId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPhone(),
+                    user.getRole(),
+                    user.getCreatedAt(),
+                    user.getCreditCard(),
+                    user.getExpiryDate(),
+                    user.getCountry(),
+                    user.getProvince(),
+                    user.getAddress(),
+                    user.getPostalCode()
+            )).toList();
 
-        return new ResponseEntity<>(userResponseList, HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(userResponseList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
-
 
     @DeleteMapping("/profile")
     public ResponseEntity<String> deleteUserAccount(@RequestParam String username) {
         try {
             userService.deleteUserByUsername(username);
             return new ResponseEntity<>("User account deleted successfully", HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("User not found: " + e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("Error deleting user account: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/wishlist")
-    public ResponseEntity<List<?>> getWishlist(@RequestParam String username) {
-        // Placeholder for wishlist retrieval logic
-        // Replace '?' with your actual WishlistItemDTO or appropriate class once implemented
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
+    public ResponseEntity<List<WishlistDTO>> getWishlist(@RequestParam String username) {
+        Optional<User> userOpt = userService.findByUsername(username);
+        if (userOpt.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        try {
+            Long userId = userOpt.get().getUserId();
+            List<WishlistItem> wishlistItems = wishlistService.getWishlistItemsByUserId(userId);
+            List<WishlistDTO> wishlistDTOs = wishlistItems.stream()
+                    .map(wishlistService::convertToWishlistDTO)
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(wishlistDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+}
 }
