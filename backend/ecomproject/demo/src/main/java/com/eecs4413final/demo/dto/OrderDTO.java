@@ -10,7 +10,6 @@ public class OrderDTO {
     private double totalAmount;
     private List<OrderItemDTO> orderItems;
 
-    // Constructors
     public OrderDTO() {}
 
     public OrderDTO(int orderID, LocalDateTime orderDate, String status, double totalAmount, List<OrderItemDTO> orderItems) {
@@ -20,8 +19,6 @@ public class OrderDTO {
         this.totalAmount = totalAmount;
         this.orderItems = orderItems;
     }
-
-    // Getters and Setters
 
     public int getOrderID() {
         return orderID;

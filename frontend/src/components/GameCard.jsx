@@ -41,7 +41,6 @@ function GameCard({ game }) {
 
     return (
         <Link to={`/gamedetailpage/${game.productId}`} className="block text-center">
-            {/* Image Section */}
             <div className="relative w-full h-[300px]">
                 <img
                     src={imageSrc}
@@ -50,8 +49,6 @@ function GameCard({ game }) {
                     onError={() => setImageSrc('/placeholder.jpg')}
                 />
             </div>
-
-            {/* Game Info Section */}
             <h2 className="text-base font-medium mt-2 truncate">{game.name}</h2>
             <p className="text-xs text-gray-500 mt-1">Categories: {categoriesText}</p>
             <p className="text-xs text-gray-500 mt-1">Platform: {platformText}</p>

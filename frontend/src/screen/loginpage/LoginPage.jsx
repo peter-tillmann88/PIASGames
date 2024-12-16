@@ -38,6 +38,7 @@ function LoginPage() {
             });
 
             const { accessToken, refreshToken, role } = response.data;
+
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('role', role);

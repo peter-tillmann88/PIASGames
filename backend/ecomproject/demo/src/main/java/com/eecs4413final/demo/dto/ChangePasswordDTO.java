@@ -10,7 +10,7 @@ public class ChangePasswordDTO {
     @NotBlank(message = "New password is required")
     private String newPassword;
 
-    // Getters and Setters
+
     public String getOldPassword() {
         return oldPassword;
     }

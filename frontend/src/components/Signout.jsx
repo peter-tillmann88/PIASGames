@@ -5,8 +5,7 @@ function SignOut() {
     const navigate = useNavigate();
 
     const handleSignOut = () => {
-        // Clear user authentication (e.g., tokens, session data)
-        navigate('/login'); // Redirect to login after signing out
+        navigate('/login'); 
     };
 
     return (

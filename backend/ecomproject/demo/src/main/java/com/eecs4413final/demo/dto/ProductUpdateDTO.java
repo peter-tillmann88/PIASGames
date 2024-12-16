@@ -1,5 +1,3 @@
-// src/main/java/com/eecs4413final/demo/dto/ProductUpdateDTO.java
-
 package com.eecs4413final.demo.dto;
 
 import java.math.BigDecimal;
@@ -13,7 +11,7 @@ public class ProductUpdateDTO {
     private Float saleMod;
     private String platform;
 
-    // Getters and Setters
+   
 
     public String getName() {
         return name;

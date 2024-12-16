@@ -13,7 +13,6 @@ function Header() {
         const accessToken = localStorage.getItem('accessToken');
         setIsAuthenticated(!!accessToken);
 
-
         const updateCartCount = () => {
             const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
             const cartTotal = tempCart.reduce((total, item) => total + item.quantity, 0);
@@ -49,35 +48,30 @@ function Header() {
     }, []);
 
     const handleSignOut = () => {
-
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('userId');
         localStorage.removeItem('tempCart');
-
-
         setIsAuthenticated(false);
-
-
         navigate('/');
     };
 
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="flex items-center justify-between max-w-7xl mx-auto">
-                {/* Logo Section */}
+                {/* logo */}
                 <div className="flex items-center flex-shrink-0">
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-16 w-auto" />
                     </Link>
                 </div>
 
-                {/* Search Bar Section */}
+                {/* search bar */}
                 <div className="flex-1 mx-6">
                     <SearchBar />
                 </div>
 
-                {/* Action Buttons */}
+                {/* buttons */}
                 <div className="flex items-center space-x-4 flex-shrink-0">
                     {!isAuthenticated ? (
                         <>

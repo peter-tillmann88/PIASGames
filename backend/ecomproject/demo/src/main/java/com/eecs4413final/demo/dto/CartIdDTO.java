@@ -4,14 +4,12 @@ public class CartIdDTO {
     private Long cartId;
     private String message;
 
-    // Constructors
     public CartIdDTO() {}
 
     public CartIdDTO(Long cartId) {
         this.cartId = cartId;
     }
 
-    // Getters and Setters
     public Long getCartId() {
         return cartId;
     }

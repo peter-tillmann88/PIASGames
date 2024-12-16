@@ -21,18 +21,14 @@ public class Administrator {
     @Column(nullable = false, length = 100)
     private String lastName;
 
-    // Default constructor
     public Administrator() {
     }
 
-    // Parameterized constructor
     public Administrator(User user, String firstName, String lastName) {
         this.user = user;
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
-    // Getters and Setters
 
     public Long getAdminID() {
         return adminID;
@@ -66,7 +62,6 @@ public class Administrator {
         this.lastName = lastName;
     }
 
-    // toString method
 
     @Override
     public String toString() {
@@ -77,9 +72,6 @@ public class Administrator {
                 ", lastName='" + lastName + '\'' +
                 '}';
     }
-
-    // equals and hashCode methods
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -15,12 +15,10 @@ function GameDetailPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [alert, setAlert] = useState(null);
 
-
     const [userInfo, setUserInfo] = useState({
         userID: null,
         token: null,
     });
-
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -41,8 +39,6 @@ function GameDetailPage() {
                     const data = await response.json();
                     const { userID } = data;
                     setUserInfo({ userID, token });
-                    console.log(userID);
-                    console.log(token);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                     setUserInfo({ userID: null, token: null });
@@ -68,7 +64,6 @@ function GameDetailPage() {
                 }
 
                 const data = await response.json();
-                let imageLink = data.signedUrl;
                 return data.signedUrl;
             } catch (err) {
                 console.error('Error fetching signed URL:', err);
@@ -118,8 +113,6 @@ function GameDetailPage() {
             if (existingItemIndex !== -1) {
                 tempCart[existingItemIndex].quantity += quantity;
             } else {
-
-
                 const newItem = {
                     cartItemId: game.productId,
                     id: game.productId,
@@ -128,23 +121,14 @@ function GameDetailPage() {
                     quantity,
                     imageUrl: imageUrls[0],
                 };
-
-                console.log(newItem.cartItemId);
-                console.log(newItem.id);
-                console.log(newItem.name);
-                console.log(newItem.price);
-                console.log(newItem.quantity);
-                console.log(newItem.imageUrl);
                 tempCart.push(newItem);
-
-
-
             }
 
             localStorage.setItem('tempCart', JSON.stringify(tempCart));
             setAlert('Item added to cart (Temporary Cart)');
-
-
+            setTimeout(() => {
+                navigate('/cart');
+            }, 2000);
             return;
         }
 

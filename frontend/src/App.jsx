@@ -6,10 +6,7 @@ import CartPage from './cart/CartPage';
 import CheckoutPage from './cart/CheckoutPage';
 import GameDetailPage from './screen/gamedetailpage/GameDetailPage';
 import OrderConfirmationPage from './cart/OrderConfirmationPage';
-import XboxPage from './screen/xbox/XboxPage';
-import PlaystationPage from './screen/playstation/PlaystationPage';
-import PcPage from './screen/pc/PcPage';
-import SwitchPage from './screen/switch/SwitchPage';
+
 import Footer from "./components/Footer.jsx";
 import SearchPage from "./components/SearchPage.jsx";
 import RegisterPage from './components/Register';
@@ -22,10 +19,6 @@ import Saleshistory from './Admin/SalesHistoryPage.jsx';
 function App() {
     return (
         <Routes>
-            <Route path="/xbox" element={<XboxPage />} />
-            <Route path="/playstation" element={<PlaystationPage />} />
-            <Route path="/pc" element={<PcPage />} />
-            <Route path="/switch" element={<SwitchPage />} />
             <Route path="/" element={<Homepage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cart" element={<CartPage />} />
@@ -38,9 +31,10 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/manage-customers" element={<ManageCustomers />} /> 
-            <Route path="/sales-history" element={<Saleshistory />} /> 
-            <Route path="/manage-inventory" element={<ManageInventory />} />  
+            <Route path="/manage-customers" element={<ManageCustomers />} />
+            <Route path="/sales-history" element={<Saleshistory />} />
+            <Route path="/manage-inventory" element={<ManageInventory />} />
+
         </Routes>
     );
 }

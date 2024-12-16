@@ -1,4 +1,3 @@
-// HomePage.js
 import React, { useState, useEffect } from 'react';
 import Header from '../../screen/homepage/Header';
 import Sidebar from '../../components/Sidebar';
@@ -17,24 +16,12 @@ function HomePage() {
 
     useEffect(() => {
         fetchGames();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filters]);
 
     const fetchGames = async () => {
         setLoading(true);
         try {
             let url = 'http://localhost:8080/api/products/all';
-
-            // If backend supports query parameters for filtering, append them here
-            // For example:
-            // const params = new URLSearchParams();
-            // if (filters.category) params.append('category', filters.category);
-            // if (filters.platform) params.append('platform', filters.platform);
-            // if (filters.price) params.append('price', filters.price);
-            // if (filters.sort) params.append('sort', filters.sort);
-            // if ([...params].length > 0) url += `?${params.toString()}`;
-
-            // Fetch all products (assuming filtering is handled client-side)
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -45,11 +32,10 @@ function HomePage() {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             const data = await response.json();
-            console.log('Fetched games:', data); // Debugging line
             applyFilters(data);
         } catch (error) {
             console.error('Error fetching products:', error);
-            setGames([]); // In case of error, show no products
+            setGames([]);
         } finally {
             setLoading(false);
         }
@@ -58,7 +44,7 @@ function HomePage() {
     const applyFilters = (data) => {
         let filteredData = [...data];
 
-        // Apply Category Filter
+        //apply cat filter
         if (filters.category) {
             filteredData = filteredData.filter(game =>
                 Array.isArray(game.categoryList) &&
@@ -66,14 +52,14 @@ function HomePage() {
             );
         }
 
-        // Apply Platform Filter
+        //platform filter
         if (filters.platform) {
             filteredData = filteredData.filter(game =>
                 game.platform === filters.platform
             );
         }
 
-        // Apply Price Filter
+        //price filter 
         if (filters.price) {
             filteredData = filteredData.sort((a, b) => {
                 if (filters.price === 'low-to-high') return a.price - b.price;
@@ -82,7 +68,7 @@ function HomePage() {
             });
         }
 
-        // Apply Sort By Name Filter
+        //name filter
         if (filters.sort === 'alphabetical-asc') {
             filteredData = filteredData.sort((a, b) => a.name.localeCompare(b.name));
         }
@@ -90,8 +76,6 @@ function HomePage() {
         if (filters.sort === 'alphabetical-desc') {
             filteredData = filteredData.sort((a, b) => b.name.localeCompare(a.name));
         }
-
-        console.log('Filtered games:', filteredData); // Debugging line
         setGames(filteredData);
     };
 

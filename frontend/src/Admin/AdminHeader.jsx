@@ -21,14 +21,14 @@ function Header() {
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="flex items-center justify-between max-w-7xl mx-auto">
-                {/* Logo Section */}
+                {/* logo*/}
                 <div className="flex items-center flex-shrink-0">
                     <Link to="/admin-dashboard">
-                        <img src={logo} alt="Logo" className="h-16 w-auto" /> {/* Adjusted height for better scaling */}
+                        <img src={logo} alt="Logo" className="h-16 w-auto" /> 
                     </Link>
                 </div>
 
-                {/* Navigation Links */}
+                {/* links for nav */}
                 <nav className="flex items-center space-x-6">
                     {isAuthenticated && (
                         <>
@@ -54,7 +54,6 @@ function Header() {
                     )}
                 </nav>
 
-                {/* Action Buttons */}
                 <div className="flex items-center space-x-4 flex-shrink-0">
                     {!isAuthenticated ? (
                         <>

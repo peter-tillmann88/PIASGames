@@ -1,8 +1,6 @@
-// Sidebar.js
 import React, { useState, useEffect } from 'react';
 
 function Sidebar({ onFilterChange }) {
-    // Hardcoded Platforms
     const platforms = [
         "PC",
         "Nintendo Switch",
@@ -11,7 +9,7 @@ function Sidebar({ onFilterChange }) {
         "Xbox Series X"
     ];
 
-    // State for Categories
+    //category states
     const [categories, setCategories] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const [categoriesError, setCategoriesError] = useState(null);
@@ -34,7 +32,7 @@ function Sidebar({ onFilterChange }) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
                 const data = await response.json();
-                setCategories(data.object); // Updated here
+                setCategories(data.object);
             } catch (error) {
                 console.error('Error fetching categories:', error);
                 setCategoriesError('Failed to load categories.');
@@ -70,7 +68,7 @@ function Sidebar({ onFilterChange }) {
         <div className="bg-white p-4 rounded-md shadow-md">
             <h3 className="text-lg font-semibold">Filter Products</h3>
 
-            {/* Category Filter */}
+            {/* cat filter*/}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Category</label>
                 {categoriesLoading ? (
@@ -93,7 +91,7 @@ function Sidebar({ onFilterChange }) {
                 )}
             </div>
 
-            {/* Platform Filter */}
+            {/* platform filter*/}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Platform</label>
                 <select
@@ -110,7 +108,7 @@ function Sidebar({ onFilterChange }) {
                 </select>
             </div>
 
-            {/* Price Filter */}
+            {/* price filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Price</label>
                 <select
@@ -124,7 +122,7 @@ function Sidebar({ onFilterChange }) {
                 </select>
             </div>
 
-            {/* Sort By Filter */}
+            {/* sort w filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Sort By</label>
                 <select

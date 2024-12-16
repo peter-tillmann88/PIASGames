@@ -40,11 +40,9 @@ public class ImageServiceImpl implements ImageService{
     public void deleteById(Long id){
         Image image = imageRepository.findById(id)
                 .orElseThrow(() -> new ImageNotFoundException("Image does not exist with Id: " + id));
-        // Delete the image from Supabase Storage
         String fileName = image.getFileName();
         Mono<Void> deleteMono = storageService.deleteImage(fileName);
-        deleteMono.block(); // Blocking for simplicity; consider reactive chains for production
-        // Delete from the database
+        deleteMono.block(); 
         imageRepository.deleteById(id);
     }
 
@@ -57,7 +55,7 @@ public class ImageServiceImpl implements ImageService{
             throw new Exception("Unsupported file type: " + contentType);
         }
 
-        if (file.getSize() > 5 * 1024 * 1024) { // 5MB limit
+        if (file.getSize() > 5 * 1024 * 1024) { 
             throw new ImageTooLargeException("File size exceeds the maximum limit of 5MB");
         }
     }
@@ -66,20 +64,19 @@ public class ImageServiceImpl implements ImageService{
     public ImageDTO addImage(Long productId, MultipartFile file) throws Exception {
         System.out.println("Adding image for product ID: " + productId);
         validateImage(file);
-        // Find the product
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ImageNotFoundException("Product not found with Id: " + productId));
 
-        // Generate a unique filename
+
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         System.out.println("Generated file name: " + fileName);
 
-        // Upload image to Supabase Storage and get the URL
+
         Mono<String> imageUrlMono = storageService.uploadImage(file, fileName);
-        String imageUrl = imageUrlMono.block(); // Blocking for simplicity
+        String imageUrl = imageUrlMono.block();
         System.out.println("Uploaded image URL: " + imageUrl);
 
-        // Create and save the Image entity
         Image image = new Image();
         image.setFileName(fileName);
         image.setFileType(file.getContentType());
@@ -89,7 +86,6 @@ public class ImageServiceImpl implements ImageService{
         Image savedImage = imageRepository.save(image);
         System.out.println("Saved image with ID: " + savedImage.getId());
 
-        // Convert to DTO
         ImageDTO imageDTO = new ImageDTO();
         imageDTO.setId(savedImage.getId());
         imageDTO.setFileName(savedImage.getFileName());

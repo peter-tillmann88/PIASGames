@@ -4,13 +4,13 @@ import com.eecs4413final.demo.dto.ChangePasswordDTO;
 import com.eecs4413final.demo.dto.UserRegistrationDTO;
 import com.eecs4413final.demo.dto.UserResponseDTO;
 import com.eecs4413final.demo.dto.UserUpdateDTO;
-import com.eecs4413final.demo.dto.WishlistDTO;
+
 import com.eecs4413final.demo.exception.EmailAlreadyExistsException;
 import com.eecs4413final.demo.exception.UsernameAlreadyExistsException;
 import com.eecs4413final.demo.model.User;
-import com.eecs4413final.demo.model.WishlistItem;
+
 import com.eecs4413final.demo.service.UserService;
-import com.eecs4413final.demo.service.WishlistService;
+
 import com.eecs4413final.demo.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +28,11 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-    private final WishlistService wishlistService;
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public UserController(UserService userService, WishlistService wishlistService, JwtUtil jwtUtil) {
+    public UserController(UserService userService,  JwtUtil jwtUtil) {
         this.userService = userService;
-        this.wishlistService = wishlistService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -207,22 +205,4 @@ public class UserController {
         }
     }
 
-    @GetMapping("/wishlist")
-    public ResponseEntity<List<WishlistDTO>> getWishlist(@RequestParam String username) {
-        Optional<User> userOpt = userService.findByUsername(username);
-        if (userOpt.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        try {
-            Long userId = userOpt.get().getUserId();
-            List<WishlistItem> wishlistItems = wishlistService.getWishlistItemsByUserId(userId);
-            List<WishlistDTO> wishlistDTOs = wishlistItems.stream()
-                    .map(wishlistService::convertToWishlistDTO)
-                    .collect(Collectors.toList());
-
-            return new ResponseEntity<>(wishlistDTOs, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

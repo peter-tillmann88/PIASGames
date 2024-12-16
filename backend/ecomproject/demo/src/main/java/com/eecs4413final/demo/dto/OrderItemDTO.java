@@ -9,7 +9,6 @@ public class OrderItemDTO {
     private int quantity;
     private BigDecimal priceAtPurchase;
 
-
     public OrderItemDTO() {}
 
     public OrderItemDTO(Long orderItemID, Long productId, String productName, int quantity, BigDecimal priceAtPurchase) {
@@ -20,45 +19,43 @@ public class OrderItemDTO {
         this.priceAtPurchase = priceAtPurchase;
     }
 
-
-
-    public Long getOrderItemID(){
+    public Long getOrderItemID() {
         return orderItemID;
     }
 
-    public void setOrderItemID(Long orderItemID){
+    public void setOrderItemID(Long orderItemID) {
         this.orderItemID = orderItemID;
     }
 
-    public Long getProductId(){
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Long productId){
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
-    public String getProductName(){
+    public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName){
+    public void setProductName(String productName) {
         this.productName = productName;
     }
 
-    public int getQuantity(){
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity){
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPriceAtPurchase(){
+    public BigDecimal getPriceAtPurchase() {
         return priceAtPurchase;
     }
 
-    public void setPriceAtPurchase(BigDecimal priceAtPurchase){
+    public void setPriceAtPurchase(BigDecimal priceAtPurchase) {
         this.priceAtPurchase = priceAtPurchase;
     }
 }

@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.logging.ErrorManager;
-
 
 @RestController
 @RequestMapping("/api/cart-items")
@@ -47,7 +45,6 @@ public class ShoppingCartItemController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-
             ShoppingCart cart = shoppingCartService.getCartByUser(userId);
             if (cart == null) {
                 System.out.println("Cart for user with ID " + userId + " not found");
@@ -71,14 +68,9 @@ public class ShoppingCartItemController {
 
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
-
             System.out.println("Error occurred while adding item to cart: " + e.getMessage());
-
-
             ShoppingCartItemResponseDTO errorResponse = new ShoppingCartItemResponseDTO();
             errorResponse.setMessage("Failed to add item to cart. Please try again.");
-
-
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

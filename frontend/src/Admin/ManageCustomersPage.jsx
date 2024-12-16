@@ -47,7 +47,7 @@ function ManageCustomersPage() {
             const allOrders = await response.json();
             const userOrders = allOrders.filter(order => order.username === customer.username);
             const history = userOrders.map(order => ({
-                orderId: order.orderID, // Include Order ID
+                orderId: order.orderID, 
                 date: new Date(order.orderDate).toLocaleDateString(),
                 items: order.orderItems.map(item => ({
                     product: item.productName,
@@ -172,7 +172,7 @@ function ManageCustomersPage() {
                     {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
                     {successMessage && <p className="text-green-500 mt-4">{successMessage}</p>}
 
-                    {/* Edit Customer Modal */}
+                    {/*update customer*/}
                     <Modal
                         isOpen={isEditModalOpen && editCustomer !== null}
                         onRequestClose={closeEditModal}
@@ -222,7 +222,7 @@ function ManageCustomersPage() {
                         )}
                     </Modal>
 
-                    {/* Purchase History Modal */}
+                    {/*modal for purchase history*/}
                     <Modal
                         isOpen={isHistoryModalOpen}
                         onRequestClose={closeHistoryModal}

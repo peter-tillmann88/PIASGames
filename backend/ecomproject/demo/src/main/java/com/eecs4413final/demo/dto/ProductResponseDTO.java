@@ -1,5 +1,3 @@
-// src/main/java/com/eecs4413final/demo/dto/ProductResponseDTO.java
-
 package com.eecs4413final.demo.dto;
 
 import com.eecs4413final.demo.model.Categories;
@@ -13,19 +11,18 @@ public class ProductResponseDTO {
 
     private Long productId;
     private String name;
-    private String developer;   // Added developer field
+    private String developer;   
     private String description;
     private String platform;
     private BigDecimal price;
     private int stock;
     private float saleMod;
-    private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
+    private Set<Categories> categoryList = new HashSet<>(); 
     private List<ImageDTO> images;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String message;
 
-    // Constructors
     public ProductResponseDTO() {
         this.createdAt = LocalDateTime.now();
     }
@@ -57,7 +54,6 @@ public class ProductResponseDTO {
         this.platform = platform;
     }
 
-    // Getters and Setters
     public Long getProductId() {
         return productId;
     }

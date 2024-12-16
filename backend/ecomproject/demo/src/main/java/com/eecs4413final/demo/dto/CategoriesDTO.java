@@ -15,7 +15,6 @@ public class CategoriesDTO {
     @Size(min = 10, max = 250, message = "Description must be between 10 and 250 characters")
     private String description;
 
-    // Getters and Setters
 
     public String getName() {
         return name;
