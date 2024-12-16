@@ -1,5 +1,3 @@
-// src/main/java/com/eecs4413final/demo/service/OrderServiceImpl.java
-
 package com.eecs4413final.demo.service;
 
 import com.eecs4413final.demo.exception.ShoppingCartNotFoundException;
@@ -12,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
     private final ShoppingCartService shoppingCartService;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
@@ -39,33 +39,37 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order createOrderFromCart(Long userId) {
-        // 1. Get the user's cart
         ShoppingCart cart = shoppingCartService.getCartByUser(userId);
+        if (cart == null || cart.getShoppingCartItems().isEmpty()) {
+            throw new ShoppingCartNotFoundException("Shopping cart is empty for user ID " + userId);
+        }
 
-        // 2. Calculate the total amount from the cart items
         double totalAmount = cart.getShoppingCartItems().stream()
                 .map(item -> item.getTotalPrice().doubleValue())
                 .reduce(0.0, Double::sum);
 
-        // 3. Create a new Order entity
         Order newOrder = new Order();
-        try{
-            Optional<User> user = userRepository.findById(userId);
-            newOrder.setUserId(userId.intValue()); // assuming customerID is an int, cast userId
+        try {
+            Optional<User> userOpt = userRepository.findById(userId);
+            if (!userOpt.isPresent()) {
+                throw new IllegalArgumentException("User with ID " + userId + " not found.");
+            }
+            User user = userOpt.get();
+
+            newOrder.setUserId(userId.intValue());
             newOrder.setTotalAmount(totalAmount);
             newOrder.setStatus("COMPLETE");
             newOrder.setOrderDate(LocalDateTime.now());
             newOrder = orderRepository.save(newOrder);
-            logger.info("We have created the order");
-        }
-        catch (Exception e){
-            logger.error("Error adding order: {}", e.getMessage());
+            logger.info("Order created successfully: {}", newOrder);
+        } catch (Exception e) {
+            logger.error("Error adding order for user ID {}: {}", userId, e.getMessage(), e);
+            throw e;
         }
 
-
-        // 4. Convert each ShoppingCartItem into an OrderItem and reduce product stock
-        try{
+        try {
             for (ShoppingCartItems cartItem : cart.getShoppingCartItems()) {
                 Product product = cartItem.getProduct();
 
@@ -74,24 +78,43 @@ public class OrderServiceImpl implements OrderService {
                 product.setStock(newStock);
                 productRepository.save(product);
 
+                // Create OrderItem and associate with Order
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrder(newOrder);
                 orderItem.setProduct(product);
                 orderItem.setQuantity(cartItem.getQuantity());
-                orderItem.setPriceAtPurchase(cartItem.getUnitPrice()); // unit price at time of purchase
+                orderItem.setPriceAtPurchase(cartItem.getUnitPrice());
+
+                // Add OrderItem to Order's orderItems set
+                newOrder.addOrderItem(orderItem);
+
                 orderItemRepository.save(orderItem);
             }
-            logger.info("We have created the orderItems");
+            logger.info("OrderItems created successfully for order ID {}", newOrder.getOrderID());
+        } catch (Exception e) {
+            logger.error("Error converting ShoppingCartItem to OrderItem for order ID {}: {}", newOrder.getOrderID(), e.getMessage(), e);
+            throw e;
         }
-        catch (Exception e){
-            logger.error("Error converting shoppingcartitem to an order item: {}", e.getMessage());
-        }
-
-
-        // 5. Clear the cart
+        
         shoppingCartService.clearCart(cart.getCartId());
 
         // Return the newly created order
         return newOrder;
+    }
+
+    @Override
+    public List<Order> getOrdersForUser(Long userId) {
+        logger.info("Fetching orders for user ID: {}", userId);
+        List<Order> orders = orderRepository.findByUserIdOrderByOrderDateDesc(userId.intValue());
+        logger.info("Found {} orders for user ID: {}", orders.size(), userId);
+        return orders;
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        logger.info("Admin fetching all orders.");
+        List<Order> orders = orderRepository.findAllByOrderByOrderDateDesc();
+        logger.info("Total orders fetched: {}", orders.size());
+        return orders;
     }
 }

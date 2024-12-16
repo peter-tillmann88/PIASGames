@@ -2,7 +2,10 @@ package com.eecs4413final.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -24,6 +27,9 @@ public class Order {
     @Column(name = "totalamount", nullable = false) // Explicitly map to 'totalamount'
     private double totalAmount;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<OrderItem> orderItems = new HashSet<>();
+
     // Default constructor
     public Order() {}
 
@@ -34,6 +40,13 @@ public class Order {
     }
 
     // Getters and Setters
+
+    public Set<OrderItem> getOrderItems() { return orderItems; }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 
     public int getOrderID() {
         return orderID;

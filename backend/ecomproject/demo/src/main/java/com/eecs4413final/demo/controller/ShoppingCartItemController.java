@@ -41,7 +41,6 @@ public class ShoppingCartItemController {
             @PathVariable Long productId,
             @RequestParam Integer quantity) {
         try {
-            System.out.println("fuck my chungus life 1" + productId + userId);
             Product product = productService.getById(productId);
             if (product == null) {
                 System.out.println("Product with ID " + productId + " not found");

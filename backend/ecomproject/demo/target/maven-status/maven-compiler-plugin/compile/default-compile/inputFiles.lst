@@ -1,6 +1,7 @@
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/UserController.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/config/SecurityConfig.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/Administrator.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/OrderDTO.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/User.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/BlacklistService.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/AuthController.java
@@ -37,6 +38,7 @@
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/ProductController.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/UserServiceImpl.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ShoppingCartItemDTO.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/OrderItemDTO.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/service/OrderServiceImpl.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/WishlistItemRepository.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/controller/CategoryController.java
@@ -45,6 +47,7 @@
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/CustomerRepository.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/ShoppingCartItemRepository.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/repository/WishlistRepository.java
+/Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/mapper/OrderMapper.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/dto/ProductUpdateDTO.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/OrderItem.java
 /Users/shabbir_abedi/EECS 4413/final project/backend/ecomproject/demo/src/main/java/com/eecs4413final/demo/model/WishlistItem.java
