@@ -13,7 +13,8 @@ function CartPage() {
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        let userID = localStorage.getItem('userID');
+        let userID = null;
+
 
         const fetchUserProfile = async () => {
             if (token && !userID) {
@@ -31,7 +32,9 @@ function CartPage() {
 
                     const data = await response.json();
                     userID = data.userID;
+
                     localStorage.setItem('userID', userID);
+
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                 }
@@ -43,7 +46,6 @@ function CartPage() {
                 setUser(null);
             }
         };
-
         fetchUserProfile();
     }, []);
 
@@ -92,6 +94,7 @@ function CartPage() {
             });
 
             if (!response.ok) {
+
                 throw new Error('Failed to fetch cart items');
             }
 

@@ -41,13 +41,14 @@ function GameDetailPage() {
                     const data = await response.json();
                     const { userID } = data; // Adjust based on your API response
                     setUserInfo({ userID, token });
+                    console.log(userID);
+                    console.log(token);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                     setUserInfo({ userID: null, token: null });
                 }
             }
         };
-
         fetchUserInfo();
     }, []);
 
