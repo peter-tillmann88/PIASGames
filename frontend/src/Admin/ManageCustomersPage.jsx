@@ -3,7 +3,6 @@ import Header from './AdminHeader';
 import Footer from '../components/Footer';
 import Modal from 'react-modal';
 
-// Set the app element for accessibility
 Modal.setAppElement('#root');
 
 function ManageCustomersPage() {
@@ -24,30 +23,42 @@ function ManageCustomersPage() {
         setLoading(true);
         try {
             const response = await fetch('http://localhost:8080/api/users/all');
-            if (!response.ok) {
-                throw new Error('Failed to fetch customers');
-            }
+            if (!response.ok) throw new Error('Failed to fetch customers');
             const data = await response.json();
             setCustomers(data);
             setErrorMessage('');
         } catch (error) {
-            console.error('Error fetching customers:', error);
             setErrorMessage('Error fetching customers: ' + error.message);
         } finally {
             setLoading(false);
         }
     };
 
-    const fetchPurchaseHistory = async (userId) => {
+    const fetchPurchaseHistory = async (customer) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/users/purchase-history?userId=${userId}`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch purchase history');
-            }
-            const history = await response.json();
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch('http://localhost:8080/api/order/all', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) throw new Error('Failed to fetch purchase history');
+            const allOrders = await response.json();
+            const userOrders = allOrders.filter(order => order.username === customer.username);
+            const history = userOrders.map(order => ({
+                orderId: order.orderID, // Include Order ID
+                date: new Date(order.orderDate).toLocaleDateString(),
+                items: order.orderItems.map(item => ({
+                    product: item.productName,
+                    quantity: item.quantity,
+                    price: item.priceAtPurchase,
+                })),
+                total: order.totalAmount,
+            }));
             setSelectedCustomerHistory(history);
+            setErrorMessage('');
         } catch (error) {
-            console.error('Error fetching purchase history:', error);
             setSelectedCustomerHistory([]);
             setErrorMessage('Error fetching purchase history: ' + error.message);
         }
@@ -66,7 +77,7 @@ function ManageCustomersPage() {
     };
 
     const openHistoryModal = (customer) => {
-        fetchPurchaseHistory(customer.userId);
+        fetchPurchaseHistory(customer);
         setIsHistoryModalOpen(true);
     };
 
@@ -100,18 +111,15 @@ function ManageCustomersPage() {
                     province: editCustomer.province,
                 }),
             });
-
             if (response.ok) {
                 setSuccessMessage('Customer updated successfully!');
                 await fetchCustomers();
                 closeEditModal();
             } else {
                 const errorText = await response.text();
-                console.error('Failed to update customer:', errorText);
                 setErrorMessage('Failed to update customer: ' + errorText);
             }
         } catch (error) {
-            console.error('Error updating customer:', error);
             setErrorMessage('Error updating customer: ' + error.message);
         }
     };
@@ -227,9 +235,18 @@ function ManageCustomersPage() {
                             {selectedCustomerHistory.length > 0 ? (
                                 selectedCustomerHistory.map((history, index) => (
                                     <div key={index} className="p-4 border-b border-gray-300">
+                                        <p><strong>Order ID:</strong> {history.orderId}</p> 
                                         <p><strong>Date:</strong> {history.date}</p>
-                                        <p><strong>Item:</strong> {history.item}</p>
-                                        <p><strong>Price:</strong> ${history.price.toFixed(2)}</p>
+                                        <p>
+                                            <strong>Items:</strong>{' '}
+                                            {history.items.map((item, i) => (
+                                                <span key={i}>
+                                                    {item.product} (x{item.quantity}) - ${item.price.toFixed(2)}
+                                                    {i < history.items.length - 1 && ', '}
+                                                </span>
+                                            ))}
+                                        </p>
+                                        <p><strong>Total:</strong> ${history.total.toFixed(2)}</p>
                                     </div>
                                 ))
                             ) : (

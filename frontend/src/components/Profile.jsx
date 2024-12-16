@@ -310,7 +310,7 @@ function Profile() {
                     )}
                 </div>
 
-                {/* Wishlist Section */}
+                {/* Wishlist Section
                 <div className="bg-white p-6 mt-6 rounded shadow-lg w-full max-w-4xl">
                     <h3 className="text-2xl font-bold mb-4">Wishlist</h3>
                     {wishlist.length > 0 ? (
@@ -329,7 +329,7 @@ function Profile() {
                     ) : (
                         <p>No wishlist items available.</p>
                     )}
-                </div>
+                </div> */}
             </div>
             <Footer />
         </>
