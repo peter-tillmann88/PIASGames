@@ -8,7 +8,7 @@ import customers from '../assets/img/manage-customers.svg';
 
 function AdminDashboard() {
     const navigate = useNavigate();
-    const [isAdmin, setIsAdmin] = useState(null); // Loading state for role verification
+    const [isAdmin, setIsAdmin] = useState(null);
 
     useEffect(() => {
         const role = localStorage.getItem('role');
@@ -41,11 +41,11 @@ function AdminDashboard() {
         <div className="flex flex-col min-h-screen">
             <Header />
 
-            {/* Main Content */}
+            
             <div className="flex flex-1 flex-col items-center p-6">
                 <h1 className="text-4xl font-bold mb-6">Admin Dashboard</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
-                    {/* Sales History */}
+                    {/* sales */}
                     <Link to="/sales-history" className="group">
                         <div className="relative bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
                             <div className="flex items-center justify-center w-full h-64 bg-gray-100">
@@ -66,7 +66,7 @@ function AdminDashboard() {
                         </div>
                     </Link>
 
-                    {/* Manage Customers */}
+                    {/* customers */}
                     <Link to="/manage-customers" className="group">
                         <div className="relative bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
                             <div className="flex items-center justify-center w-full h-64 bg-gray-100">
@@ -87,7 +87,7 @@ function AdminDashboard() {
                         </div>
                     </Link>
 
-                    {/* Manage Inventory */}
+                    {/* inventory */}
                     <Link to="/manage-inventory" className="group">
                         <div className="relative bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
                             <div className="flex items-center justify-center w-full h-64 bg-gray-100">

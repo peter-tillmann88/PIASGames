@@ -24,7 +24,7 @@ public class Order {
     @Column(nullable = false)
     private String status = "PENDING";
 
-    @Column(name = "totalamount", nullable = false) // Explicitly map to 'totalamount'
+    @Column(name = "totalamount", nullable = false) 
     private double totalAmount;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function GameCard({ game }) {
-    const [imageSrc, setImageSrc] = useState('/placeholder.jpg'); // Default placeholder
+    const [imageSrc, setImageSrc] = useState('/placeholder.jpg'); 
 
     useEffect(() => {
         async function fetchSignedUrl() {
@@ -41,7 +41,7 @@ function GameCard({ game }) {
 
     return (
         <Link to={`/gamedetailpage/${game.productId}`} className="block text-center">
-            {/* Image Section */}
+            {/* Image section */}
             <div className="relative w-full h-[300px]">
                 <img
                     src={imageSrc}
@@ -51,7 +51,7 @@ function GameCard({ game }) {
                 />
             </div>
 
-            {/* Game Info Section */}
+            {/* game info stuff */}
             <h2 className="text-base font-medium mt-2 truncate">{game.name}</h2>
             <p className="text-xs text-gray-500 mt-1">Categories: {categoriesText}</p>
             <p className="text-xs text-gray-500 mt-1">Platform: {platformText}</p>

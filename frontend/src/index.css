@@ -1,9 +1,8 @@
-/* Tailwind CSS base styles (from Tailwind build) */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Resetting default margin/padding */
 * {
   margin: 0;
   padding: 0;

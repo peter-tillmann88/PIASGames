@@ -6,7 +6,7 @@ public class ImageDTO {
     private String fileType;
     private String imageUrl;
 
-    // Constructors
+
     public ImageDTO() {
     }
 
@@ -17,7 +17,7 @@ public class ImageDTO {
         this.imageUrl = imageUrl;
     }
 
-    // Getters and Setters
+
 
     public Long getId() {
         return id;

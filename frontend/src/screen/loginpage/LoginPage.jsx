@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Header from '../../screen/homepage/Header'; // Assuming Header is in the components folder
-import Footer from '../../components/Footer'; // Assuming Footer is in the components folder
+import Header from '../../screen/homepage/Header';
+import Footer from '../../components/Footer';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
@@ -10,7 +10,7 @@ function LoginPage() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // Redirect if already logged in
+    //prevents logged in users from accessing things they r supposed to 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
@@ -25,7 +25,7 @@ function LoginPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(''); // Clear any previous errors
+        setError('');
 
         if (!username || !password) {
             setError('Please fill in both username and password');
@@ -33,25 +33,20 @@ function LoginPage() {
         }
 
         try {
-            // Send a POST request to the backend
             const response = await axios.post('http://localhost:8080/api/auth/login', {
                 username,
                 password,
             });
-
-            // Extract tokens and role from the response
             const { accessToken, refreshToken, role } = response.data;
 
-            // Save tokens and role to localStorage
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('role', role);
-
-            // Redirect based on the role
+            //redirect based on role 
             if (role === 'ADMIN') {
-                navigate('/admin-dashboard'); // Redirect to admin dashboard
+                navigate('/admin-dashboard');
             } else {
-                navigate('/'); // Redirect to home for customers
+                navigate('/');
             }
         } catch (err) {
             console.error('Login failed:', err.response || err.message);
@@ -65,7 +60,7 @@ function LoginPage() {
 
     return (
         <>
-            <Header /> {/* Automatically reflects login state based on tokens in localStorage */}
+            <Header /> 
             <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 py-12">
                 <form onSubmit={handleLogin} className="bg-white p-6 rounded shadow-lg w-full max-w-lg">
                     <h2 className="text-3xl font-bold mb-6 text-center">Log In</h2>
@@ -107,7 +102,7 @@ function LoginPage() {
                         <p>Don't have an account?</p>
                         <button
                             type="button"
-                            onClick={() => navigate('/register')} // Navigate to RegisterPage
+                            onClick={() => navigate('/register')}
                             className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-700 mt-2"
                         >
                             Register

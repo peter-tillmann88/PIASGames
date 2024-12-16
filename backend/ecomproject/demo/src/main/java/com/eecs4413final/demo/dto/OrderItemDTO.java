@@ -9,7 +9,6 @@ public class OrderItemDTO {
     private int quantity;
     private BigDecimal priceAtPurchase;
 
-    // Constructors
     public OrderItemDTO() {}
 
     public OrderItemDTO(Long orderItemID, Long productId, String productName, int quantity, BigDecimal priceAtPurchase) {
@@ -20,7 +19,6 @@ public class OrderItemDTO {
         this.priceAtPurchase = priceAtPurchase;
     }
 
-    // Getters and Setters
 
     public Long getOrderItemID(){
         return orderItemID;

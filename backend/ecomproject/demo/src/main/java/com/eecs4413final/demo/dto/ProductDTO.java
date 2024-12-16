@@ -33,11 +33,10 @@ public class ProductDTO {
     private String platform;
 
     @NotNull(message = "Product categories are required")
-    private List<Long> categoryIds; // Changed from List<Categories> to List<Long>
+    private List<Long> categoryIds; 
 
     private List<String> imageNames;
 
-    // Getters and Setters
 
     public String getDeveloper() {
         return developer;

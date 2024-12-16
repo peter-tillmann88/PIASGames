@@ -6,14 +6,14 @@ import SearchBar from '../../components/SearchBar';
 
 function Header() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [cartCount, setCartCount] = useState(0); // State for cart item count
+    const [cartCount, setCartCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         setIsAuthenticated(!!accessToken);
 
-        // Fetch cart items and update cart count
+        //fetch cart and update count
         const updateCartCount = () => {
             const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
             const cartTotal = tempCart.reduce((total, item) => total + item.quantity, 0);
@@ -49,35 +49,32 @@ function Header() {
     }, []);
 
     const handleSignOut = () => {
-        // Remove tokens and user-related local storage
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('userId');
-        localStorage.removeItem('tempCart'); // Clear guest cart (if any)
-
-        // Reset authentication state
+        localStorage.removeItem('tempCart');
         setIsAuthenticated(false);
 
-        // Redirect to home page
+        //redirector to homepage
         navigate('/');
     };
 
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="flex items-center justify-between max-w-7xl mx-auto">
-                {/* Logo Section */}
+                {/* logo */}
                 <div className="flex items-center flex-shrink-0">
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-16 w-auto" />
                     </Link>
                 </div>
 
-                {/* Search Bar Section */}
+                {/* search bar */}
                 <div className="flex-1 mx-6">
                     <SearchBar />
                 </div>
 
-                {/* Action Buttons */}
+                {/* buttons */}
                 <div className="flex items-center space-x-4 flex-shrink-0">
                     {!isAuthenticated ? (
                         <>

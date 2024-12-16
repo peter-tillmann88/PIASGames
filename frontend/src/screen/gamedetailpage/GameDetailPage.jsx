@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useParams, useNavigate } from 'react-router-dom'; 
 import Footer from '../../components/Footer';
 import Header from '../../screen/homepage/Header';
 import axios from 'axios';
 
 function GameDetailPage() {
     const { id } = useParams();
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate(); 
     const [game, setGame] = useState(null);
     const [imageUrls, setImageUrls] = useState(['/placeholder.jpg']);
     const [loading, setLoading] = useState(true);
@@ -15,13 +15,11 @@ function GameDetailPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [alert, setAlert] = useState(null);
 
-    // State for user info
     const [userInfo, setUserInfo] = useState({
         userID: null,
         token: null,
     });
 
-    // Fetch user info from backend
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('accessToken');
@@ -39,7 +37,7 @@ function GameDetailPage() {
                     }
 
                     const data = await response.json();
-                    const { userID } = data; // Adjust based on your API response
+                    const { userID } = data; 
                     setUserInfo({ userID, token });
                     console.log(userID);
                     console.log(token);
@@ -131,10 +129,10 @@ function GameDetailPage() {
             localStorage.setItem('tempCart', JSON.stringify(tempCart));
             setAlert('Item added to cart (Temporary Cart)');
 
-            // Redirect to cart after showing alert
+           
             setTimeout(() => {
                 navigate('/cart');
-            }, 2000); // Delay to show the success message
+            }, 2000); 
             return;
         }
 
@@ -153,8 +151,8 @@ function GameDetailPage() {
             if (response.ok) {
                 setAlert('Item added to cart successfully!');
                 setTimeout(() => {
-                    navigate('/cart'); // Redirect to cart page after showing success message
-                }, 2000); // 2-second delay to display the message
+                    navigate('/cart');
+                }, 2000); 
             } else {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Failed to add item to cart');

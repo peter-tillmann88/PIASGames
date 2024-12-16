@@ -161,11 +161,9 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId).orElse(null);
         if (product != null) {
             List<Image> productImages = product.getImages();
-            // Use the imageService to delete images so that files on Supabase are also deleted
             for (Image image: productImages) {
-                imageService.deleteById(image.getId()); // This triggers deletion from Supabase
+                imageService.deleteById(image.getId()); 
             }
-            // Now delete the product
             productRepository.deleteById(productId);
         } else {
             throw new ProductNotFoundException("Product not found with id: " + productId);
@@ -174,17 +172,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> searchProductsByName(String query) {
-        // Use the correctly defined repository method
         return productRepository.findByNameContainingIgnoreCase(query);
     }
 
     @Override
     public Product updateProduct(Long id, ProductUpdateDTO updateDTO) throws Exception {
-        // Find the product by ID
+        
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
 
-        // Validate and update fields
         if (updateDTO.getName() != null && !updateDTO.getName().trim().isEmpty()) {
             product.setName(updateDTO.getName().trim());
         }
@@ -207,10 +203,10 @@ public class ProductServiceImpl implements ProductService {
             product.setPlatform(updateDTO.getPlatform().trim());
         }
 
-        // Update the updatedAt timestamp
+        
         product.setUpdatedAt(LocalDateTime.now());
 
-        // Save and return the updated product
+        
         return productRepository.save(product);
     }
 

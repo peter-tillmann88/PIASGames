@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import Header from '../screen/homepage/Header'; // Adjust the path as needed
+import Header from '../screen/homepage/Header';
 import Sidebar from '../components/Sidebar';
 import GameCard from '../components/GameCard';
 import Footer from '../components/Footer';
@@ -22,7 +22,6 @@ function SearchPage() {
 
     useEffect(() => {
         fetchSearchResults();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchQuery, filters]);
 
     const fetchSearchResults = async () => {

@@ -73,19 +73,19 @@ public class OrderServiceImpl implements OrderService {
             for (ShoppingCartItems cartItem : cart.getShoppingCartItems()) {
                 Product product = cartItem.getProduct();
 
-                // Decrement product stock
+                
                 int newStock = product.getStock() - cartItem.getQuantity();
                 product.setStock(newStock);
                 productRepository.save(product);
 
-                // Create OrderItem and associate with Order
+                
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrder(newOrder);
                 orderItem.setProduct(product);
                 orderItem.setQuantity(cartItem.getQuantity());
                 orderItem.setPriceAtPurchase(cartItem.getUnitPrice());
 
-                // Add OrderItem to Order's orderItems set
+                
                 newOrder.addOrderItem(orderItem);
 
                 orderItemRepository.save(orderItem);
@@ -98,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
         
         shoppingCartService.clearCart(cart.getCartId());
 
-        // Return the newly created order
+       
         return newOrder;
     }
 
