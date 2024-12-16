@@ -1,6 +1,7 @@
 package com.eecs4413final.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ public class Categories {
     private String description;
 
     @ManyToMany(mappedBy = "categoryList")
+    @JsonIgnore
     private Set<Product> products = new HashSet<>();
 
     public Categories() {}

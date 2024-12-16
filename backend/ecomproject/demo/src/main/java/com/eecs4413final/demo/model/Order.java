@@ -12,11 +12,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderID;
 
-    @Column(nullable = false)
-    private int customerID;
-
-    @Column(nullable = false)
-    private int addressID;
+    @Column(name = "userid", nullable = false)
+    private int userId;
 
     @Column(nullable = false)
     private LocalDateTime orderDate = LocalDateTime.now();
@@ -24,16 +21,15 @@ public class Order {
     @Column(nullable = false)
     private String status = "PENDING";
 
-    @Column(nullable = false)
+    @Column(name = "totalamount", nullable = false) // Explicitly map to 'totalamount'
     private double totalAmount;
 
     // Default constructor
     public Order() {}
 
     // Parameterized constructor
-    public Order(int customerID, int addressID, double totalAmount) {
-        this.customerID = customerID;
-        this.addressID = addressID;
+    public Order(int userId, double totalAmount) {
+        this.userId = userId;
         this.totalAmount = totalAmount;
     }
 
@@ -47,20 +43,12 @@ public class Order {
         this.orderID = orderID;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
-    }
-
-    public int getAddressID() {
-        return addressID;
-    }
-
-    public void setAddressID(int addressID) {
-        this.addressID = addressID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getOrderDate() {
@@ -92,8 +80,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "orderID=" + orderID +
-                ", customerID=" + customerID +
-                ", addressID=" + addressID +
+                ", userId=" + userId +
                 ", orderDate=" + orderDate +
                 ", status='" + status + '\'' +
                 ", totalAmount=" + totalAmount +

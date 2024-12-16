@@ -20,7 +20,7 @@ public class ShoppingCartItems {
     @JoinColumn(name = "cartid", referencedColumnName = "cartid", nullable = false)
     private ShoppingCart shoppingCart;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "productID", nullable = false)
     private Product product;
 

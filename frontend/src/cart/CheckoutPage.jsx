@@ -2,12 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function CheckoutPage() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        creditCard: '',
-        expiryDate: '',
-    });
     const [user, setUser] = useState(null);
     const [orderData, setOrderData] = useState({
         items: [],
@@ -20,10 +14,10 @@ function CheckoutPage() {
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        let userId = localStorage.getItem('userId');
+        let userID = localStorage.getItem('userID');
 
         const fetchUserProfile = async () => {
-            if (token && !userId) {
+            if (token && !userID) {
                 try {
                     const response = await fetch('http://localhost:8080/api/users/profile', {
                         method: 'GET',
@@ -37,27 +31,27 @@ function CheckoutPage() {
                     }
 
                     const data = await response.json();
-                    userId = data.userID;
-                    localStorage.setItem('userId', userId);
+                    userID = data.userID;
+                    localStorage.setItem('userID', userID);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                 }
             }
 
-            if (token && userId) {
-                setUser({ userId, token });
-                fetchCartData(userId, token);
+            if (token && userID) {
+                setUser({ userID, token });
+                fetchCartData(userID, token);
             } else {
                 navigate('/login');
             }
         };
 
         fetchUserProfile();
-    }, []);
+    }, [navigate]);
 
-    const fetchCartData = async (userId, token) => {
+    const fetchCartData = async (userID, token) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/cart/${userId}/cart`, {
+            const response = await fetch(`http://localhost:8080/api/cart/${userID}/cart`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -88,46 +82,53 @@ function CheckoutPage() {
         }
     };
 
-    const generateOrderNumber = () => {
-        return 'ORD-' + Math.floor(Math.random() * 1000000);
-    };
+    const handleCompletePurchase = async () => {
+        if (!user) return;
 
-    const isValidCreditCard = (creditCard) => {
-        const cleanedCard = creditCard.replace(/\D/g, '');
-        return /^\d{16}$/.test(cleanedCard);
-    };
+        try {
+            const response = await fetch('http://localhost:8080/api/order/checkout', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            });
 
-    const isValidExpiryDate = (expiryDate) => {
-        const [month, year] = expiryDate.split('/').map(Number);
-        if (!month || !year || month < 1 || month > 12) return false;
-        const now = new Date();
-        const currentYear = now.getFullYear() % 100;
-        const currentMonth = now.getMonth() + 1;
-        return year > currentYear || (year === currentYear && month >= currentMonth);
-    };
+            if (!response.ok) {
+                // Attempt to parse the error message from the response
+                let errorMessage = 'Failed to complete purchase.';
+                try {
+                    const errorData = await response.json();
+                    // Adjust the key based on your backend's error response structure
+                    errorMessage = errorData.message || errorMessage;
+                } catch (parseError) {
+                    console.error('Error parsing error response:', parseError);
+                }
+                throw new Error(`Failed to complete purchase. ${errorMessage}`);
+            }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+            const order = await response.json();
+            // Assuming the order JSON contains orderID, orderDate, and other info.
+            // If it doesn't, you'll need to adjust how you generate the order number/date.
+            const orderNumber = "ORD-" + order.orderID;
+            const orderDetails = {
+                items: orderData.items.map(item => ({
+                    name: item.product_name,
+                    price: item.unit_price,
+                    quantity: item.quantity
+                })),
+                subtotal: orderData.subtotal,
+                shipping: orderData.shipping,
+                tax: orderData.tax,
+                total: orderData.total,
+                orderNumber,
+                orderDate: order.orderDate || new Date().toISOString(),
+            };
 
-        if (!isValidCreditCard(formData.creditCard)) {
-            alert('Invalid credit card number. Please enter a valid 16-digit credit card number.');
-            return;
+            navigate('/order-confirmation', { state: orderDetails });
+        } catch (error) {
+            console.error('Error completing purchase:', error);
+            alert('Failed to complete purchase. Please try again.');
         }
-
-        if (!isValidExpiryDate(formData.expiryDate)) {
-            alert('Invalid expiry date. Please ensure the expiry date is in the future.');
-            return;
-        }
-
-        const orderNumber = generateOrderNumber();
-
-        const orderDetails = {
-            ...orderData,
-            orderNumber,
-            orderDate: new Date().toISOString(),
-        };
-
-        navigate('/order-confirmation', { state: orderDetails });
     };
 
     return (
@@ -168,64 +169,24 @@ function CheckoutPage() {
                 )}
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-semibold">Name</label>
-                    <input
-                        type="text"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                    />
-                </div>
+            {/* Removed the CVV input field as it references undefined `formData` */}
+            {/* <div>
+                <label className="block text-sm font-semibold">CVV for credit card registered on Account</label>
+                <input
+                    type="text"
+                    className="w-full p-2 border border-gray-300 rounded-lg"
+                    value={formData.expiryDate}
+                    onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
+                    required
+                />
+            </div> */}
 
-                <div>
-                    <label className="block text-sm font-semibold">Email</label>
-                    <input
-                        type="email"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-semibold">Credit Card</label>
-                    <input
-                        type="text"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        value={formData.creditCard}
-                        onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, '');
-                            if (value.length <= 16) {
-                                setFormData({ ...formData, creditCard: value });
-                            }
-                        }}
-                        maxLength={16}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-semibold">Expiry Date (MM/YY)</label>
-                    <input
-                        type="text"
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        value={formData.expiryDate}
-                        onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
-                        required
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
-                >
-                    Complete Purchase
-                </button>
-            </form>
+            <button
+                onClick={handleCompletePurchase}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
+            >
+                Complete Purchase
+            </button>
         </div>
     );
 }

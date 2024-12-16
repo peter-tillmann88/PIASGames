@@ -41,8 +41,9 @@ public class AuthController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             try {
-                String accessToken = jwtUtil.generateAccessToken(user.getUsername());
-                String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
+                Long userId = user.getUserId();
+                String accessToken = jwtUtil.generateAccessToken(user.getUsername(), userId);
+                String refreshToken = jwtUtil.generateRefreshToken(user.getUsername(), userId);
 
                 logger.info("JWT tokens generated for user: {}", user.getUsername());
 
@@ -61,6 +62,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
+
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String authHeader) {
@@ -94,7 +96,14 @@ public class AuthController {
             }
 
             String username = jwtUtil.extractUsername(refreshToken);
-            String newAccessToken = jwtUtil.generateAccessToken(username);
+            // Retrieve the user to get the userId
+            Optional<User> userOpt = userService.findByUsername(username);
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+
+            Long userId = userOpt.get().getUserId();
+            String newAccessToken = jwtUtil.generateAccessToken(username, userId);
 
             Map<String, String> tokens = new HashMap<>();
             tokens.put("accessToken", newAccessToken);
@@ -105,35 +114,34 @@ public class AuthController {
             logger.error("Error refreshing token: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
     }
+
     @PostMapping("/verify")
-public ResponseEntity<Map<String, Object>> verifyToken(@RequestHeader("Authorization") String authHeader) {
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("valid", false, "message", "Invalid token format"));
-    }
+    public ResponseEntity<Map<String, Object>> verifyToken(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("valid", false, "message", "Invalid token format"));
+        }
 
-    String token = authHeader.substring(7);
-    try {
-        if (jwtUtil.validateToken(token)) {
-            String username = jwtUtil.extractUsername(token);
-            Optional<User> userOpt = userService.findByUsername(username);
-            if (userOpt.isPresent()) {
-                Long userId = userOpt.get().getUserId();
-                return ResponseEntity.ok(Map.of("valid", true, "username", username, "userId", userId));
+        String token = authHeader.substring(7);
+        try {
+            if (jwtUtil.validateToken(token)) {
+                String username = jwtUtil.extractUsername(token);
+                Optional<User> userOpt = userService.findByUsername(username);
+                if (userOpt.isPresent()) {
+                    Long userId = userOpt.get().getUserId();
+                    return ResponseEntity.ok(Map.of("valid", true, "username", username, "userId", userId));
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body(Map.of("valid", false, "message", "User not found"));
+                }
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("valid", false, "message", "User not found"));
+                        .body(Map.of("valid", false, "message", "Token is invalid or expired"));
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("valid", false, "message", "Token is invalid or expired"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("valid", false, "message", e.getMessage()));
         }
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("valid", false, "message", e.getMessage()));
     }
-}
-
 }

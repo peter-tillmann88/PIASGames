@@ -13,10 +13,10 @@ function CartPage() {
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        let userId = localStorage.getItem('userId');
+        let userID = localStorage.getItem('userID');
 
         const fetchUserProfile = async () => {
-            if (token && !userId) {
+            if (token && !userID) {
                 try {
                     const response = await fetch('http://localhost:8080/api/users/profile', {
                         method: 'GET',
@@ -30,15 +30,15 @@ function CartPage() {
                     }
 
                     const data = await response.json();
-                    userId = data.userID;
-                    localStorage.setItem('userId', userId);
+                    userID = data.userID;
+                    localStorage.setItem('userID', userID);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                 }
             }
 
-            if (token && userId) {
-                setUser({ userId, token });
+            if (token && userID) {
+                setUser({ userID, token });
             } else {
                 setUser(null);
             }
@@ -83,7 +83,7 @@ function CartPage() {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/cart/${user.userId}/cart`, {
+            const response = await fetch(`http://localhost:8080/api/cart/${user.userID}/cart`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

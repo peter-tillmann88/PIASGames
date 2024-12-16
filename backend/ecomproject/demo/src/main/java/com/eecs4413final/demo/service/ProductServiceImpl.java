@@ -179,39 +179,39 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-public Product updateProduct(Long id, ProductUpdateDTO updateDTO) throws Exception {
-    // Find the product by ID
-    Product product = productRepository.findById(id)
-            .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+    public Product updateProduct(Long id, ProductUpdateDTO updateDTO) throws Exception {
+        // Find the product by ID
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
 
-    // Validate and update fields
-    if (updateDTO.getName() != null && !updateDTO.getName().trim().isEmpty()) {
-        product.setName(updateDTO.getName().trim());
-    }
-    if (updateDTO.getDeveloper() != null && !updateDTO.getDeveloper().trim().isEmpty()) {
-        product.setDeveloper(updateDTO.getDeveloper().trim());
-    }
-    if (updateDTO.getDescription() != null && !updateDTO.getDescription().trim().isEmpty()) {
-        product.setDescription(updateDTO.getDescription().trim());
-    }
-    if (updateDTO.getPrice() != null && updateDTO.getPrice().compareTo(BigDecimal.ZERO) > 0) {
-        product.setPrice(updateDTO.getPrice());
-    }
-    if (updateDTO.getStock() != null && updateDTO.getStock() >= 0) {
-        product.setStock(updateDTO.getStock());
-    }
-    if (updateDTO.getSaleMod() != null && updateDTO.getSaleMod() >= 0) {
-        product.setSaleMod(updateDTO.getSaleMod());
-    }
-    if (updateDTO.getPlatform() != null && !updateDTO.getPlatform().trim().isEmpty()) {
-        product.setPlatform(updateDTO.getPlatform().trim());
-    }
+        // Validate and update fields
+        if (updateDTO.getName() != null && !updateDTO.getName().trim().isEmpty()) {
+            product.setName(updateDTO.getName().trim());
+        }
+        if (updateDTO.getDeveloper() != null && !updateDTO.getDeveloper().trim().isEmpty()) {
+            product.setDeveloper(updateDTO.getDeveloper().trim());
+        }
+        if (updateDTO.getDescription() != null && !updateDTO.getDescription().trim().isEmpty()) {
+            product.setDescription(updateDTO.getDescription().trim());
+        }
+        if (updateDTO.getPrice() != null && updateDTO.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+            product.setPrice(updateDTO.getPrice());
+        }
+        if (updateDTO.getStock() != null && updateDTO.getStock() >= 0) {
+            product.setStock(updateDTO.getStock());
+        }
+        if (updateDTO.getSaleMod() != null && updateDTO.getSaleMod() >= 0) {
+            product.setSaleMod(updateDTO.getSaleMod());
+        }
+        if (updateDTO.getPlatform() != null && !updateDTO.getPlatform().trim().isEmpty()) {
+            product.setPlatform(updateDTO.getPlatform().trim());
+        }
 
-    // Update the updatedAt timestamp
-    product.setUpdatedAt(LocalDateTime.now());
+        // Update the updatedAt timestamp
+        product.setUpdatedAt(LocalDateTime.now());
 
-    // Save and return the updated product
-    return productRepository.save(product);
-}
+        // Save and return the updated product
+        return productRepository.save(product);
+    }
 
 }
