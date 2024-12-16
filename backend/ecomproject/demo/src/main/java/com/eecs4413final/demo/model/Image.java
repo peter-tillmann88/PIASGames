@@ -1,8 +1,14 @@
 package com.eecs4413final.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Entity
+@Table(name = "image")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Image {
 
     @Id
@@ -19,9 +25,7 @@ public class Image {
     @JoinColumn(name = "productID")
     private Product product;
 
-    // Constructors
-    public Image() {
-    }
+    public Image() {}
 
     public Image(String fileName, String fileType, String imageUrl, Product product) {
         this.fileName = fileName;
@@ -30,13 +34,13 @@ public class Image {
         this.product = product;
     }
 
-    // Getters and Setters
-
     public Long getId() {
         return id;
     }
 
-    // ... other getters and setters
+    public void setId(Long id){
+        this.id = id;
+    }
 
     public String getFileName() {
         return fileName;
@@ -69,6 +73,4 @@ public class Image {
     public void setProduct(Product product){
         this.product = product;
     }
-
-    // toString, equals, hashCode
 }

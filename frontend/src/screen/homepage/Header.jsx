@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../../assets/img/logo.svg'; 
-import cartIcon from '../../assets/img/cart-icon.svg'; 
+import logo from '../../assets/img/logo.svg';
+import cartIcon from '../../assets/img/cart-icon.svg';
 import SearchBar from '../../components/SearchBar';
 
 function Header() {
@@ -9,35 +9,41 @@ function Header() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         const accessToken = localStorage.getItem('accessToken');
         setIsAuthenticated(!!accessToken);
     }, []);
 
     const handleSignOut = () => {
-
+        // Remove tokens and user-related local storage
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('tempCart'); // Clear guest cart (if any)
+
+        // Reset authentication state
         setIsAuthenticated(false);
-        navigate('/'); 
+
+        // Redirect to home page
+        navigate('/');
     };
 
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="flex items-center justify-between max-w-7xl mx-auto">
-                <div className="flex items-center">
+                {/* Logo Section */}
+                <div className="flex items-center flex-shrink-0">
                     <Link to="/">
-                        <img src={logo} alt="Logo" className="h-24 w-auto" />
+                        <img src={logo} alt="Logo" className="h-16 w-auto" />
                     </Link>
                 </div>
 
-
-                <div className="flex-1 mx-4">
+                {/* Search Bar Section */}
+                <div className="flex-1 mx-6">
                     <SearchBar />
                 </div>
 
-
-                <div className="flex items-center space-x-4">
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-4 flex-shrink-0">
                     {!isAuthenticated ? (
                         <>
                             <Link to="/login">
@@ -60,7 +66,6 @@ function Header() {
                             </button>
                         </>
                     )}
-
                     <Link to="/cart">
                         <img
                             src={cartIcon}

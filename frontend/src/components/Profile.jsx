@@ -5,7 +5,6 @@ import Footer from '../components/Footer';
 
 function Profile() {
     const [userInfo, setUserInfo] = useState({
-        username: '',
         email: '',
         phone: '',
         creditCard: '',
@@ -15,7 +14,9 @@ function Profile() {
         country: '',
         province: '',
         role: '',
-        createdAt: ''
+        createdAt: '',
+        userID: '',
+        username: '',
     });
 
     const [username, setUsername] = useState('');
@@ -33,14 +34,19 @@ function Profile() {
         }
     }, []);
 
-    const fetchUserProfile = async (username) => {
+    const fetchUserProfile = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/users/profile`, {
-                params: { username }
+            const token = localStorage.getItem('accessToken');
+
+            const response = await axios.get('http://localhost:8080/api/users/profile', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             setUserInfo(response.data);
         } catch (error) {
             alert('Error fetching user profile');
+            console.error(error);
         }
     };
 
@@ -78,6 +84,7 @@ function Profile() {
     const handleSaveChanges = async () => {
         try {
             await axios.put(`http://localhost:8080/api/users/profile`, {
+                userID: userInfo.userID,
                 username: userInfo.username,
                 email: userInfo.email,
                 phone: userInfo.phone,
@@ -95,7 +102,7 @@ function Profile() {
             fetchUserProfile(username);
         } catch (error) {
             if (error.response && error.response.status === 409) {
-                alert('Username or Email already exists.');
+                alert('Email already exists.');
             } else if (error.response && error.response.status === 400) {
                 alert('Invalid input data.');
             } else {
@@ -113,7 +120,6 @@ function Profile() {
             alert('Account deleted successfully');
             localStorage.removeItem('username');
             setUserInfo({
-                username: '',
                 email: '',
                 phone: '',
                 creditCard: '',
@@ -123,7 +129,9 @@ function Profile() {
                 country: '',
                 province: '',
                 role: '',
-                createdAt: ''
+                createdAt: '',
+                userID: '',
+                username: '',
             });
         } catch (error) {
             alert('Error deleting account');
@@ -140,17 +148,17 @@ function Profile() {
                     {isEditing ? (
                         <>
                             <div className="mb-4">
-                                <label className="block text-lg font-semibold mb-2">Name</label>
+                                <label className="block text-lg font-semibold mb-2">Email</label>
                                 <input
                                     type="text"
-                                    name="username"
-                                    value={userInfo.username}
+                                    name="email"
+                                    value={userInfo.email}
                                     onChange={handleInputChange}
                                     className="w-full p-2 border border-gray-300 rounded"
                                 />
                             </div>
                             <div className="mb-4">
-                                <label className="block text-lg font-semibold mb-2">Credit Card</label>
+                                <label className="block text-lg font-semibold mb-2">Credit Card #</label>
                                 <input
                                     type="text"
                                     name="creditCard"
@@ -229,7 +237,9 @@ function Profile() {
                         </>
                     ) : (
                         <>
-                        
+                            <p className="mb-4 text-lg">
+                                <strong>User ID:</strong> {userInfo.userID || 'N/A'}
+                            </p>
                             <p className="mb-4 text-lg">
                                 <strong>Email:</strong> {userInfo.email || 'N/A'}
                             </p>
@@ -237,7 +247,7 @@ function Profile() {
                                 <strong>Phone:</strong> {userInfo.phone || 'N/A'}
                             </p>
                             <p className="mb-4 text-lg">
-                                <strong>Credit Card:</strong> {userInfo.creditCard || 'N/A'}
+                                <strong>Credit Card #:</strong> {userInfo.creditCard || 'N/A'}
                             </p>
                             <p className="mb-4 text-lg">
                                 <strong>Address:</strong> {userInfo.address || 'N/A'}

@@ -1,6 +1,9 @@
+// src/main/java/com/eecs4413final/demo/service/ProductServiceImpl.java
+
 package com.eecs4413final.demo.service;
 
 import com.eecs4413final.demo.dto.ProductDTO;
+import com.eecs4413final.demo.dto.ProductUpdateDTO;
 import com.eecs4413final.demo.exception.CategoryNotFoundException;
 import com.eecs4413final.demo.exception.ProductNotFoundException;
 import com.eecs4413final.demo.model.Categories;
@@ -12,7 +15,8 @@ import com.eecs4413final.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -173,4 +177,41 @@ public class ProductServiceImpl implements ProductService {
         // Use the correctly defined repository method
         return productRepository.findByNameContainingIgnoreCase(query);
     }
+
+    @Override
+    public Product updateProduct(Long id, ProductUpdateDTO updateDTO) throws Exception {
+        // Find the product by ID
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
+
+        // Validate and update fields
+        if (updateDTO.getName() != null && !updateDTO.getName().trim().isEmpty()) {
+            product.setName(updateDTO.getName().trim());
+        }
+        if (updateDTO.getDeveloper() != null && !updateDTO.getDeveloper().trim().isEmpty()) {
+            product.setDeveloper(updateDTO.getDeveloper().trim());
+        }
+        if (updateDTO.getDescription() != null && !updateDTO.getDescription().trim().isEmpty()) {
+            product.setDescription(updateDTO.getDescription().trim());
+        }
+        if (updateDTO.getPrice() != null && updateDTO.getPrice().compareTo(BigDecimal.ZERO) > 0) {
+            product.setPrice(updateDTO.getPrice());
+        }
+        if (updateDTO.getStock() != null && updateDTO.getStock() >= 0) {
+            product.setStock(updateDTO.getStock());
+        }
+        if (updateDTO.getSaleMod() != null && updateDTO.getSaleMod() >= 0) {
+            product.setSaleMod(updateDTO.getSaleMod());
+        }
+        if (updateDTO.getPlatform() != null && !updateDTO.getPlatform().trim().isEmpty()) {
+            product.setPlatform(updateDTO.getPlatform().trim());
+        }
+
+        // Update the updatedAt timestamp
+        product.setUpdatedAt(LocalDateTime.now());
+
+        // Save and return the updated product
+        return productRepository.save(product);
+    }
+
 }

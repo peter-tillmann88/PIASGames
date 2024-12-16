@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.logging.ErrorManager;
 
+
 @RestController
 @RequestMapping("/api/cart-items")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = {"Authorization", "Content-Type"})
 public class ShoppingCartItemController {
 
     private final ShoppingCartService shoppingCartService;
@@ -101,4 +103,3 @@ public class ShoppingCartItemController {
         }
     }
 }
-

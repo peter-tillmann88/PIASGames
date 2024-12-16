@@ -1,9 +1,7 @@
-// src/main/java/com/eecs4413final/demo/model/Product.java
-
 package com.eecs4413final.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Products")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "productId")
 public class Product {
 
     @Id
@@ -25,14 +24,13 @@ public class Product {
     private String name;
 
     @Column(name = "developer", nullable = false, length = 100)
-    private String developer;   //added developer field
+    private String developer;
 
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Column(name = "platform", nullable = false, length = 100)
     private String platform;
-
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
@@ -49,19 +47,17 @@ public class Product {
             joinColumns = @JoinColumn(name = "productid"),
             inverseJoinColumns = @JoinColumn(name = "categoryid")
     )
-    @JsonManagedReference
-    private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
+    private Set<Categories> categoryList = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true) //removes all images when item deleted
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime  createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    // Constructors
     public Product(){
         this.createdAt = LocalDateTime.now();
     }
@@ -91,7 +87,6 @@ public class Product {
         this.platform = platform;
     }
 
-    // Getters and Setters
     public Long getProductId() {
         return productId;
     }
@@ -108,14 +103,6 @@ public class Product {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getDeveloper(){
         return this.developer;
     }
@@ -124,12 +111,20 @@ public class Product {
         this.developer = developer;
     }
 
-    public Set<Categories> getCategoryList() {
-        return categoryList;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCategoryList(Set<Categories> categoryList) {
-        this.categoryList = categoryList;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPlatform(){
+        return platform;
+    }
+
+    public void setPlatform(String platform){
+        this.platform = platform;
     }
 
     public BigDecimal getPrice() {
@@ -148,9 +143,26 @@ public class Product {
         this.stock = quantity;
     }
 
+    public float getSaleMod(){
+        return saleMod;
+    }
+
+    public void setSaleMod(float saleMod) {
+        this.saleMod = saleMod;
+    }
+
+    public Set<Categories> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(Set<Categories> categoryList) {
+        this.categoryList = categoryList;
+    }
+
     public List<Image> getImages() {
         return images;
     }
+
     public void setImages(List<Image> images) {
         this.images = images;
     }
@@ -167,11 +179,11 @@ public class Product {
         return updatedAt;
     }
 
-    public void setUpdatedAt() {
-        this.updatedAt = LocalDateTime.now();
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
+    
 
-    // Helper methods to manage bidirectional relationship
     public void addCategory(Categories category) {
         this.categoryList.add(category);
         category.getProducts().add(this);
@@ -192,37 +204,6 @@ public class Product {
         image.setProduct(null);
     }
 
-    public void setPlatform(String platform){
-        this.platform = platform;
-    }
-
-    public String getPlatform(){
-        return platform;
-    }
-
-    public float getSaleMod(){
-        return saleMod;
-    }
-
-    // toString, equals, hashCode
-    @Override
-    public String toString() {
-        return "Product{" +
-                "productID=" + productId +
-                ", name='" + name + '\'' +
-                ", developer='" + developer + '\'' +
-                ", description='" + description + '\'' +
-                ", platform='" + platform + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", saleMod=" + saleMod +
-                ", categoryList=" + categoryList +
-                ", images=" + images +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -235,9 +216,5 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(productId);
-    }
-
-    public void setSaleMod(float saleMod) {
-        this.saleMod = saleMod;
     }
 }

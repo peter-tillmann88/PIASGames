@@ -13,8 +13,8 @@ public class Wishlist {
     private Long wishlistID;
 
     @ManyToOne
-    @JoinColumn(name = "customerID", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "userID", nullable = false) // Change to userID
+    private User user; // Replace Customer with User
 
     @Column(nullable = false, length = 100)
     private String name;
@@ -25,19 +25,15 @@ public class Wishlist {
     @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<WishlistItem> wishlistItems;
 
-    // Default constructor
     public Wishlist() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Parameterized constructor
-    public Wishlist(Customer customer, String name) {
-        this.customer = customer;
+    public Wishlist(User user, String name) {
+        this.user = user;
         this.name = name;
         this.createdAt = LocalDateTime.now();
     }
-
-    // Getters and Setters
 
     public Long getWishlistID() {
         return wishlistID;
@@ -47,12 +43,12 @@ public class Wishlist {
         this.wishlistID = wishlistID;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -67,27 +63,11 @@ public class Wishlist {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Set<WishlistItem> getWishlistItems() {
         return wishlistItems;
     }
 
     public void setWishlistItems(Set<WishlistItem> wishlistItems) {
         this.wishlistItems = wishlistItems;
-    }
-
-    // toString method
-
-    @Override
-    public String toString() {
-        return "Wishlist{" +
-                "wishlistID=" + wishlistID +
-                ", customer=" + customer.getFirstName() + " " + customer.getLastName() +
-                ", name='" + name + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
     }
 }

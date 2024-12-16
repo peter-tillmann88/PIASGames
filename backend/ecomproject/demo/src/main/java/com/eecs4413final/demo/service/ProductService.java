@@ -1,7 +1,8 @@
+// src/main/java/com/eecs4413final/demo/service/ProductService.java
 package com.eecs4413final.demo.service;
 
 import com.eecs4413final.demo.dto.ProductDTO;
-import com.eecs4413final.demo.model.Categories;
+import com.eecs4413final.demo.dto.ProductUpdateDTO;
 import com.eecs4413final.demo.model.Product;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ public interface ProductService {
     List<Product> getByCategoryAndPlatform(String category, String platform);
     Product getByName(String name);
     List<Product> getByPlatformAndName(String platform, String name);
-    public List<Product> getByCategoryListIn(Set<Long> categoryIds);
+    List<Product> getByCategoryListIn(Set<Long> categoryIds);
 
     Product getById(Long productId);
     void deleteById(Long productId);
@@ -27,5 +28,9 @@ public interface ProductService {
 
     // New addProduct that also handles images
     Product addProduct(ProductDTO productDTO, List<MultipartFile> images) throws Exception;
+
+    // New updateProduct method
+    Product updateProduct(Long productId, ProductUpdateDTO updateDTO) throws Exception;
+
     List<Product> searchProductsByName(String query);
 }

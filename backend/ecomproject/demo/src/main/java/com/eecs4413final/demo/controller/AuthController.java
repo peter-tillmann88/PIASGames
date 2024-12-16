@@ -23,14 +23,14 @@ public class AuthController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
-    private final BlacklistService blacklistService; // Correct type for BlacklistService
+    private final BlacklistService blacklistService;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     public AuthController(UserService userService, JwtUtil jwtUtil, BlacklistService blacklistService) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
-        this.blacklistService = blacklistService; // Properly assign BlacklistService
+        this.blacklistService = blacklistService;
     }
 
     @PostMapping("/login")
@@ -41,17 +41,16 @@ public class AuthController {
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             try {
-                // Generate Access and Refresh Tokens
-                String accessToken = jwtUtil.generateAccessToken(user.getUsername());
-                String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
+                Long userId = user.getUserId();
+                String accessToken = jwtUtil.generateAccessToken(user.getUsername(), userId);
+                String refreshToken = jwtUtil.generateRefreshToken(user.getUsername(), userId);
 
                 logger.info("JWT tokens generated for user: {}", user.getUsername());
 
-                // Return tokens along with user role
                 Map<String, String> response = new HashMap<>();
                 response.put("accessToken", accessToken);
                 response.put("refreshToken", refreshToken);
-                response.put("role", user.getRole()); // Include the user's role in the response
+                response.put("role", user.getRole());
 
                 return ResponseEntity.ok(response);
             } catch (Exception e) {
@@ -64,16 +63,17 @@ public class AuthController {
         }
     }
 
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token format");
         }
 
-        String token = authHeader.substring(7); // Extract the JWT after "Bearer "
+        String token = authHeader.substring(7);
         try {
-            String username = jwtUtil.extractUsername(token); // Extract username for debugging
-            blacklistService.blacklistToken(token); // Add token to blacklist
+            String username = jwtUtil.extractUsername(token);
+            blacklistService.blacklistToken(token);
             logger.info("Token blacklisted for user: {}", username);
             return ResponseEntity.ok("Logged out successfully");
         } catch (Exception e) {
@@ -88,29 +88,60 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        String refreshToken = authHeader.substring(7); // Extract the JWT after "Bearer "
+        String refreshToken = authHeader.substring(7);
         try {
-            // Validate Refresh Token
             if (!jwtUtil.validateToken(refreshToken)) {
                 logger.warn("Invalid refresh token provided");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
 
-            // Extract Username from Refresh Token
             String username = jwtUtil.extractUsername(refreshToken);
+            // Retrieve the user to get the userId
+            Optional<User> userOpt = userService.findByUsername(username);
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
 
-            // Generate New Access Token
-            String newAccessToken = jwtUtil.generateAccessToken(username);
+            Long userId = userOpt.get().getUserId();
+            String newAccessToken = jwtUtil.generateAccessToken(username, userId);
 
-            // Return the new access token
             Map<String, String> tokens = new HashMap<>();
             tokens.put("accessToken", newAccessToken);
-            tokens.put("refreshToken", refreshToken); // Optionally return the same refresh token
+            tokens.put("refreshToken", refreshToken);
 
             return ResponseEntity.ok(tokens);
         } catch (Exception e) {
             logger.error("Error refreshing token: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Map<String, Object>> verifyToken(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("valid", false, "message", "Invalid token format"));
+        }
+
+        String token = authHeader.substring(7);
+        try {
+            if (jwtUtil.validateToken(token)) {
+                String username = jwtUtil.extractUsername(token);
+                Optional<User> userOpt = userService.findByUsername(username);
+                if (userOpt.isPresent()) {
+                    Long userId = userOpt.get().getUserId();
+                    return ResponseEntity.ok(Map.of("valid", true, "username", username, "userId", userId));
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body(Map.of("valid", false, "message", "User not found"));
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("valid", false, "message", "Token is invalid or expired"));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("valid", false, "message", e.getMessage()));
         }
     }
 }

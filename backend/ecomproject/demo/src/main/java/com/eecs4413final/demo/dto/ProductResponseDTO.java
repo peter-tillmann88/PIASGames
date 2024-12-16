@@ -1,42 +1,28 @@
-// src/main/java/com/eecs4413final/demo/model/Product.java
+// src/main/java/com/eecs4413final/demo/dto/ProductResponseDTO.java
 
 package com.eecs4413final.demo.dto;
 
 import com.eecs4413final.demo.model.Categories;
-import com.eecs4413final.demo.model.Image;
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class ProductResponseDTO {
 
     private Long productId;
-
     private String name;
-
-    private String developer;   //added developer field
-
+    private String developer;   // Added developer field
     private String description;
-
     private String platform;
-
     private BigDecimal price;
-
     private int stock;
-
     private float saleMod;
-
     private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
-
     private List<ImageDTO> images;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     private String message;
 
     // Constructors
@@ -58,7 +44,7 @@ public class ProductResponseDTO {
         this.platform = platform;
     }
 
-    public ProductResponseDTO(Long id,String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, String platform) {
+    public ProductResponseDTO(Long id, String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, String platform) {
         this.productId = id;
         this.name = name;
         this.developer = developer;
@@ -88,6 +74,14 @@ public class ProductResponseDTO {
         this.name = name;
     }
 
+	public String getDeveloper() {
+        return developer;
+    }
+
+    public void setDeveloper(String developer) {
+        this.developer = developer;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -96,20 +90,12 @@ public class ProductResponseDTO {
         this.description = description;
     }
 
-    public String getDeveloper() {
-        return this.developer;
+    public String getPlatform() {
+        return platform;
     }
 
-    public void setDeveloper(String developer) {
-        this.developer = developer;
-    }
-
-    public Set<Categories> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(Set<Categories> categoryList) {
-        this.categoryList = categoryList;
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     public BigDecimal getPrice() {
@@ -126,6 +112,22 @@ public class ProductResponseDTO {
 
     public void setStock(Integer quantity) {
         this.stock = quantity;
+    }
+
+    public float getSaleMod() {
+        return saleMod;
+    }
+
+    public void setSaleMod(float saleMod) {
+        this.saleMod = saleMod;
+    }
+
+    public Set<Categories> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(Set<Categories> categoryList) {
+        this.categoryList = categoryList;
     }
 
     public List<ImageDTO> getImages() {
@@ -148,25 +150,8 @@ public class ProductResponseDTO {
         return updatedAt;
     }
 
-    public void setUpdatedAt() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-
-    public void setMod(float mod) {
-        this.saleMod = mod;
-    }
-
-    public float getMod() {
-        return saleMod;
-    }
-
-    public void setPlatform(String platform) {
-        this.platform = platform;
-    }
-
-    public String getPlatform() {
-        return platform;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getMessage(){

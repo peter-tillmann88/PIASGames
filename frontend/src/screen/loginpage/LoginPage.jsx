@@ -18,7 +18,7 @@ function LoginPage() {
             if (role === 'ADMIN') {
                 navigate('/admin-dashboard');
             } else {
-                navigate('/home');
+                navigate('/');
             }
         }
     }, [navigate]);
@@ -51,7 +51,7 @@ function LoginPage() {
             if (role === 'ADMIN') {
                 navigate('/admin-dashboard'); // Redirect to admin dashboard
             } else {
-                navigate('/home'); // Redirect to home for customers
+                navigate('/'); // Redirect to home for customers
             }
         } catch (err) {
             console.error('Login failed:', err.response || err.message);
@@ -102,6 +102,17 @@ function LoginPage() {
                     >
                         Log In
                     </button>
+
+                    <div className="mt-4 text-center">
+                        <p>Don't have an account?</p>
+                        <button
+                            type="button"
+                            onClick={() => navigate('/register')} // Navigate to RegisterPage
+                            className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-700 mt-2"
+                        >
+                            Register
+                        </button>
+                    </div>
                 </form>
             </div>
             <Footer />

@@ -4,22 +4,25 @@ function CartItem({ item, onRemove }) {
     const [quantity, setQuantity] = useState(item.quantity);
 
     const handleQuantityChange = (e) => {
-        const newQuantity = parseInt(e.target.value);
+        const newQuantity = parseInt(e.target.value, 10);
         setQuantity(newQuantity);
-        // Optionally update the cart in the database here
     };
 
     const handleRemoveItem = () => {
-        onRemove(item.id);
+        onRemove(item.cartItemId);
     };
 
     return (
         <div className="flex justify-between items-center border-b py-4">
             <div className="flex items-center">
-                <img src={item.imageUrl} alt={item.name} className="w-16 h-16 mr-4" />
+                <img
+                    src={item.imageUrl} // This is now the signed URL
+                    alt={item.product_name}
+                    className="w-16 h-16 mr-4 object-cover"
+                />
                 <div>
-                    <p className="font-semibold">{item.name}</p>
-                    <p className="text-gray-500">{item.platform}</p>
+                    <p className="font-semibold">{item.product_name}</p>
+                    <p className="text-gray-500">Qty: {quantity}</p>
                 </div>
             </div>
 
@@ -31,7 +34,7 @@ function CartItem({ item, onRemove }) {
                     className="border p-2 w-16 text-center"
                     min="1"
                 />
-                <p className="font-semibold">${(item.price * quantity).toFixed(2)}</p>
+                <p className="font-semibold">${(item.unit_price * quantity).toFixed(2)}</p>
                 <button
                     onClick={handleRemoveItem}
                     className="text-red-600 hover:underline"

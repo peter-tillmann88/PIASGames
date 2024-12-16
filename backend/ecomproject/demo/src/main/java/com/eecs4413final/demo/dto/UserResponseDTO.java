@@ -1,6 +1,5 @@
 package com.eecs4413final.demo.dto;
 
-import com.eecs4413final.demo.model.User;
 import java.time.LocalDateTime;
 
 public class UserResponseDTO {
@@ -19,7 +18,7 @@ public class UserResponseDTO {
     private String postalCode;
 
     public UserResponseDTO(Long userID, String username, String email, String phone, String role,
-                           LocalDateTime createdAt, String creditCard, String expiryDate, 
+                           LocalDateTime createdAt, String creditCard, String expiryDate,
                            String country, String province, String address, String postalCode) {
         this.userID = userID;
         this.username = username;
@@ -35,7 +34,6 @@ public class UserResponseDTO {
         this.postalCode = postalCode;
     }
 
-    // Getters and Setters
     public Long getUserID() {
         return userID;
     }
@@ -55,15 +53,15 @@ public class UserResponseDTO {
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public String getPhone() {
         return phone;
     }
-    
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -71,7 +69,7 @@ public class UserResponseDTO {
     public String getRole() {
         return role;
     }
-    
+
     public void setRole(String role) {
         this.role = role;
     }
@@ -79,7 +77,7 @@ public class UserResponseDTO {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    
+
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
@@ -87,47 +85,47 @@ public class UserResponseDTO {
     public String getCreditCard() {
         return creditCard;
     }
-    
+
     public void setCreditCard(String creditCard) {
         this.creditCard = creditCard;
     }
-    
+
     public String getExpiryDate() {
         return expiryDate;
     }
-    
+
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
-    
+
     public String getCountry() {
         return country;
     }
-    
+
     public void setCountry(String country) {
         this.country = country;
     }
-    
+
     public String getProvince() {
         return province;
     }
-    
+
     public void setProvince(String province) {
         this.province = province;
     }
-    
+
     public String getAddress() {
         return address;
     }
-    
+
     public void setAddress(String address) {
         this.address = address;
     }
-    
+
     public String getPostalCode() {
         return postalCode;
     }
-    
+
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
