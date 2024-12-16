@@ -1,5 +1,6 @@
 package com.eecs4413final.demo.controller;
 
+import com.eecs4413final.demo.dto.AdminOrderDTO;
 import com.eecs4413final.demo.dto.OrderDTO;
 import com.eecs4413final.demo.mapper.OrderMapper;
 import com.eecs4413final.demo.model.Order;
@@ -12,8 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -75,7 +75,7 @@ public class OrderController {
         }
     }
 
-    // New endpoint to get all orders (Admin only)
+    // Admin endpoint to get all orders with usernames
     @GetMapping("/all")
     public ResponseEntity<?> getAllOrders(@RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -101,9 +101,21 @@ public class OrderController {
 
         try {
             List<Order> orders = orderService.getAllOrders();
-            List<OrderDTO> orderDTOs = orders.stream()
-                    .map(OrderMapper::toDTO)
-                    .collect(Collectors.toList());
+            List<AdminOrderDTO> orderDTOs = orders.stream().map(order -> {
+                AdminOrderDTO dto = new AdminOrderDTO(
+                        order.getOrderID(),
+                        order.getOrderDate(),
+                        order.getStatus(),
+                        order.getTotalAmount(),
+                        order.getOrderItems().stream().map(OrderMapper::toDTO).collect(Collectors.toList()),
+                        null // will set username next
+                );
+                // Fetch the user who placed the order
+                Optional<User> orderUserOpt = userRepository.findById((long) order.getUserId());
+                orderUserOpt.ifPresent(orderUser -> dto.setUsername(orderUser.getUsername()));
+                return dto;
+            }).collect(Collectors.toList());
+
             return ResponseEntity.ok(orderDTOs);
         } catch (Exception e) {
             return new ResponseEntity<>("Could not retrieve orders: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

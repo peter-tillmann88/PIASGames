@@ -19,8 +19,11 @@ function SalesHistoryPage() {
         fetchUsers();
         fetchProducts();
         fetchSalesData();
-        calculateSummary();
     }, [filters]);
+
+    useEffect(() => {
+        calculateSummary();
+    }, [salesData]);
 
     const fetchUsers = async () => {
         try {
@@ -47,23 +50,45 @@ function SalesHistoryPage() {
     };
 
     const fetchSalesData = async () => {
-        const data = [
-            { id: 1, user: 'John Doe', product: 'Game A', price: 49.99, quantity: 2, date: '2024-12-01' },
-            { id: 2, user: 'Jane Smith', product: 'Game B', price: 39.99, quantity: 1, date: '2024-12-02' },
-            { id: 3, user: 'John Doe', product: 'Game A', price: 49.99, quantity: 1, date: '2024-12-03' },
-        ];
+        try {
+            const token = localStorage.getItem('accessToken'); // Admin's token
+            const response = await fetch('http://localhost:8080/api/order/all', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
-        const filteredData = data.filter((sale) => {
-            const matchCustomer = filters.customer ? sale.user === filters.customer : true;
-            const matchProduct = filters.product ? sale.product === filters.product : true;
+            if (response.ok) {
+                const orders = await response.json();
+                // orders is a list of AdminOrderDTO (with username and orderItems)
+                const flattenedData = [];
+                orders.forEach((order) => {
+                    order.orderItems.forEach((item) => {
+                        flattenedData.push({
+                            user: order.username,
+                            product: item.productName,
+                            price: item.priceAtPurchase,
+                            quantity: item.quantity,
+                            date: order.orderDate
+                        });
+                    });
+                });
 
-            const matchStartDate = filters.startDate ? new Date(sale.date) >= new Date(filters.startDate) : true;
-            const matchEndDate = filters.endDate ? new Date(sale.date) <= new Date(filters.endDate) : true;
+                const filteredData = flattenedData.filter((sale) => {
+                    const matchCustomer = filters.customer ? sale.user === filters.customer : true;
+                    const matchProduct = filters.product ? sale.product === filters.product : true;
+                    const matchStartDate = filters.startDate ? new Date(sale.date) >= new Date(filters.startDate) : true;
+                    const matchEndDate = filters.endDate ? new Date(sale.date) <= new Date(filters.endDate) : true;
+                    return matchCustomer && matchProduct && matchStartDate && matchEndDate;
+                });
 
-            return matchCustomer && matchProduct && matchStartDate && matchEndDate;
-        });
-
-        setSalesData(filteredData);
+                setSalesData(filteredData);
+            } else {
+                console.error('Failed to fetch orders');
+            }
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
     };
 
     const calculateSummary = () => {
@@ -174,7 +199,7 @@ function SalesHistoryPage() {
                     </div>
                 </div>
 
-                {/* Grid for Statistics */}
+                {/* Statistics */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <div className="bg-blue-500 text-white p-6 rounded shadow">
                         <h3 className="text-lg font-bold">Total Sales</h3>
@@ -210,13 +235,13 @@ function SalesHistoryPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {salesData.map((sale) => (
-                            <tr key={sale.id} className="text-center">
+                        {salesData.map((sale, index) => (
+                            <tr key={index} className="text-center">
                                 <td className="border border-gray-300 px-4 py-2">{sale.user}</td>
                                 <td className="border border-gray-300 px-4 py-2">{sale.product}</td>
                                 <td className="border border-gray-300 px-4 py-2">${sale.price.toFixed(2)}</td>
                                 <td className="border border-gray-300 px-4 py-2">{sale.quantity}</td>
-                                <td className="border border-gray-300 px-4 py-2">{sale.date}</td>
+                                <td className="border border-gray-300 px-4 py-2">{new Date(sale.date).toLocaleDateString()}</td>
                             </tr>
                         ))}
                     </tbody>

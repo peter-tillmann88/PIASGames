@@ -81,6 +81,7 @@ com/eecs4413final/demo/config/WebConfig.class
 com/eecs4413final/demo/service/CategoryServiceImpl.class
 com/eecs4413final/demo/dto/ProductUpdateDTO.class
 com/eecs4413final/demo/exception/CategoryNotFoundException.class
+com/eecs4413final/demo/dto/AdminOrderDTO.class
 com/eecs4413final/demo/model/Customer.class
 com/eecs4413final/demo/model/Order.class
 com/eecs4413final/demo/exception/ImageNotFoundException.class
