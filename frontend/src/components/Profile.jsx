@@ -29,7 +29,7 @@ function Profile() {
         if (savedUsername) {
             setUsername(savedUsername);
             fetchUserProfile(savedUsername);
-            fetchPurchaseHistory(savedUsername);
+            fetchOrderHistory(); // Call the new order history endpoint
             fetchWishlist(savedUsername);
         }
     }, []);
@@ -50,14 +50,19 @@ function Profile() {
         }
     };
 
-    const fetchPurchaseHistory = async (username) => {
+    // Updated function to fetch order history from the /api/order/history endpoint
+    const fetchOrderHistory = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/purchases`, {
-                params: { username }
+            const token = localStorage.getItem('accessToken');
+            const response = await axios.get('http://localhost:8080/api/order/history', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
+            // The response should match the structure you showed in the sample
             setPurchaseHistory(response.data);
         } catch (error) {
-            console.error('Error fetching purchase history:', error);
+            console.error('Error fetching order history:', error);
         }
     };
 
@@ -276,28 +281,36 @@ function Profile() {
                         </>
                     )}
                 </div>
+
+                {/* Display Order History */}
                 <div className="bg-white p-6 mt-6 rounded shadow-lg w-full max-w-4xl">
-                    <h3 className="text-2xl font-bold mb-4">Purchase History</h3>
+                    <h3 className="text-2xl font-bold mb-4">Order History</h3>
                     {purchaseHistory.length > 0 ? (
-                        <ul>
-                            {purchaseHistory.map((purchase, index) => (
-                                <li key={index} className="mb-2">
-                                    <p>
-                                        <strong>Product:</strong> {purchase.productName}
-                                    </p>
-                                    <p>
-                                        <strong>Date:</strong> {purchase.date}
-                                    </p>
-                                    <p>
-                                        <strong>Amount:</strong> ${purchase.amount}
-                                    </p>
-                                </li>
-                            ))}
-                        </ul>
+                        purchaseHistory.map((order) => (
+                            <div key={order.orderID} className="mb-6 border-b pb-4">
+                                <p><strong>Order ID:</strong> {order.orderID}</p>
+                                <p><strong>Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
+                                <p><strong>Status:</strong> {order.status}</p>
+                                <p><strong>Total Amount:</strong> ${order.totalAmount.toFixed(2)}</p>
+
+                                <h4 className="text-xl font-semibold mt-4 mb-2">Order Items</h4>
+                                <ul className="ml-4 list-disc">
+                                    {order.orderItems.map((item) => (
+                                        <li key={item.orderItemID} className="mb-2">
+                                            <p><strong>Product Name:</strong> {item.productName}</p>
+                                            <p><strong>Quantity:</strong> {item.quantity}</p>
+                                            <p><strong>Price at Purchase:</strong> ${item.priceAtPurchase}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
                     ) : (
-                        <p>No purchase history available.</p>
+                        <p>No orders found.</p>
                     )}
                 </div>
+
+                {/* Wishlist Section */}
                 <div className="bg-white p-6 mt-6 rounded shadow-lg w-full max-w-4xl">
                     <h3 className="text-2xl font-bold mb-4">Wishlist</h3>
                     {wishlist.length > 0 ? (
