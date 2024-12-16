@@ -16,8 +16,9 @@ function GameCard({ game }) {
                 fileName = decodeURIComponent(fileName);
 
                 try {
-                    const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
-
+                    const response = await fetch(
+                        `http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`
+                    );
                     if (response.ok) {
                         const data = await response.json();
                         setImageSrc(data.signedUrl);
@@ -33,11 +34,11 @@ function GameCard({ game }) {
         fetchSignedUrl();
     }, [game.images]);
 
-    const categoriesText = (Array.isArray(game.categoryList) && game.categoryList.length > 0)
+    const categoriesText = game.categoryList && game.categoryList.length > 0
         ? game.categoryList.map(cat => cat.name).join(', ')
         : 'No category';
 
-    const platformText = game.platform ? game.platform : 'No platform';
+    const platformText = game.platform || 'No platform';
 
     return (
         <Link to={`/gamedetailpage/${game.productId}`} className="block text-center">

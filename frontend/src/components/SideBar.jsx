@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 function Sidebar({ onFilterChange }) {
-    const platforms = [
-        "PC",
-        "Nintendo Switch",
-        "PS4",
-        "PS5",
-        "Xbox Series X"
-    ];
+    const platforms = ["PC", "Nintendo Switch", "PS4", "PS5", "Xbox Series X"];
 
-    //category states
     const [categories, setCategories] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const [categoriesError, setCategoriesError] = useState(null);
@@ -22,12 +15,7 @@ function Sidebar({ onFilterChange }) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/categories/all', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+                const response = await fetch('http://localhost:8080/api/categories/all');
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
@@ -44,31 +32,15 @@ function Sidebar({ onFilterChange }) {
         fetchCategories();
     }, []);
 
-    const handleCategoryChange = (e) => {
-        setSelectedCategory(e.target.value);
-        onFilterChange('category', e.target.value);
-    };
-
-    const handlePlatformChange = (e) => {
-        setSelectedPlatform(e.target.value);
-        onFilterChange('platform', e.target.value);
-    };
-
-    const handlePriceChange = (e) => {
-        setSelectedPrice(e.target.value);
-        onFilterChange('price', e.target.value);
-    };
-
-    const handleSortChange = (e) => {
-        setSelectedSort(e.target.value);
-        onFilterChange('sort', e.target.value);
+    const handleFilterChange = (filterType, value) => {
+        onFilterChange(filterType, value);
     };
 
     return (
         <div className="bg-white p-4 rounded-md shadow-md">
             <h3 className="text-lg font-semibold">Filter Products</h3>
 
-            {/* cat filter*/}
+            {/* Category Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Category</label>
                 {categoriesLoading ? (
@@ -78,7 +50,10 @@ function Sidebar({ onFilterChange }) {
                 ) : (
                     <select
                         value={selectedCategory}
-                        onChange={handleCategoryChange}
+                        onChange={(e) => {
+                            setSelectedCategory(e.target.value);
+                            handleFilterChange('category', e.target.value);
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                     >
                         <option value="">All Categories</option>
@@ -91,12 +66,15 @@ function Sidebar({ onFilterChange }) {
                 )}
             </div>
 
-            {/* platform filter*/}
+            {/* Platform Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Platform</label>
                 <select
                     value={selectedPlatform}
-                    onChange={handlePlatformChange}
+                    onChange={(e) => {
+                        setSelectedPlatform(e.target.value);
+                        handleFilterChange('platform', e.target.value);
+                    }}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 >
                     <option value="">All Platforms</option>
@@ -108,12 +86,15 @@ function Sidebar({ onFilterChange }) {
                 </select>
             </div>
 
-            {/* price filter */}
+            {/* Price Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Price</label>
                 <select
                     value={selectedPrice}
-                    onChange={handlePriceChange}
+                    onChange={(e) => {
+                        setSelectedPrice(e.target.value);
+                        handleFilterChange('price', e.target.value);
+                    }}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 >
                     <option value="">All Prices</option>
@@ -122,12 +103,15 @@ function Sidebar({ onFilterChange }) {
                 </select>
             </div>
 
-            {/* sort w filter */}
+            {/* Sort Filter */}
             <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700">Sort By</label>
                 <select
                     value={selectedSort}
-                    onChange={handleSortChange}
+                    onChange={(e) => {
+                        setSelectedSort(e.target.value);
+                        handleFilterChange('sort', e.target.value);
+                    }}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 >
                     <option value="">Default</option>
@@ -137,7 +121,6 @@ function Sidebar({ onFilterChange }) {
             </div>
         </div>
     );
-
 }
 
 export default Sidebar;

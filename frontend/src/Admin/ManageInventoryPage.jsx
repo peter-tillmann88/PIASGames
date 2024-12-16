@@ -675,7 +675,7 @@ function ManageInventoryPage() {
                                         </select>
                                     </div>
 
-                                    {/* cat seleciton */}
+                                    {/* cat seleciton
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Categories:</label>
                                         <Select
@@ -714,7 +714,7 @@ function ManageInventoryPage() {
                                         <p className="text-sm text-gray-500 mt-1">
                                             Use Ctrl (Windows) or Command (Mac) to select multiple categories.
                                         </p>
-                                    </div>
+                                    </div> */}
 
                                     <button
                                         type="submit"

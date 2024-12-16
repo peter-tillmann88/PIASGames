@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../screen/homepage/Header';
 import axios from 'axios';
 
 function GameDetailPage() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [game, setGame] = useState(null);
     const [imageUrls, setImageUrls] = useState(['/placeholder.jpg']);
     const [loading, setLoading] = useState(true);
@@ -15,11 +14,13 @@ function GameDetailPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [alert, setAlert] = useState(null);
 
+    // State for user info
     const [userInfo, setUserInfo] = useState({
         userID: null,
         token: null,
     });
 
+    // Fetch user info from backend
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('accessToken');
@@ -37,7 +38,7 @@ function GameDetailPage() {
                     }
 
                     const data = await response.json();
-                    const { userID } = data;
+                    const { userID } = data; // Adjust based on your API response
                     setUserInfo({ userID, token });
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
@@ -45,6 +46,7 @@ function GameDetailPage() {
                 }
             }
         };
+
         fetchUserInfo();
     }, []);
 
@@ -125,10 +127,7 @@ function GameDetailPage() {
             }
 
             localStorage.setItem('tempCart', JSON.stringify(tempCart));
-            setAlert('Item added to cart (Temporary Cart)');
-            setTimeout(() => {
-                navigate('/cart');
-            }, 2000);
+            alert('Item added to cart (Temporary Cart)');
             return;
         }
 
@@ -145,17 +144,61 @@ function GameDetailPage() {
             );
 
             if (response.ok) {
-                setAlert('Item added to cart successfully!');
-                setTimeout(() => {
-                    navigate('/cart');
-                }, 2000);
+                alert('Item added to cart successfully!');
             } else {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Failed to add item to cart');
             }
         } catch (error) {
             console.error('Error adding item to cart:', error);
-            setAlert(`Error: ${error.message}`);
+            alert(`Error: ${error.message}`);
+        }
+    };
+
+    const handleAddToWishlist = async () => {
+        if (!userInfo || !userInfo.userID) {
+            setAlert('Please log in to add this game to your wishlist.');
+            return;
+        }
+
+        const authToken = localStorage.getItem('authToken');
+
+        try {
+            let wishlistId = localStorage.getItem('wishlistId');
+
+            if (!wishlistId) {
+                const createResponse = await fetch(`http://localhost:8080/api/wishlist/create/${userInfo.userID}`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+
+                if (!createResponse.ok) {
+                    throw new Error('Failed to create wishlist.');
+                }
+
+                const newWishlist = await createResponse.json();
+                wishlistId = newWishlist.wishlistID;
+                localStorage.setItem('wishlistId', wishlistId);
+            }
+
+            const response = await fetch(`http://localhost:8080/api/wishlist/add/${wishlistId}/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to add to wishlist.');
+            }
+
+            setAlert('Game added to your wishlist!');
+        } catch (err) {
+            console.error('Error adding to wishlist:', err);
+            setAlert('Error adding game to wishlist.');
         }
     };
 
@@ -293,7 +336,13 @@ function GameDetailPage() {
                             >
                                 Add to Cart
                             </button>
-                            {alert && <p className="mt-4 text-sm text-green-600">{alert}</p>}
+                            <button
+                                className="bg-green-500 px-4 py-2 mt-2 rounded text-white hover:bg-green-700"
+                                onClick={handleAddToWishlist}
+                            >
+                                Add to Wishlist
+                            </button>
+                            {alert && <p className="mt-4 text-sm text-red-600">{alert}</p>}
                         </div>
                     </div>
                 </div>
