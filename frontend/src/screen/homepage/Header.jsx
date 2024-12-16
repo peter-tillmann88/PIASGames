@@ -6,14 +6,14 @@ import SearchBar from '../../components/SearchBar';
 
 function Header() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [cartCount, setCartCount] = useState(0); // State for cart item count
+    const [cartCount, setCartCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         setIsAuthenticated(!!accessToken);
 
-        // Fetch cart items and update cart count
+
         const updateCartCount = () => {
             const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
             const cartTotal = tempCart.reduce((total, item) => total + item.quantity, 0);
@@ -49,16 +49,16 @@ function Header() {
     }, []);
 
     const handleSignOut = () => {
-        // Remove tokens and user-related local storage
+
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('userId');
-        localStorage.removeItem('tempCart'); // Clear guest cart (if any)
+        localStorage.removeItem('tempCart');
 
-        // Reset authentication state
+
         setIsAuthenticated(false);
 
-        // Redirect to home page
+
         navigate('/');
     };
 

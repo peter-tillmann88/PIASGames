@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function GameCard({ game }) {
-    const [imageSrc, setImageSrc] = useState('/placeholder.jpg'); // Default placeholder
+    const [imageSrc, setImageSrc] = useState('/placeholder.jpg');
 
     useEffect(() => {
         async function fetchSignedUrl() {

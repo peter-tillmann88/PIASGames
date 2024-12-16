@@ -71,14 +71,14 @@ public class ShoppingCartItemController {
 
             return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
-            // Print exception for debugging
+
             System.out.println("Error occurred while adding item to cart: " + e.getMessage());
 
-            // Prepare error response
+
             ShoppingCartItemResponseDTO errorResponse = new ShoppingCartItemResponseDTO();
             errorResponse.setMessage("Failed to add item to cart. Please try again.");
 
-            // Return an error response
+
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

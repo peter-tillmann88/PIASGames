@@ -29,7 +29,7 @@ function Profile() {
         if (savedUsername) {
             setUsername(savedUsername);
             fetchUserProfile(savedUsername);
-            fetchOrderHistory(); // Call the new order history endpoint
+            fetchOrderHistory();
             fetchWishlist(savedUsername);
         }
     }, []);
@@ -50,7 +50,7 @@ function Profile() {
         }
     };
 
-    // Updated function to fetch order history from the /api/order/history endpoint
+
     const fetchOrderHistory = async () => {
         try {
             const token = localStorage.getItem('accessToken');
@@ -59,7 +59,7 @@ function Profile() {
                     Authorization: `Bearer ${token}`
                 }
             });
-            // The response should match the structure you showed in the sample
+
             setPurchaseHistory(response.data);
         } catch (error) {
             console.error('Error fetching order history:', error);

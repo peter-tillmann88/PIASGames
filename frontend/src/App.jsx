@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Homepage from './screen/homepage/HomePage'; // Correct path
+import Homepage from './screen/homepage/HomePage';
 import LoginPage from './screen/loginpage/LoginPage';
 import CartPage from './cart/CartPage';
 import CheckoutPage from './cart/CheckoutPage';
 import GameDetailPage from './screen/gamedetailpage/GameDetailPage';
 import OrderConfirmationPage from './cart/OrderConfirmationPage';
-import XboxPage from './screen/xbox/XboxPage'; // Ensure correct import paths
+import XboxPage from './screen/xbox/XboxPage';
 import PlaystationPage from './screen/playstation/PlaystationPage';
 import PcPage from './screen/pc/PcPage';
 import SwitchPage from './screen/switch/SwitchPage';

@@ -2,15 +2,15 @@ const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
-const port = 3000; // Change to your desired port
+const port = 3000;
 
-// Initialize Supabase client
+
 const supabase = createClient(
-  'https://dtxzuqapniscqgvkynbf.supabase.co', // Your Supabase project URL
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0eHp1cWFwbmlzY3Fndmt5bmJmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzc3MzQyOCwiZXhwIjoyMDQ5MzQ5NDI4fQ.Ve4PT3n0wuDwzgJZFKyt7vfljK8o1J3krpnFxJNiGy4' // Use your service role key (not anon key!)
+  'https://dtxzuqapniscqgvkynbf.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0eHp1cWFwbmlzY3Fndmt5bmJmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzc3MzQyOCwiZXhwIjoyMDQ5MzQ5NDI4fQ.Ve4PT3n0wuDwzgJZFKyt7vfljK8o1J3krpnFxJNiGy4'
 );
 
-// Endpoint to generate a signed URL
+
 app.get('/generate-signed-url', async (req, res) => {
   const { bucketName, fileName } = req.query;
 
@@ -19,11 +19,11 @@ app.get('/generate-signed-url', async (req, res) => {
   }
 
   try {
-    // Generate signed URL
+
     const { data, error } = await supabase
       .storage
       .from(bucketName)
-      .createSignedUrl(fileName, 60 * 60); // URL valid for 1 hour
+      .createSignedUrl(fileName, 60 * 60);
 
     if (error) {
       throw error;
@@ -36,7 +36,7 @@ app.get('/generate-signed-url', async (req, res) => {
   }
 });
 
-// Start the server
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });

@@ -16,7 +16,7 @@ import java.util.Map;
 public class JwtUtil {
 
     private final String SECRET_KEY_BASE64 = "xzuSgIedcMpuHaOs4jWNs5SkdWzFwO7ypn4oQ6O4a2Va7QZlQR7xMAI9Iw5G93HjA1y45Z6pRQhoKutxJUz5YQ==";
-    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15; // 15 minutes
+    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60; // 15 minutes
     private final long REFRESH_TOKEN_EXPIRATION = 1000L * 60 * 60 * 24 * 7; // 7 days
 
     private final SecretKey SECRET_KEY;
