@@ -3,11 +3,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/', // Ensures the base path is correct
+  base: '/',
   build: {
-    outDir: 'dist', // Default output folder
+    outDir: 'dist',
   },
   server: {
-    historyApiFallback: true, // Enables fallback for SPA routing locally
+    historyApiFallback: true,
   },
 });
