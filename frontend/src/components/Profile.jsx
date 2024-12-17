@@ -35,6 +35,7 @@ function Profile() {
     const fetchUserProfile = async () => {
         try {
             const token = localStorage.getItem('accessToken');
+            console.log(`Here is the token when fetching user profile in prod! ${token}`)
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/profile`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
