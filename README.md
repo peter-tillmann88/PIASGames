@@ -21,3 +21,6 @@ An E-commerce platform for a video game store
 
 ![Screenshot 2024-12-16 at 7 51 50 PM](https://github.com/user-attachments/assets/e83c60fb-c0ab-4dae-83b0-d2e0b0d31327)
 
+![Screenshot 2024-12-16 at 8 16 38 PM](https://github.com/user-attachments/assets/81830c56-c20c-4111-8ef6-4f96ff5d2556)
+
+![Screenshot 2024-12-16 at 7 51 21 PM](https://github.com/user-attachments/assets/c58bc6ba-25bc-4bb8-8548-5ea4dd2e5c4b)
