@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../screen/homepage/Header';
-import Sidebar from '../../components/Sidebar';
+import Sidebar from '../../components/SideBar';
 import GameCard from '../../components/GameCard';
 import Footer from '../../components/Footer';
 
