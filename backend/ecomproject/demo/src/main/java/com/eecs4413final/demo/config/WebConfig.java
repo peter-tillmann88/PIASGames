@@ -11,11 +11,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${ALLOWED_ORIGIN}")
     private String allowedOrigin;
 
-    public void addCorsMappings(CorsRegistry registry, @Value("${ALLOWED_ORIGIN}") String allowedOrigin) {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(allowedOrigin)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Authorization", "Content-Type") 
-                .allowCredentials(true); 
+                .allowedHeaders("Authorization", "Content-Type")
+                .allowCredentials(true);
     }
 }
