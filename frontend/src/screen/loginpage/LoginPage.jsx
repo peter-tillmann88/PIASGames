@@ -32,7 +32,7 @@ function LoginPage() {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/login', {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
                 username,
                 password,
             });
@@ -44,7 +44,7 @@ function LoginPage() {
             localStorage.setItem('role', role);
 
             const token = accessToken;
-            const userIDResponse = await fetch('http://localhost:8080/api/users/profile', {
+            const userIDResponse = await fetch(`${import.meta.env.VITE_API_URL}/users/profile`, {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -56,7 +56,7 @@ function LoginPage() {
                 const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
                 if (tempCart.length > 0) {
                     for (const item of tempCart) {
-                        await axios.post(`http://localhost:8080/api/cart-items/cart/${userID}/item/${item.id}/add`, null, {
+                        await axios.post(`${import.meta.env.VITE_API_URL}/cart-items/cart/${userID}/item/${item.id}/add`, null, {
                             headers: { Authorization: `Bearer ${token}` },
                             params: { quantity: item.quantity },
                         });

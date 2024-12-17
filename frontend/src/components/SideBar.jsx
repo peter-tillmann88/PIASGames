@@ -15,7 +15,7 @@ function Sidebar({ onFilterChange }) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/categories/all');
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/categories/all`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }

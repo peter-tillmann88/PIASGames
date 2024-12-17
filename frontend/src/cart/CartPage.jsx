@@ -14,7 +14,7 @@ function CartPage() {
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token) {
-            fetch('http://localhost:8080/api/users/profile', {
+            fetch(`${import.meta.env.VITE_API_URL}/users/profile`, {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${token}` },
             })
@@ -32,7 +32,7 @@ function CartPage() {
     const fetchProductStock = async (productId) => {
         if (!productId) return 0;
         try {
-            const response = await axios.get(`http://localhost:8080/api/products/get/${productId}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/products/get/${productId}`);
             if (response.status === 200) {
                 return response.data.stock || 0;
             }
@@ -51,7 +51,7 @@ function CartPage() {
 
             const fileName = encodeURIComponent(item.image_name);
             try {
-                const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${fileName}`);
+                const response = await fetch(`${import.meta.env.VITE_IMAGE_SERVER_URL}/generate-signed-url?bucketName=product-images&fileName=${fileName}`);
                 if (!response.ok) {
                     console.error('Failed to fetch signed URL:', await response.text());
                     return { ...item, imageUrl: '/placeholder.jpg' };
@@ -77,7 +77,7 @@ function CartPage() {
                 if (tempCart.length > 0) {
                     for (const item of tempCart) {
                         await axios.post(
-                            `http://localhost:8080/api/cart-items/cart/${user.userID}/item/${item.id}/add`,
+                            `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${item.id}/add`,
                             null,
                             {
                                 headers: { Authorization: `Bearer ${user.token}` },
@@ -90,7 +90,7 @@ function CartPage() {
 
 
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/cart/${user.userID}/cart`, {
+                    const response = await axios.get(`${import.meta.env.VITE_API_URL}/cart/${user.userID}/cart`, {
                         headers: { Authorization: `Bearer ${user.token}` },
                     });
 
@@ -154,7 +154,7 @@ function CartPage() {
             const cartItem = updatedCart.find(item => item.cartItemId === cartItemId);
             if (cartItem) {
                 axios.post(
-                    `http://localhost:8080/api/cart-items/cart/${user.userID}/item/${cartItem.productId}/update`,
+                    `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${cartItem.productId}/update`,
                     { quantity: newQuantity },
                     { headers: { Authorization: `Bearer ${user.token}` } }
                 )
@@ -170,7 +170,7 @@ function CartPage() {
 
     const handleRemoveItem = (cartItemId) => {
         if (user) {
-            axios.delete(`http://localhost:8080/api/cart/item/${cartItemId}`, {
+            axios.delete(`${import.meta.env.VITE_API_URL}/cart/item/${cartItemId}`, {
                 headers: { Authorization: `Bearer ${user.token}` },
             })
                 .then(() => setCartItems(cartItems.filter(item => item.cartItemId !== cartItemId)))

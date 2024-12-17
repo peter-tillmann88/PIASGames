@@ -28,7 +28,7 @@ function RegisterPage() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/users/register', formData);
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/users/register`, formData);
             localStorage.setItem('username', response.data.username);
             alert('Registration successful');
             navigate('/login');

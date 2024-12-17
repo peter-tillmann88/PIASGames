@@ -22,7 +22,7 @@ function ManageCustomersPage() {
     const fetchCustomers = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/api/users/all');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/users/all`);
             if (!response.ok) throw new Error('Failed to fetch customers');
             const data = await response.json();
             setCustomers(data);
@@ -37,7 +37,7 @@ function ManageCustomersPage() {
     const fetchPurchaseHistory = async (customer) => {
         try {
             const token = localStorage.getItem('accessToken');
-            const response = await fetch('http://localhost:8080/api/order/all', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/order/all`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function ManageCustomersPage() {
         setErrorMessage('');
         setSuccessMessage('');
         try {
-            const response = await fetch(`http://localhost:8080/api/users/profile?username=${editCustomer.username}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/users/profile?username=${editCustomer.username}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

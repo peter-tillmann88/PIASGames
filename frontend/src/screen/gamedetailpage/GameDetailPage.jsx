@@ -26,7 +26,7 @@ function GameDetailPage() {
             const token = localStorage.getItem('accessToken');
             if (token) {
                 try {
-                    const response = await fetch('http://localhost:8080/api/users/profile', {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/users/profile`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -59,7 +59,7 @@ function GameDetailPage() {
             fileName = decodeURIComponent(fileName);
 
             try {
-                const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
+                const response = await fetch(`${import.meta.env.VITE_IMAGE_SERVER_URL}/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
                 if (!response.ok) {
                     console.error('Failed to fetch signed URL:', await response.text());
                     return '/placeholder.jpg';
@@ -79,7 +79,7 @@ function GameDetailPage() {
     useEffect(() => {
         const fetchGame = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/products/get/${id}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/products/get/${id}`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
@@ -133,7 +133,7 @@ function GameDetailPage() {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/cart-items/cart/${userID}/item/${game.productId}/add?quantity=${quantity}`,
+                `${import.meta.env.VITE_API_URL}/cart-items/cart/${userID}/item/${game.productId}/add?quantity=${quantity}`,
                 {
                     method: 'POST',
                     headers: {
@@ -167,7 +167,7 @@ function GameDetailPage() {
             let wishlistId = localStorage.getItem('wishlistId');
 
             if (!wishlistId) {
-                const createResponse = await fetch(`http://localhost:8080/api/wishlist/create/${userInfo.userID}`, {
+                const createResponse = await fetch(`${import.meta.env.VITE_API_URL}/wishlist/create/${userInfo.userID}`, {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${authToken}`,
@@ -183,7 +183,7 @@ function GameDetailPage() {
                 localStorage.setItem('wishlistId', wishlistId);
             }
 
-            const response = await fetch(`http://localhost:8080/api/wishlist/add/${wishlistId}/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/wishlist/add/${wishlistId}/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

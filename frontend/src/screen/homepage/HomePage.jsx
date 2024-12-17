@@ -21,7 +21,7 @@ function HomePage() {
     const fetchGames = async () => {
         setLoading(true);
         try {
-            let url = 'http://localhost:8080/api/products/all';
+            let url = `${import.meta.env.VITE_API_URL}/products/all`;
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {

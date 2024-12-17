@@ -36,7 +36,7 @@ function ManageInventoryPage() {
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/api/products/all');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/products/all`);
             if (!response.ok) {
                 throw new Error('Failed to fetch products');
             }
@@ -54,7 +54,7 @@ function ManageInventoryPage() {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/categories/all');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/categories/all`);
             if (!response.ok) {
                 throw new Error('Failed to fetch categories');
             }
@@ -129,7 +129,7 @@ function ManageInventoryPage() {
                 });
             }
 
-            const response = await fetch('http://localhost:8080/api/products/add', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/products/add`, {
                 method: 'POST',
                 body: formData,
             });
@@ -200,7 +200,7 @@ function ManageInventoryPage() {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/api/products/del/${productId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/products/del/${productId}`, {
                 method: 'DELETE',
             });
 
@@ -268,7 +268,7 @@ function ManageInventoryPage() {
                 platform: editProduct.platform,
             };
 
-            const response = await fetch(`http://localhost:8080/api/products/${editProduct.productId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/products/${editProduct.productId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
