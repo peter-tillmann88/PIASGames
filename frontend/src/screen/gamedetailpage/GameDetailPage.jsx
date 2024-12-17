@@ -59,7 +59,7 @@ function GameDetailPage() {
             fileName = decodeURIComponent(fileName);
 
             try {
-                const response = await fetch(`${import.meta.env.VITE_IMAGE_SERVER_URL}/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
+                const response = await fetch(`${import.meta.env.VITE_IMAGE_SERVER_URL}generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
                 if (!response.ok) {
                     console.error('Failed to fetch signed URL:', await response.text());
                     return '/placeholder.jpg';
