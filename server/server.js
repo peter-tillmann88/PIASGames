@@ -1,15 +1,23 @@
 const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
+const cors = require('cors'); // Import cors
+require('dotenv').config(); // Load environment variables
 
 const app = express();
 const port = 3000;
 
-
+// Initialize Supabase client
 const supabase = createClient(
-  'https://dtxzuqapniscqgvkynbf.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0eHp1cWFwbmlzY3Fndmt5bmJmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzc3MzQyOCwiZXhwIjoyMDQ5MzQ5NDI4fQ.Ve4PT3n0wuDwzgJZFKyt7vfljK8o1J3krpnFxJNiGy4'
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_API_KEY
 );
 
+// Configure CORS
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.get('/generate-signed-url', async (req, res) => {
   const { bucketName, fileName } = req.query;
@@ -19,11 +27,10 @@ app.get('/generate-signed-url', async (req, res) => {
   }
 
   try {
-
     const { data, error } = await supabase
       .storage
       .from(bucketName)
-      .createSignedUrl(fileName, 60 * 60);
+      .createSignedUrl(fileName, 60 * 60); // 1 hour
 
     if (error) {
       throw error;
@@ -36,7 +43,6 @@ app.get('/generate-signed-url', async (req, res) => {
   }
 });
 
-
 app.listen(port, () => {
-  console.log(`Server is running`);
+  console.log(`Server is running on port ${port}`);
 });
