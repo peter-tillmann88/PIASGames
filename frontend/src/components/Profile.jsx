@@ -15,7 +15,7 @@ function Profile() {
         province: '',
         role: '',
         createdAt: '',
-        userID: '',
+        userId: '',
         username: '',
     });
 
@@ -27,9 +27,8 @@ function Profile() {
         const savedUsername = localStorage.getItem('username');
         if (savedUsername) {
             setUsername(savedUsername);
-            fetchUserProfile(savedUsername);
+            fetchUserProfile();
             fetchOrderHistory();
-            fetchWishlist(savedUsername);
         }
     }, []);
 
@@ -42,6 +41,7 @@ function Profile() {
             });
             console.log('Profile fetched successfully:', response.data);
             setUserInfo(response.data);
+            console.log('Updated userInfo state:', response.data);
         } catch (error) {
             alert('Error fetching user profile');
             console.error('Error fetching user profile:', error);
@@ -50,6 +50,7 @@ function Profile() {
 
 
     const fetchOrderHistory = async () => {
+        console.log('fetchOrderHistory called'); // Added log
         try {
             const token = localStorage.getItem('accessToken');
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/order/history`, {
@@ -64,17 +65,6 @@ function Profile() {
         }
     };
 
-    const fetchWishlist = async (username) => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/wishlist`, {
-                params: { username }
-            });
-            setWishlist(response.data);
-        } catch (error) {
-            console.error('Error fetching wishlist:', error);
-        }
-    };
-
     const handleEditToggle = () => {
         setIsEditing(!isEditing);
     };
@@ -86,10 +76,11 @@ function Profile() {
 
     const handleSaveChanges = async () => {
         try {
+            const token = localStorage.getItem('accessToken');
             await axios.put(
                 `${import.meta.env.VITE_API_URL}/users/profile`,
                 {
-                    userID: userInfo.userID,
+                    userId: userInfo.userId,
                     username: userInfo.username, // If the backend allows updating username; otherwise, remove it
                     email: userInfo.email,
                     phone: userInfo.phone,
@@ -119,6 +110,7 @@ function Profile() {
 
     const handleDeleteAccount = async () => {
         try {
+            const token = localStorage.getItem('accessToken');
             await axios.delete(`${import.meta.env.VITE_API_URL}/users/profile`, {
                 headers: { Authorization: `Bearer ${token}` },
             });            
@@ -135,7 +127,7 @@ function Profile() {
                 province: '',
                 role: '',
                 createdAt: '',
-                userID: '',
+                userId: '',
                 username: '',
             });
         } catch (error) {
@@ -243,7 +235,7 @@ function Profile() {
                     ) : (
                         <>
                             <p className="mb-4 text-lg">
-                                <strong>User ID:</strong> {userInfo.userID || 'N/A'}
+                                <strong>User ID:</strong> {userInfo.userId || 'N/A'}
                             </p>
                             <p className="mb-4 text-lg">
                                 <strong>Email:</strong> {userInfo.email || 'N/A'}
