@@ -37,7 +37,7 @@ function Profile() {
     const fetchUserProfile = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const response = await axios.get('http://localhost:8080/api/users/profile', {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/profile`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUserInfo(response.data);
@@ -50,7 +50,7 @@ function Profile() {
     const fetchOrderHistory = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const response = await axios.get('http://localhost:8080/api/order/history', {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/order/history`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPurchaseHistory(response.data);
@@ -61,7 +61,7 @@ function Profile() {
 
     const fetchWishlist = async (username) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/users/wishlist`, {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/wishlist`, {
                 params: { username },
             });
             setWishlist(response.data);
@@ -80,7 +80,7 @@ function Profile() {
     const handleSaveChanges = async () => {
         try {
             await axios.put(
-                `http://localhost:8080/api/users/profile`,
+                `${import.meta.env.VITE_API_URL}/users/profile`,
                 {
                     userID: userInfo.userID,
                     username: userInfo.username,
@@ -112,7 +112,7 @@ function Profile() {
 
     const handleDeleteAccount = async () => {
         try {
-            await axios.delete(`http://localhost:8080/api/users/profile`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/users/profile`, {
                 params: { username },
             });
             alert('Account deleted successfully');

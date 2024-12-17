@@ -27,7 +27,7 @@ function Header() {
             const userID = localStorage.getItem('userID');
             if (userID && accessToken) {
                 try {
-                    const response = await fetch(`http://localhost:8080/api/cart/${userID}/cart`, {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/${userID}/cart`, {
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
                         },

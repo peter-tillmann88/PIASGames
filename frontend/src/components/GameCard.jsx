@@ -17,7 +17,7 @@ function GameCard({ game }) {
 
                 try {
                     const response = await fetch(
-                        `http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`
+                        `${import.meta.env.VITE_IMAGE_SERVER_URL}/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`
                     );
                     if (response.ok) {
                         const data = await response.json();

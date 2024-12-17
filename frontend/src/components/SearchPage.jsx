@@ -27,7 +27,7 @@ function SearchPage() {
     const fetchSearchResults = async () => {
         setLoading(true);
         try {
-            let url = `http://localhost:8080/api/products/search?query=${encodeURIComponent(searchQuery)}`;
+            let url = `${import.meta.env.VITE_API_URL}/products/search?query=${encodeURIComponent(searchQuery)}`;
 
             if (filters.category) {
                 url += `&category=${encodeURIComponent(filters.category)}`;

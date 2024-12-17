@@ -29,7 +29,7 @@ function CheckoutPage() {
         const fetchUserProfile = async () => {
             if (token && !userID) {
                 try {
-                    const response = await fetch('http://localhost:8080/api/users/profile', {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/users/profile`, {
                         method: 'GET',
                         headers: { Authorization: `Bearer ${token}` },
                     });
@@ -65,7 +65,7 @@ function CheckoutPage() {
 
     const fetchCartData = async (userID, token) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/cart/${userID}/cart`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/${userID}/cart`, {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -108,7 +108,7 @@ function CheckoutPage() {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/api/order/checkout', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/order/checkout`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${user.token}` },
             });

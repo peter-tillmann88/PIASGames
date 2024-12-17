@@ -36,7 +36,7 @@ function SalesHistoryPage() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/users/all');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/users/all`);
             if (response.ok) {
                 const data = await response.json();
                 setUsers(data.map(user => user.username));
@@ -51,7 +51,7 @@ function SalesHistoryPage() {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/products/all');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/products/all`);
             if (response.ok) {
                 const data = await response.json();
                 setProducts(data.map(product => product.name));
@@ -72,7 +72,7 @@ function SalesHistoryPage() {
                 throw new Error('Unauthorized: No access token found');
             }
 
-            const response = await fetch('http://localhost:8080/api/order/all', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/order/all`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
