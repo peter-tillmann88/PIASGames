@@ -14,7 +14,7 @@ function CartPage() {
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (token) {
-            fetch('http://localhost:8080/api/users/profile', {
+            fetch(`${import.meta.env.VITE_API_URL}/users/profile`, {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${token}` },
             })
@@ -32,7 +32,7 @@ function CartPage() {
     const fetchProductStock = async (productId) => {
         if (!productId) return 0;
         try {
-            const response = await axios.get(`http://localhost:8080/api/products/get/${productId}`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/products/get/${productId}`);
             if (response.status === 200) {
                 return response.data.stock || 0;
             }
@@ -51,7 +51,7 @@ function CartPage() {
 
             const fileName = encodeURIComponent(item.image_name);
             try {
-                const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${fileName}`);
+                const response = await fetch(`${import.meta.env.VITE_IMAGE_SERVER_URL}generate-signed-url?bucketName=product-images&fileName=${fileName}`);
                 if (!response.ok) {
                     console.error('Failed to fetch signed URL:', await response.text());
                     return { ...item, imageUrl: '/placeholder.jpg' };
@@ -76,21 +76,24 @@ function CartPage() {
                 const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
                 if (tempCart.length > 0) {
                     for (const item of tempCart) {
-                        await axios.post(
-                            `http://localhost:8080/api/cart-items/cart/${user.userID}/item/${item.id}/add`,
-                            null,
-                            {
-                                headers: { Authorization: `Bearer ${user.token}` },
-                                params: { quantity: item.quantity },
-                            }
-                        );
+                        try {
+                            await axios.post(
+                                `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${item.id}/add`,
+                                null,
+                                {
+                                    headers: { Authorization: `Bearer ${user.token}` },
+                                    params: { quantity: item.quantity },
+                                }
+                            );
+                        } catch (error) {
+                            console.error(`Error adding temp cart item (Product ID: ${item.id}) to backend:`, error);
+                        }
                     }
                     localStorage.removeItem('tempCart');
                 }
 
-
                 try {
-                    const response = await axios.get(`http://localhost:8080/api/cart/${user.userID}/cart`, {
+                    const response = await axios.get(`${import.meta.env.VITE_API_URL}/cart/${user.userID}/cart`, {
                         headers: { Authorization: `Bearer ${user.token}` },
                     });
 
@@ -138,7 +141,7 @@ function CartPage() {
         fetchCartItems();
     }, [user]);
 
-    const handleQuantityUpdate = (cartItemId, newQuantity) => {
+    const handleQuantityUpdate = async (cartItemId, newQuantity) => {
         const updatedCart = cartItems.map((item) => {
             if (item.cartItemId === cartItemId) {
                 return { ...item, quantity: newQuantity };
@@ -153,32 +156,43 @@ function CartPage() {
         } else {
             const cartItem = updatedCart.find(item => item.cartItemId === cartItemId);
             if (cartItem) {
-                axios.post(
-                    `http://localhost:8080/api/cart-items/cart/${user.userID}/item/${cartItem.productId}/update`,
-                    { quantity: newQuantity },
-                    { headers: { Authorization: `Bearer ${user.token}` } }
-                )
-                .then(response => {
-                    console.log('Quantity updated successfully:', response.data);
-                })
-                .catch(error => {
+                try {
+                    await axios.patch(
+                        `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${cartItem.productId}/update-quantity`,
+                        null,
+                        {
+                            headers: { Authorization: `Bearer ${user.token}` },
+                            params: { newQuantity },
+                        }
+                    );
+                    console.log('Quantity updated successfully for Product ID:', cartItem.productId);
+                } catch (error) {
                     console.error('Error updating quantity:', error);
-                });
+                }
             }
         }
     };
 
     const handleRemoveItem = (cartItemId) => {
         if (user) {
-            axios.delete(`http://localhost:8080/api/cart/item/${cartItemId}`, {
-                headers: { Authorization: `Bearer ${user.token}` },
-            })
-                .then(() => setCartItems(cartItems.filter(item => item.cartItemId !== cartItemId)))
-                .catch(err => console.error('Error removing item:', err));
+            const cartItem = cartItems.find(item => item.cartItemId === cartItemId);
+            if (cartItem) {
+                axios.delete(`${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${cartItem.productId}/del`, {
+                    headers: { Authorization: `Bearer ${user.token}` },
+                })
+                    .then(() => {
+                        setCartItems(cartItems.filter(item => item.cartItemId !== cartItemId));
+                        console.log(`Removed Product ID: ${cartItem.productId} from cart.`);
+                    })
+                    .catch(err => console.error('Error removing item:', err));
+            } else {
+                console.error('Cart item not found:', cartItemId);
+            }
         } else {
             const updatedCart = cartItems.filter(item => item.cartItemId !== cartItemId);
             localStorage.setItem('tempCart', JSON.stringify(updatedCart));
             setCartItems(updatedCart);
+            console.log(`Removed Temp Cart Item ID: ${cartItemId} from localStorage.`);
         }
     };
 
@@ -188,6 +202,29 @@ function CartPage() {
     const calculateTotal = () => {
         const subtotal = calculateSubtotal();
         return subtotal + calculateTax(subtotal) + calculateShipping();
+    };
+
+    const handleProceedToCheckout = async () => {
+        if (user) {
+            try {
+                await Promise.all(cartItems.map(async (item) => {
+                    await axios.patch(
+                        `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${item.productId}/update-quantity`,
+                        null,
+                        {
+                            headers: { Authorization: `Bearer ${user.token}` },
+                            params: { newQuantity: item.quantity },
+                        }
+                    );
+                }));
+                navigate('/checkout');
+            } catch (error) {
+                console.error('Error updating quantities before checkout:', error);
+                alert('There was an error processing your cart. Please try again.');
+            }
+        } else {
+            navigate('/login');
+        }
     };
 
     return (
@@ -239,7 +276,7 @@ function CartPage() {
                     Total: ${calculateTotal().toFixed(2)}
                 </div>
                 <button
-                    onClick={() => navigate(user ? '/checkout' : '/login')}
+                    onClick={handleProceedToCheckout}
                     className="mt-6 bg-blue-600 text-white px-4 py-2 rounded mr-4"
                 >
                     Proceed to Checkout

@@ -56,4 +56,14 @@ public class RawCartService {
 
         return jdbcTemplate.queryForObject(sql, String.class, userId);
     }
+
+    public boolean updateQuantityByUserIdAndProductId(Long userId, Long productId, int newQuantity) {
+        String sql = "UPDATE shoppingcartitems " +
+                "SET quantity = ? " +
+                "FROM shopping_carts sc " +
+                "WHERE shoppingcartitems.cartid = sc.cartid " +
+                "AND sc.user_id = ? AND shoppingcartitems.productid = ?";
+        int rowsAffected = jdbcTemplate.update(sql, newQuantity, userId, productId);
+        return rowsAffected > 0; // Return true if the update was successful
+    }
 }

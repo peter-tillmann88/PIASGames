@@ -92,13 +92,30 @@ function SalesHistoryPage() {
                     }))
                 }));
 
+                const normalizeDate = (date, isEndDate = false) => {
+                    const d = new Date(date);
+                    if (isEndDate) {
+                        // Set to the end of the day
+                        d.setHours(23, 59, 59, 999);
+                    } else {
+                        // Set to the start of the day
+                        d.setHours(0, 0, 0, 0);
+                    }
+                    return d;
+                };
+
                 const filteredData = groupedOrders.filter(order => {
+                    const orderDate = new Date(order.date);
+                    const startDate = filters.startDate ? normalizeDate(filters.startDate) : null;
+                    const endDate = filters.endDate ? normalizeDate(filters.endDate, true) : null;
+
                     const matchCustomer = filters.customer ? order.user === filters.customer : true;
                     const matchProduct = filters.product
                         ? order.items.some(item => item.product === filters.product)
                         : true;
-                    const matchStartDate = filters.startDate ? new Date(order.date) >= new Date(filters.startDate) : true;
-                    const matchEndDate = filters.endDate ? new Date(order.date) <= new Date(filters.endDate) : true;
+                    const matchStartDate = startDate ? orderDate >= startDate : true;
+                    const matchEndDate = endDate ? orderDate <= endDate : true;
+
                     return matchCustomer && matchProduct && matchStartDate && matchEndDate;
                 });
 
@@ -301,7 +318,7 @@ function SalesHistoryPage() {
                         <div className="bg-blue-500 text-white p-6 rounded shadow">
                             <h3 className="text-lg font-bold">Total Sales</h3>
                             <p className="text-2xl font-semibold">${totalSales}</p>
-                            <p className="text-sm">Includes ${totalTax} in tax.</p>
+
                         </div>
                         <div className="bg-green-500 text-white p-6 rounded shadow">
                             <h3 className="text-lg font-bold">Top-Selling Product</h3>

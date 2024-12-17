@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../screen/homepage/Header';
 import axios from 'axios';
 
 function GameDetailPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [game, setGame] = useState(null);
     const [imageUrls, setImageUrls] = useState(['/placeholder.jpg']);
     const [loading, setLoading] = useState(true);
@@ -14,19 +15,17 @@ function GameDetailPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [alert, setAlert] = useState(null);
 
-    // State for user info
     const [userInfo, setUserInfo] = useState({
         userID: null,
         token: null,
     });
 
-    // Fetch user info from backend
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('accessToken');
             if (token) {
                 try {
-                    const response = await fetch('http://localhost:8080/api/users/profile', {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/users/profile`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -38,15 +37,16 @@ function GameDetailPage() {
                     }
 
                     const data = await response.json();
-                    const { userID } = data; // Adjust based on your API response
+                    const { userID } = data;
                     setUserInfo({ userID, token });
+                    console.log(userID);
+                    console.log(token);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                     setUserInfo({ userID: null, token: null });
                 }
             }
         };
-
         fetchUserInfo();
     }, []);
 
@@ -59,13 +59,14 @@ function GameDetailPage() {
             fileName = decodeURIComponent(fileName);
 
             try {
-                const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
+                const response = await fetch(`${import.meta.env.VITE_IMAGE_SERVER_URL}/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
                 if (!response.ok) {
                     console.error('Failed to fetch signed URL:', await response.text());
                     return '/placeholder.jpg';
                 }
 
                 const data = await response.json();
+                let imageLink = data.signedUrl;
                 return data.signedUrl;
             } catch (err) {
                 console.error('Error fetching signed URL:', err);
@@ -79,7 +80,7 @@ function GameDetailPage() {
     useEffect(() => {
         const fetchGame = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/products/get/${id}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/products/get/${id}`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
@@ -123,17 +124,25 @@ function GameDetailPage() {
                     quantity,
                     imageUrl: imageUrls[0],
                 };
+
+                console.log(newItem.cartItemId);
+                console.log(newItem.id);
+                console.log(newItem.name);
+                console.log(newItem.price);
+                console.log(newItem.quantity);
+                console.log(newItem.imageUrl);
                 tempCart.push(newItem);
             }
 
             localStorage.setItem('tempCart', JSON.stringify(tempCart));
-            alert('Item added to cart (Temporary Cart)');
+            setAlert('Item added to cart (Temporary Cart)');
+
             return;
         }
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/cart-items/cart/${userID}/item/${game.productId}/add?quantity=${quantity}`,
+                `${import.meta.env.VITE_API_URL}/cart-items/cart/${userID}/item/${game.productId}/add?quantity=${quantity}`,
                 {
                     method: 'POST',
                     headers: {
@@ -144,61 +153,17 @@ function GameDetailPage() {
             );
 
             if (response.ok) {
-                alert('Item added to cart successfully!');
+                setAlert('Item added to cart successfully!');
+                setTimeout(() => {
+                    navigate('/cart');
+                }, 2000);
             } else {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Failed to add item to cart');
             }
         } catch (error) {
             console.error('Error adding item to cart:', error);
-            alert(`Error: ${error.message}`);
-        }
-    };
-
-    const handleAddToWishlist = async () => {
-        if (!userInfo || !userInfo.userID) {
-            setAlert('Please log in to add this game to your wishlist.');
-            return;
-        }
-
-        const authToken = localStorage.getItem('authToken');
-
-        try {
-            let wishlistId = localStorage.getItem('wishlistId');
-
-            if (!wishlistId) {
-                const createResponse = await fetch(`http://localhost:8080/api/wishlist/create/${userInfo.userID}`, {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                });
-
-                if (!createResponse.ok) {
-                    throw new Error('Failed to create wishlist.');
-                }
-
-                const newWishlist = await createResponse.json();
-                wishlistId = newWishlist.wishlistID;
-                localStorage.setItem('wishlistId', wishlistId);
-            }
-
-            const response = await fetch(`http://localhost:8080/api/wishlist/add/${wishlistId}/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${authToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to add to wishlist.');
-            }
-
-            setAlert('Game added to your wishlist!');
-        } catch (err) {
-            console.error('Error adding to wishlist:', err);
-            setAlert('Error adding game to wishlist.');
+            setAlert(`Error: ${error.message}`);
         }
     };
 
@@ -336,13 +301,7 @@ function GameDetailPage() {
                             >
                                 Add to Cart
                             </button>
-                            <button
-                                className="bg-green-500 px-4 py-2 mt-2 rounded text-white hover:bg-green-700"
-                                onClick={handleAddToWishlist}
-                            >
-                                Add to Wishlist
-                            </button>
-                            {alert && <p className="mt-4 text-sm text-red-600">{alert}</p>}
+                            {alert && <p className="mt-4 text-sm text-green-600">{alert}</p>}
                         </div>
                     </div>
                 </div>
