@@ -59,39 +59,55 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<UserResponseDTO> getUserProfile(@RequestHeader("Authorization") String authHeader) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        try {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                LoggerFactory.getLogger(UserController.class).warn("Authorization header missing or malformed");
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            String token = authHeader.substring(7);
+            if (!jwtUtil.validateToken(token)) {
+                LoggerFactory.getLogger(UserController.class).warn("Invalid JWT token");
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            String username = jwtUtil.extractUsername(token);
+            if (username == null || username.isEmpty()) {
+                LoggerFactory.getLogger(UserController.class).warn("Username extracted from token is null or empty");
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            Optional<User> userOpt = userService.findByUsername(username);
+
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                UserResponseDTO responseDto = new UserResponseDTO(
+                        user.getUserId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getPhone(),
+                        user.getRole(),
+                        user.getCreatedAt(),
+                        user.getCreditCard(),
+                        user.getExpiryDate(),
+                        user.getCountry(),
+                        user.getProvince(),
+                        user.getAddress(),
+                        user.getPostalCode()
+                );
+                LoggerFactory.getLogger(UserController.class).info("Successfully fetched profile for user: {}", username);
+                return new ResponseEntity<>(responseDto, HttpStatus.OK);
+            }
+
+            LoggerFactory.getLogger(UserController.class).warn("User not found: {}", username);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LoggerFactory.getLogger(UserController.class).error("Exception in getUserProfile: ", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        String token = authHeader.substring(7);
-        if (!jwtUtil.validateToken(token)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        String username = jwtUtil.extractUsername(token);
-        Optional<User> userOpt = userService.findByUsername(username);
-
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            UserResponseDTO responseDto = new UserResponseDTO(
-                    user.getUserId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getPhone(),
-                    user.getRole(),
-                    user.getCreatedAt(),
-                    user.getCreditCard(),
-                    user.getExpiryDate(),
-                    user.getCountry(),
-                    user.getProvince(),
-                    user.getAddress(),
-                    user.getPostalCode()
-            );
-            return new ResponseEntity<>(responseDto, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+
 
     @PutMapping("/profile")
     public ResponseEntity<?> updateUserProfile(
@@ -127,7 +143,6 @@ public class UserController {
             );
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         } catch (Exception e) {
-            LoggerFactory.getLogger(UserController.class).error("Error in getUserProfile: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
