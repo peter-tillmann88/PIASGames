@@ -22,7 +22,6 @@ function Profile() {
     const [username, setUsername] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [purchaseHistory, setPurchaseHistory] = useState([]);
-    const [wishlist, setWishlist] = useState([]);
 
     useEffect(() => {
         const savedUsername = localStorage.getItem('username');
@@ -30,7 +29,6 @@ function Profile() {
             setUsername(savedUsername);
             fetchUserProfile(savedUsername);
             fetchOrderHistory();
-            fetchWishlist(savedUsername);
         }
     }, []);
 
@@ -56,17 +54,6 @@ function Profile() {
             setPurchaseHistory(response.data);
         } catch (error) {
             console.error('Error fetching order history:', error);
-        }
-    };
-
-    const fetchWishlist = async (username) => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/wishlist`, {
-                params: { username },
-            });
-            setWishlist(response.data);
-        } catch (error) {
-            console.error('Error fetching wishlist:', error);
         }
     };
 
@@ -190,6 +177,32 @@ function Profile() {
                                 Delete Account
                             </button>
                         </>
+                    )}
+                </div>
+                {/* Display Order History */}
+                <div className="bg-white p-6 mt-6 rounded shadow-lg w-full max-w-4xl">
+                    <h3 className="text-2xl font-bold mb-4">Order History</h3>
+                    {purchaseHistory.length > 0 ? (
+                        purchaseHistory.map((order) => (
+                            <div key={order.orderID} className="mb-6 border-b pb-4">
+                                <p><strong>Order ID:</strong> {order.orderID}</p>
+                                <p><strong>Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
+                                <p><strong>Status:</strong> {order.status}</p>
+                                <p><strong>Total Amount:</strong> ${order.totalAmount.toFixed(2)}</p>
+                                <h4 className="text-xl font-semibold mt-4 mb-2">Order Items</h4>
+                                <ul className="ml-4 list-disc">
+                                    {order.orderItems.map((item) => (
+                                        <li key={item.orderItemID} className="mb-2">
+                                            <p><strong>Product Name:</strong> {item.productName}</p>
+                                            <p><strong>Quantity:</strong> {item.quantity}</p>
+                                            <p><strong>Price at Purchase:</strong> ${item.priceAtPurchase}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No orders found.</p>
                     )}
                 </div>
             </div>
