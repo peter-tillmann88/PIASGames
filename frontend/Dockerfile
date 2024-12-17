@@ -2,6 +2,12 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+ARG VITE_API_URL
+ARG VITE_IMAGE_SERVER_URL
+
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_IMAGE_SERVER_URL=$VITE_IMAGE_SERVER_URL
+
 COPY package.json package-lock.json ./
 
 RUN npm install
