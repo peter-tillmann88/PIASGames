@@ -13,6 +13,7 @@ import com.eecs4413final.demo.service.UserService;
 
 import com.eecs4413final.demo.util.JwtUtil;
 import jakarta.validation.Valid;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -126,6 +127,7 @@ public class UserController {
             );
             return new ResponseEntity<>(responseDto, HttpStatus.OK);
         } catch (Exception e) {
+            LoggerFactory.getLogger(UserController.class).error("Error in getUserProfile: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }

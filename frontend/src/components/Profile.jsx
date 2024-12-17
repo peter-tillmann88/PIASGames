@@ -27,7 +27,7 @@ function Profile() {
         const savedUsername = localStorage.getItem('username');
         if (savedUsername) {
             setUsername(savedUsername);
-            fetchUserProfile(savedUsername);
+            fetchUserProfile();
             fetchOrderHistory();
         }
     }, []);
