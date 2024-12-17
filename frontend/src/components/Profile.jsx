@@ -33,6 +33,7 @@ function Profile() {
     }, []);
 
     const fetchUserProfile = async () => {
+        console.log("we are fetching user profile rn")
         try {
             const token = localStorage.getItem('accessToken');
             console.log(`Fetching user profile with token: ${token}`);
