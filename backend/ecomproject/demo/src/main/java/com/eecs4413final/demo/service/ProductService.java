@@ -23,13 +23,12 @@ public interface ProductService {
     Product getById(Long productId);
     void deleteById(Long productId);
 
-    // Original addProduct
+   
     Product addProduct(ProductDTO product);
 
-    // New addProduct that also handles images
+
     Product addProduct(ProductDTO productDTO, List<MultipartFile> images) throws Exception;
 
-    // New updateProduct method
     Product updateProduct(Long productId, ProductUpdateDTO updateDTO) throws Exception;
 
     List<Product> searchProductsByName(String query);

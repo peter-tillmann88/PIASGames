@@ -1,4 +1,3 @@
-// src/main/java/com/eecs4413final/demo/controller/ProductController.java
 package com.eecs4413final.demo.controller;
 
 import com.eecs4413final.demo.dto.*;
@@ -17,17 +16,19 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 @CrossOrigin(
-    origins = "http://localhost:5173", // The frontend URL
-    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE}, // Allowed HTTP methods
-    allowedHeaders = "*", // Allow all headers (optional, can restrict if needed)
-    maxAge = 3600 // Cache preflight response for 1 hour
+        origins = "http://localhost:5173",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE},
+        allowedHeaders = "*",
+        maxAge = 3600
 )
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
+
     @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -38,32 +39,18 @@ public class ProductController {
         try {
             List<Product> products = productService.getAllProducts();
             List<ProductResponseDTO> productDTOs = products.stream()
-                    .map(product -> {
-                        List<ImageDTO> imageDTOs = product.getImages() != null
-                                ? product.getImages().stream()
-                                .map(image -> new ImageDTO(
-                                        image.getId(),
-                                        image.getFileName(),
-                                        image.getFileType(),
-                                        image.getImageUrl()))
-                                .collect(Collectors.toList())
-                                : null;
-
-                        Set<Categories> categories = product.getCategoryList();
-
-                        return new ProductResponseDTO(
-                                product.getProductId(),
-                                product.getName(),
-                                product.getDeveloper(),
-                                product.getDescription(),
-                                product.getPrice(),
-                                product.getStock(),
-                                product.getSaleMod(),
-                                categories,
-                                imageDTOs,
-                                product.getPlatform()
-                        );
-                    })
+                    .map(product -> new ProductResponseDTO(
+                            product.getProductId(),
+                            product.getName(),
+                            product.getDeveloper(),
+                            product.getDescription(),
+                            product.getPrice(),
+                            product.getStock(),
+                            product.getSaleMod(),
+                            mapCategories(product.getCategoryList()),
+                            mapImages(product.getImages()),
+                            product.getPlatform()
+                    ))
                     .collect(Collectors.toList());
 
             return new ResponseEntity<>(productDTOs, HttpStatus.OK);
@@ -73,23 +60,12 @@ public class ProductController {
         }
     }
 
-
     @PostMapping(value = "/add", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ProductResponseDTO> addProduct(
             @RequestPart("product") @Valid ProductDTO productDTO,
             @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         try {
             Product newProduct = productService.addProduct(productDTO, images);
-
-            List<ImageDTO> imageDTOs = newProduct.getImages() != null
-                    ? newProduct.getImages().stream()
-                    .map(image -> new ImageDTO(
-                            image.getId(),
-                            image.getFileName(),
-                            image.getFileType(),
-                            image.getImageUrl()))
-                    .collect(Collectors.toList())
-                    : null;
 
             ProductResponseDTO responseDTO = new ProductResponseDTO(
                     newProduct.getProductId(),
@@ -99,8 +75,8 @@ public class ProductController {
                     newProduct.getPrice(),
                     newProduct.getStock(),
                     newProduct.getSaleMod(),
-                    newProduct.getCategoryList(),
-                    imageDTOs,
+                    mapCategories(newProduct.getCategoryList()),
+                    mapImages(newProduct.getImages()),
                     newProduct.getPlatform()
             );
             responseDTO.setMessage("Product successfully added.");
@@ -115,39 +91,28 @@ public class ProductController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id) {
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
         try {
             Product product = productService.getById(id);
 
-            List<ImageDTO> imageDTOs = product.getImages() != null
-                    ? product.getImages().stream()
-                    .map(image -> new ImageDTO(
-                            image.getId(),
-                            image.getFileName(),
-                            image.getFileType(),
-                            image.getImageUrl()))
-                    .collect(Collectors.toList())
-                    : null;
-
-            responseDTO.setProductId(product.getProductId());
-            responseDTO.setName(product.getName());
-            responseDTO.setDeveloper(product.getDeveloper());
-            responseDTO.setDescription(product.getDescription());
-            responseDTO.setPrice(product.getPrice());
-            responseDTO.setStock(product.getStock());
-            responseDTO.setSaleMod(product.getSaleMod());
-            responseDTO.setCategoryList(product.getCategoryList());
-            responseDTO.setImages(imageDTOs);
-            responseDTO.setPlatform(product.getPlatform());
+            ProductResponseDTO responseDTO = new ProductResponseDTO(
+                    product.getProductId(),
+                    product.getName(),
+                    product.getDeveloper(),
+                    product.getDescription(),
+                    product.getPrice(),
+                    product.getStock(),
+                    product.getSaleMod(),
+                    mapCategories(product.getCategoryList()),
+                    mapImages(product.getImages()),
+                    product.getPlatform()
+            );
             responseDTO.setMessage("Product found.");
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } catch (ProductNotFoundException e) {
-            responseDTO.setMessage("Product not found for id: " + id);
-            return new ResponseEntity<>(responseDTO, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
-            responseDTO.setMessage("An unexpected error occurred: " + e.getMessage());
-            return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -167,38 +132,52 @@ public class ProductController {
         }
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(
+            @PathVariable Long id,
+            @RequestBody ProductUpdateDTO updateDTO) {
+        try {
+            Product updatedProduct = productService.updateProduct(id, updateDTO);
+
+            ProductResponseDTO responseDTO = new ProductResponseDTO(
+                    updatedProduct.getProductId(),
+                    updatedProduct.getName(),
+                    updatedProduct.getDeveloper(),
+                    updatedProduct.getDescription(),
+                    updatedProduct.getPrice(),
+                    updatedProduct.getStock(),
+                    updatedProduct.getSaleMod(),
+                    mapCategories(updatedProduct.getCategoryList()),
+                    mapImages(updatedProduct.getImages()),
+                    updatedProduct.getPlatform()
+            );
+            responseDTO.setMessage("Product updated successfully.");
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        } catch (ProductNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String query) {
         try {
             List<Product> products = productService.searchProductsByName(query);
-
             List<ProductResponseDTO> productDTOs = products.stream()
-                    .map(product -> {
-                        List<ImageDTO> imageDTOs = product.getImages() != null
-                                ? product.getImages().stream()
-                                .map(image -> new ImageDTO(
-                                        image.getId(),
-                                        image.getFileName(),
-                                        image.getFileType(),
-                                        image.getImageUrl()))
-                                .collect(Collectors.toList())
-                                : null;
-
-                        Set<Categories> categories = product.getCategoryList();
-
-                        return new ProductResponseDTO(
-                                product.getProductId(),
-                                product.getName(),
-                                product.getDeveloper(),
-                                product.getDescription(),
-                                product.getPrice(),
-                                product.getStock(),
-                                product.getSaleMod(),
-                                categories,
-                                imageDTOs,
-                                product.getPlatform()
-                        );
-                    })
+                    .map(product -> new ProductResponseDTO(
+                            product.getProductId(),
+                            product.getName(),
+                            product.getDeveloper(),
+                            product.getDescription(),
+                            product.getPrice(),
+                            product.getStock(),
+                            product.getSaleMod(),
+                            mapCategories(product.getCategoryList()),
+                            mapImages(product.getImages()),
+                            product.getPlatform()
+                    ))
                     .collect(Collectors.toList());
 
             return new ResponseEntity<>(productDTOs, HttpStatus.OK);
@@ -209,45 +188,24 @@ public class ProductController {
     }
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(
-            @PathVariable Long id,
-            @RequestBody ProductUpdateDTO updateDTO) {
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        try {
-            Product updatedProduct = productService.updateProduct(id, updateDTO);
+    private Set<CategoriesResponseDTO> mapCategories(Set<Categories> categories) {
+        return categories.stream()
+                .map(category -> new CategoriesResponseDTO(
+                        category.getCategoryId(),
+                        category.getName(),
+                        category.getDescription()))
+                .collect(Collectors.toSet());
+    }
 
-            List<ImageDTO> imageDTOs = updatedProduct.getImages() != null
-                    ? updatedProduct.getImages().stream()
-                    .map(image -> new ImageDTO(
-                            image.getId(),
-                            image.getFileName(),
-                            image.getFileType(),
-                            image.getImageUrl()))
-                    .collect(Collectors.toList())
-                    : null;
-
-            responseDTO = new ProductResponseDTO(
-                    updatedProduct.getProductId(),
-                    updatedProduct.getName(),
-                    updatedProduct.getDeveloper(),
-                    updatedProduct.getDescription(),
-                    updatedProduct.getPrice(),
-                    updatedProduct.getStock(),
-                    updatedProduct.getSaleMod(),
-                    updatedProduct.getCategoryList(),
-                    imageDTOs,
-                    updatedProduct.getPlatform()
-            );
-            responseDTO.setMessage("Product updated successfully.");
-            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-        } catch (ProductNotFoundException e) {
-            responseDTO.setMessage("Product not found for id: " + id);
-            return new ResponseEntity<>(responseDTO, HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseDTO.setMessage("An unexpected error occurred: " + e.getMessage());
-            return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    private List<ImageDTO> mapImages(List<com.eecs4413final.demo.model.Image> images) {
+        return images != null
+                ? images.stream()
+                .map(image -> new ImageDTO(
+                        image.getId(),
+                        image.getFileName(),
+                        image.getFileType(),
+                        image.getImageUrl()))
+                .collect(Collectors.toList())
+                : null;
     }
 }

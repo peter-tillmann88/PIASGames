@@ -29,7 +29,6 @@ public class UserRegistrationDTO {
     private String address;
     private String postalCode;
 
-    // Getters and Setters
     public String getUsername() {
         return username;
     }

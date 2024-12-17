@@ -15,7 +15,6 @@ public class ShoppingCartItemResponseDTO {
     private BigDecimal totalPrice;
     private String message;
 
-    // Constructors
     public ShoppingCartItemResponseDTO() {
     }
 
@@ -26,8 +25,6 @@ public class ShoppingCartItemResponseDTO {
         this.unitPrice = unitPrice;
         this.totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
-
-    // Getters and Setters
     public Long getShoppingCartId() {
         return shoppingCartId;
     }

@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
-import Header from '../components/Header'; // Assuming Header is located in the components folder
-import Footer from '../components/Footer'; // Assuming Footer is located in the components folder
-
+import Header from '../components/Header'; 
+import Footer from '../components/Footer'; 
 function SignIn({ onSignIn }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Add API call for login
         onSignIn({ email });
     };
 
     return (
         <>
-            {/* Using the existing Header */}
             <Header />
 
-            {/* Sign In Form */}
+            {/* sign in form*/}
             <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 py-12">
                 <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-lg w-full max-w-lg">
                     <h2 className="text-3xl font-bold mb-6 text-center">Sign In</h2>
@@ -54,8 +51,6 @@ function SignIn({ onSignIn }) {
                     </button>
                 </form>
             </div>
-
-            {/* Using the existing Footer */}
             <Footer />
         </>
     );

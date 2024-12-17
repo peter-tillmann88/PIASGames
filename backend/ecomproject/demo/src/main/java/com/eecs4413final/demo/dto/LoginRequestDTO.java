@@ -10,7 +10,6 @@ public class LoginRequestDTO {
     @NotBlank(message = "Password is required")
     private String password;
 
-    // Getters and Setters
     public String getUsername() {
         return username;
     }

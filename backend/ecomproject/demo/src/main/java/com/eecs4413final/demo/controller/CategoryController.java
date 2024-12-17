@@ -32,7 +32,7 @@ private final CategoryService categoryService;
         try{
             List<Categories> categories = categoryService.getAllCategories();
             ObjectResponseDTO response = new ObjectResponseDTO("Found", categories);
-            return new ResponseEntity<>(response, HttpStatus.OK); // Changed to OK
+            return new ResponseEntity<>(response, HttpStatus.OK); 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

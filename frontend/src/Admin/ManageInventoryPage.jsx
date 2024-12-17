@@ -4,7 +4,7 @@ import Header from './AdminHeader';
 import Footer from '../components/Footer';
 import Modal from 'react-modal';
 
-// Set the app element for accessibility
+
 Modal.setAppElement('#root');
 
 function ManageInventoryPage() {
@@ -62,7 +62,6 @@ function ManageInventoryPage() {
             setAvailableCategories(data);
         } catch (error) {
             console.error('Error fetching categories:', error);
-            // Set default categories if fetch fails
             setAvailableCategories([
                 { categoryId: 3, name: 'Shooter' },
                 { categoryId: 4, name: 'Racing' },
@@ -80,7 +79,7 @@ function ManageInventoryPage() {
         const uniqueFiles = files.filter(file => 
             !selectedImages.some(selected => selected.name === file.name && selected.size === file.size)
         );
-        if (selectedImages.length + uniqueFiles.length > 5) { // Example limit
+        if (selectedImages.length + uniqueFiles.length > 5) {
             setErrorMessage('You can only upload a maximum of 5 images.');
             return;
         }
@@ -172,7 +171,6 @@ function ManageInventoryPage() {
         setNewProduct((prev) => ({ ...prev, categoryIds: selectedIds }));
     };
 
-    // Prepare options for React Select
     const categoryOptions = availableCategories.length > 0 ? 
         availableCategories.map(category => ({
             value: category.categoryId.toString(),
@@ -187,7 +185,7 @@ function ManageInventoryPage() {
             { value: '28', label: 'Fighting' },
         ];
 
-    // Platform options
+    //options
     const platformOptions = [
         { value: 'PS5', label: 'PS5' },
         { value: 'PS4', label: 'PS4' },
@@ -196,7 +194,7 @@ function ManageInventoryPage() {
         { value: 'Xbox Series X', label: 'Xbox Series X' },
     ];
 
-    // Handle Delete Product
+    //delete
     const handleDeleteProduct = async (productId) => {
         if (!window.confirm('Are you sure you want to delete this product?')) {
             return;
@@ -209,7 +207,6 @@ function ManageInventoryPage() {
             if (response.ok) {
                 setSuccessMessage('Product deleted successfully!');
                 setErrorMessage('');
-                // Remove the deleted product from the state
                 setProducts((prevProducts) => prevProducts.filter(product => product.productId !== productId));
             } else {
                 const errorText = await response.text();
@@ -223,8 +220,6 @@ function ManageInventoryPage() {
             setSuccessMessage('');
         }
     };
-
-    // Open Edit Modal
     const openEditModal = (product) => {
         setEditProduct({
             ...product,
@@ -237,24 +232,18 @@ function ManageInventoryPage() {
         setSuccessMessage('');
     };
 
-    // Close Edit Modal
     const closeEditModal = () => {
         setIsEditModalOpen(false);
         setEditProduct(null);
     };
 
-    // Handle Edit Product Input Change
     const handleEditInputChange = (field, value) => {
         setEditProduct((prev) => ({ ...prev, [field]: value }));
     };
-
-    // Handle Edit Category Change
     const handleEditCategoryChange = (selectedOptions) => {
         const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
         setEditProduct((prev) => ({ ...prev, categoryIds: selectedIds }));
     };
-
-    // Handle Update Product
     const handleUpdateProduct = async (e) => {
         e.preventDefault();
         setErrorMessage('');
@@ -269,8 +258,6 @@ function ManageInventoryPage() {
                 setErrorMessage('Platform selection is required.');
                 return;
             }
-
-            // Prepare the update payload
             const updatePayload = {
                 name: editProduct.name,
                 developer: editProduct.developer,
@@ -293,7 +280,6 @@ function ManageInventoryPage() {
                 const updatedProduct = await response.json();
                 setSuccessMessage('Product updated successfully!');
                 setErrorMessage('');
-                // Update the product in the state
                 setProducts((prevProducts) => prevProducts.map(product => 
                     product.productId === updatedProduct.productId ? updatedProduct : product
                 ));
@@ -327,7 +313,6 @@ function ManageInventoryPage() {
                                 setErrorMessage('');
                                 setSuccessMessage('');
                                 if (showAddProductForm) {
-                                    // Reset form when cancelling
                                     setNewProduct({
                                         name: '',
                                         developer: '',
@@ -350,7 +335,7 @@ function ManageInventoryPage() {
                                 onSubmit={handleAddProduct}
                                 className="bg-gray-100 p-4 rounded mt-4 shadow"
                             >
-                                {/* Developer */}
+                                {/* developer */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Developer:</label>
                                     <input
@@ -362,7 +347,7 @@ function ManageInventoryPage() {
                                     />
                                 </div>
 
-                                {/* Name */}
+                                {/* name */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Name:</label>
                                     <input
@@ -374,7 +359,7 @@ function ManageInventoryPage() {
                                     />
                                 </div>
 
-                                {/* Description */}
+                                {/* desc */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Description:</label>
                                     <textarea
@@ -385,7 +370,7 @@ function ManageInventoryPage() {
                                     />
                                 </div>
 
-                                {/* Price */}
+                                {/* price$ */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Price:</label>
                                     <input
@@ -399,7 +384,7 @@ function ManageInventoryPage() {
                                     />
                                 </div>
 
-                                {/* Stock */}
+                                {/* quanitity */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Stock:</label>
                                     <input
@@ -412,7 +397,7 @@ function ManageInventoryPage() {
                                     />
                                 </div>
 
-                                {/* Sale Modifier */}
+                                {/* sale mod (remove) */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Sale Modifier:</label>
                                     <input
@@ -425,7 +410,7 @@ function ManageInventoryPage() {
                                     />
                                 </div>
 
-                                {/* Platform */}
+                                {/* platofrm */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Platform:</label>
                                     <select
@@ -443,7 +428,7 @@ function ManageInventoryPage() {
                                     </select>
                                 </div>
 
-                                {/* Category Selection using React Select */}
+                                {/* cat selection */}
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Categories:</label>
                                     <Select
@@ -484,9 +469,9 @@ function ManageInventoryPage() {
                                     </p>
                                 </div>
 
-                                {/* Images */}
+                                {/* images */}
                                 <div className="mb-4">
-                                    <label className="block text-sm font-medium text-gray-700">Images (JPG File Only):</label>
+                                    <label className="block text-sm font-medium text-gray-700">Images (JPG File Only & First photo inputted is cover photo.):</label>
                                     <input
                                         type="file"
                                         multiple
@@ -494,7 +479,7 @@ function ManageInventoryPage() {
                                         className="w-full border border-gray-300 rounded px-3 py-2"
                                         accept="image/*"
                                     />
-                                    {/* Display selected images */}
+                                    {/* display images (first will be cover photo) */}
                                     {selectedImages.length > 0 && (
                                         <div className="mt-2 flex flex-wrap gap-2">
                                             {selectedImages.map((img, index) => (
@@ -586,7 +571,6 @@ function ManageInventoryPage() {
                         </table>
                     )}
 
-                    {/* Edit Product Modal */}
                     <Modal
                         isOpen={isEditModalOpen && editProduct !== null}
                         onRequestClose={closeEditModal}
@@ -598,7 +582,7 @@ function ManageInventoryPage() {
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
                                 <form onSubmit={handleUpdateProduct}>
-                                    {/* Developer */}
+                                    {/* developer*/}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Developer:</label>
                                         <input
@@ -610,7 +594,7 @@ function ManageInventoryPage() {
                                         />
                                     </div>
 
-                                    {/* Name */}
+                                    {/* name */}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Name:</label>
                                         <input
@@ -622,7 +606,7 @@ function ManageInventoryPage() {
                                         />
                                     </div>
 
-                                    {/* Description */}
+                                    {/* desc */}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Description:</label>
                                         <textarea
@@ -633,7 +617,7 @@ function ManageInventoryPage() {
                                         />
                                     </div>
 
-                                    {/* Price */}
+                                    {/*price*/}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Price:</label>
                                         <input
@@ -647,7 +631,7 @@ function ManageInventoryPage() {
                                         />
                                     </div>
 
-                                    {/* Stock */}
+                                    {/* stock */}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Stock:</label>
                                         <input
@@ -660,7 +644,7 @@ function ManageInventoryPage() {
                                         />
                                     </div>
 
-                                    {/* Sale Modifier */}
+                                    {/* sale mod  */}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Sale Modifier:</label>
                                         <input
@@ -673,7 +657,7 @@ function ManageInventoryPage() {
                                         />
                                     </div>
 
-                                    {/* Platform */}
+                                    {/* console*/}
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Platform:</label>
                                         <select
@@ -691,7 +675,7 @@ function ManageInventoryPage() {
                                         </select>
                                     </div>
 
-                                    {/* Category Selection using React Select */}
+                                    {/* cat seleciton
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">Categories:</label>
                                         <Select
@@ -730,7 +714,7 @@ function ManageInventoryPage() {
                                         <p className="text-sm text-gray-500 mt-1">
                                             Use Ctrl (Windows) or Command (Mac) to select multiple categories.
                                         </p>
-                                    </div>
+                                    </div> */}
 
                                     <button
                                         type="submit"

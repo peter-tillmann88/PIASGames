@@ -6,43 +6,72 @@ import SearchBar from '../../components/SearchBar';
 
 function Header() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
         setIsAuthenticated(!!accessToken);
+
+        const updateCartCount = () => {
+            const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
+            const cartTotal = tempCart.reduce((total, item) => total + item.quantity, 0);
+            setCartCount(cartTotal);
+
+            if (accessToken) {
+                fetchCartCountFromServer();
+            }
+        };
+
+        const fetchCartCountFromServer = async () => {
+            const userID = localStorage.getItem('userID');
+            if (userID && accessToken) {
+                try {
+                    const response = await fetch(`http://localhost:8080/api/cart/${userID}/cart`, {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const serverCartCount = data.reduce((total, item) => total + item.quantity, 0);
+                        setCartCount(serverCartCount);
+                    }
+                } catch (err) {
+                    console.error('Error fetching cart count:', err);
+                }
+            }
+        };
+
+        updateCartCount();
     }, []);
 
     const handleSignOut = () => {
-        // Remove tokens and user-related local storage
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('userId');
-        localStorage.removeItem('tempCart'); // Clear guest cart (if any)
-
-        // Reset authentication state
+        localStorage.removeItem('tempCart');
         setIsAuthenticated(false);
-
-        // Redirect to home page
         navigate('/');
     };
 
     return (
         <header className="bg-gray-800 text-white p-4">
             <div className="flex items-center justify-between max-w-7xl mx-auto">
-                {/* Logo Section */}
+                {/* logo */}
                 <div className="flex items-center flex-shrink-0">
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-16 w-auto" />
                     </Link>
                 </div>
 
-                {/* Search Bar Section */}
+                {/* search bar */}
                 <div className="flex-1 mx-6">
                     <SearchBar />
                 </div>
 
-                {/* Action Buttons */}
+                {/* buttons */}
                 <div className="flex items-center space-x-4 flex-shrink-0">
                     {!isAuthenticated ? (
                         <>
@@ -66,13 +95,20 @@ function Header() {
                             </button>
                         </>
                     )}
-                    <Link to="/cart">
-                        <img
-                            src={cartIcon}
-                            alt="Cart"
-                            className="h-10 w-10 cursor-pointer hover:scale-110 transition-transform duration-200"
-                        />
-                    </Link>
+                    <div className="relative">
+                        <Link to="/cart">
+                            <img
+                                src={cartIcon}
+                                alt="Cart"
+                                className="h-10 w-10 cursor-pointer hover:scale-110 transition-transform duration-200"
+                            />
+                            {cartCount > 0 && (
+                                <span className="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </Link>
+                    </div>
                 </div>
             </div>
         </header>

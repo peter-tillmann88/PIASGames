@@ -9,21 +9,20 @@ public class CategoriesResponseDTO {
     private Long categoryId;
     private String name;
     private String description;
-    private Set<Product> products = new HashSet<>(); // Initialize to prevent NullPointerException
-    private String message; // New field for messages
+    private Set<Product> products = new HashSet<>();
+    private String message;
 
-    // Constructors
     public CategoriesResponseDTO(Long id, String name, String description) {
         this.categoryId = id;
         this.name = name;
         this.description = description;
-//        this.products = products;
+
     }
 
     public CategoriesResponseDTO() {
     }
 
-    // Getters and Setters
+
     public Long getCategoryId() {
         return categoryId;
     }

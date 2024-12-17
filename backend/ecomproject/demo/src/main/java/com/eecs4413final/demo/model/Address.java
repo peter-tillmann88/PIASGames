@@ -29,11 +29,10 @@ public class Address {
     @Column(nullable = false, length = 20)
     private String zip;
 
-    // Default constructor
+   
     public Address() {
     }
 
-    // Parameterized constructor
     public Address(Customer customer, String street, String city, String province, String country, String zip, String phone) {
         this.customer = customer;
         this.street = street;
@@ -43,7 +42,6 @@ public class Address {
         this.zip = zip;
     }
 
-    // Getters and Setters
 
     public Long getAddressID() {
         return addressID;
@@ -101,7 +99,6 @@ public class Address {
         this.zip = zip;
     }
 
-    // toString method
     @Override
     public String toString() {
         return "Address{" +

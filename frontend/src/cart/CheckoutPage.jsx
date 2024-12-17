@@ -10,20 +10,28 @@ function CheckoutPage() {
         tax: 0,
         total: 0,
     });
+    const [billingInfo, setBillingInfo] = useState({
+        creditCard: '',
+        address: '',
+        postalCode: '',
+        province: '',
+        country: '',
+    });
+    const [tempBilling, setTempBilling] = useState(false);
+    const [attemptCount, setAttemptCount] = useState(0);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
-        let userID = localStorage.getItem('userID');
+        let userID = null;
 
         const fetchUserProfile = async () => {
             if (token && !userID) {
                 try {
                     const response = await fetch('http://localhost:8080/api/users/profile', {
                         method: 'GET',
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
+                        headers: { Authorization: `Bearer ${token}` },
                     });
 
                     if (!response.ok) {
@@ -33,14 +41,20 @@ function CheckoutPage() {
                     const data = await response.json();
                     userID = data.userID;
                     localStorage.setItem('userID', userID);
+
+                    setBillingInfo({
+                        creditCard: data.creditCard || '',
+                        address: data.address || '',
+                        postalCode: data.postalCode || '',
+                        province: data.province || '',
+                        country: data.country || '',
+                    });
+
+                    setUser({ userID, token });
+                    fetchCartData(userID, token);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                 }
-            }
-
-            if (token && userID) {
-                setUser({ userID, token });
-                fetchCartData(userID, token);
             } else {
                 navigate('/login');
             }
@@ -53,10 +67,7 @@ function CheckoutPage() {
         try {
             const response = await fetch(`http://localhost:8080/api/cart/${userID}/cart`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (!response.ok) {
@@ -82,45 +93,42 @@ function CheckoutPage() {
         }
     };
 
+    const handleBillingChange = (e) => {
+        const { name, value } = e.target;
+        setBillingInfo({ ...billingInfo, [name]: value });
+    };
+
     const handleCompletePurchase = async () => {
-        if (!user) return;
+        const currentAttempt = attemptCount + 1;
+        setAttemptCount(currentAttempt);
+
+        if (currentAttempt % 3 === 0) {
+            alert('Credit Card Authorization Failed.');
+            return;
+        }
 
         try {
             const response = await fetch('http://localhost:8080/api/order/checkout', {
                 method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${user.token}`,
-                },
+                headers: { Authorization: `Bearer ${user.token}` },
             });
 
             if (!response.ok) {
-                // Attempt to parse the error message from the response
-                let errorMessage = 'Failed to complete purchase.';
-                try {
-                    const errorData = await response.json();
-                    // Adjust the key based on your backend's error response structure
-                    errorMessage = errorData.message || errorMessage;
-                } catch (parseError) {
-                    console.error('Error parsing error response:', parseError);
-                }
-                throw new Error(`Failed to complete purchase. ${errorMessage}`);
+                throw new Error('Failed to complete purchase');
             }
 
             const order = await response.json();
-            // Assuming the order JSON contains orderID, orderDate, and other info.
-            // If it doesn't, you'll need to adjust how you generate the order number/date.
-            const orderNumber = "ORD-" + order.orderID;
             const orderDetails = {
-                items: orderData.items.map(item => ({
+                items: orderData.items.map((item) => ({
                     name: item.product_name,
                     price: item.unit_price,
-                    quantity: item.quantity
+                    quantity: item.quantity,
                 })),
                 subtotal: orderData.subtotal,
                 shipping: orderData.shipping,
                 tax: orderData.tax,
                 total: orderData.total,
-                orderNumber,
+                orderNumber: `ORD-${order.orderID}`,
                 orderDate: order.orderDate || new Date().toISOString(),
             };
 
@@ -143,7 +151,9 @@ function CheckoutPage() {
                     <div>
                         {orderData.items.map((item, index) => (
                             <div key={index} className="flex justify-between mb-2">
-                                <span>{item.product_name} (x{item.quantity})</span>
+                                <span>
+                                    {item.product_name} (x{item.quantity})
+                                </span>
                                 <span>${(item.unit_price * item.quantity).toFixed(2)}</span>
                             </div>
                         ))}
@@ -169,24 +179,46 @@ function CheckoutPage() {
                 )}
             </div>
 
-            {/* Removed the CVV input field as it references undefined `formData` */}
-            {/* <div>
-                <label className="block text-sm font-semibold">CVV for credit card registered on Account</label>
-                <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 rounded-lg"
-                    value={formData.expiryDate}
-                    onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
-                    required
-                />
-            </div> */}
+            <h2 className="text-2xl font-semibold mb-4">Billing Information</h2>
+            <form>
+                {['creditCard', 'address', 'postalCode', 'province', 'country'].map((field) => (
+                    <label key={field} className="block mb-2">
+                        {field.charAt(0).toUpperCase() + field.slice(1)}:
+                        <input
+                            type="text"
+                            name={field}
+                            value={billingInfo[field]}
+                            onChange={handleBillingChange}
+                            className="block w-full p-2 border rounded"
+                            disabled={!tempBilling}
+                        />
+                    </label>
+                ))}
+                <label className="flex items-center mb-4">
+                    <input
+                        type="checkbox"
+                        checked={tempBilling}
+                        onChange={() => setTempBilling(!tempBilling)}
+                        className="mr-2"
+                    />
+                    Use Temporary Billing Information
+                </label>
+            </form>
 
-            <button
-                onClick={handleCompletePurchase}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4"
-            >
-                Complete Purchase
-            </button>
+            <div className="flex gap-4">
+                <button
+                    onClick={handleCompletePurchase}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                    Complete Purchase
+                </button>
+                <button
+                    onClick={() => navigate('/')}
+                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                >
+                    Continue Shopping
+                </button>
+            </div>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function GameCard({ game }) {
-    const [imageSrc, setImageSrc] = useState('/placeholder.jpg'); // Default placeholder
+    const [imageSrc, setImageSrc] = useState('/placeholder.jpg');
 
     useEffect(() => {
         async function fetchSignedUrl() {
@@ -16,8 +16,9 @@ function GameCard({ game }) {
                 fileName = decodeURIComponent(fileName);
 
                 try {
-                    const response = await fetch(`http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`);
-
+                    const response = await fetch(
+                        `http://localhost:3000/generate-signed-url?bucketName=product-images&fileName=${encodeURIComponent(fileName)}`
+                    );
                     if (response.ok) {
                         const data = await response.json();
                         setImageSrc(data.signedUrl);
@@ -33,15 +34,14 @@ function GameCard({ game }) {
         fetchSignedUrl();
     }, [game.images]);
 
-    const categoriesText = (Array.isArray(game.categoryList) && game.categoryList.length > 0)
+    const categoriesText = game.categoryList && game.categoryList.length > 0
         ? game.categoryList.map(cat => cat.name).join(', ')
         : 'No category';
 
-    const platformText = game.platform ? game.platform : 'No platform';
+    const platformText = game.platform || 'No platform';
 
     return (
         <Link to={`/gamedetailpage/${game.productId}`} className="block text-center">
-            {/* Image Section */}
             <div className="relative w-full h-[300px]">
                 <img
                     src={imageSrc}
@@ -50,8 +50,6 @@ function GameCard({ game }) {
                     onError={() => setImageSrc('/placeholder.jpg')}
                 />
             </div>
-
-            {/* Game Info Section */}
             <h2 className="text-base font-medium mt-2 truncate">{game.name}</h2>
             <p className="text-xs text-gray-500 mt-1">Categories: {categoriesText}</p>
             <p className="text-xs text-gray-500 mt-1">Platform: {platformText}</p>

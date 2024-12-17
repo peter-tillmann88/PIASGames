@@ -1,11 +1,7 @@
-// src/main/java/com/eecs4413final/demo/dto/ProductResponseDTO.java
-
 package com.eecs4413final.demo.dto;
 
-import com.eecs4413final.demo.model.Categories;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,51 +9,42 @@ public class ProductResponseDTO {
 
     private Long productId;
     private String name;
-    private String developer;   // Added developer field
+    private String developer;
     private String description;
     private String platform;
     private BigDecimal price;
     private int stock;
     private float saleMod;
-    private Set<Categories> categoryList = new HashSet<>(); // Initialize to prevent NullPointerException
+    private Set<CategoriesResponseDTO> categoryList;
     private List<ImageDTO> images;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String message;
 
-    // Constructors
+
     public ProductResponseDTO() {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ProductResponseDTO(Long id, String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, List<ImageDTO> images, String platform) {
-        this.productId = id;
+
+    public ProductResponseDTO(
+            Long productId, String name, String developer, String description, BigDecimal price,
+            int stock, float saleMod, Set<CategoriesResponseDTO> categoryList, List<ImageDTO> images,
+            String platform) {
+        this.productId = productId;
         this.name = name;
         this.developer = developer;
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.saleMod = saleMod;
-        this.categoryList = categories;
+        this.categoryList = categoryList;
         this.images = images;
         this.createdAt = LocalDateTime.now();
         this.platform = platform;
     }
 
-    public ProductResponseDTO(Long id, String name, String developer, String description, BigDecimal price, int stock, float saleMod, Set<Categories> categories, String platform) {
-        this.productId = id;
-        this.name = name;
-        this.developer = developer;
-        this.description = description;
-        this.price = price;
-        this.stock = stock;
-        this.saleMod = saleMod;
-        this.categoryList = categories;
-        this.createdAt = LocalDateTime.now();
-        this.platform = platform;
-    }
 
-    // Getters and Setters
     public Long getProductId() {
         return productId;
     }
@@ -74,7 +61,7 @@ public class ProductResponseDTO {
         this.name = name;
     }
 
-	public String getDeveloper() {
+    public String getDeveloper() {
         return developer;
     }
 
@@ -106,12 +93,12 @@ public class ProductResponseDTO {
         this.price = price;
     }
 
-    public Integer getStock() {
+    public int getStock() {
         return stock;
     }
 
-    public void setStock(Integer quantity) {
-        this.stock = quantity;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     public float getSaleMod() {
@@ -122,11 +109,11 @@ public class ProductResponseDTO {
         this.saleMod = saleMod;
     }
 
-    public Set<Categories> getCategoryList() {
+    public Set<CategoriesResponseDTO> getCategoryList() {
         return categoryList;
     }
 
-    public void setCategoryList(Set<Categories> categoryList) {
+    public void setCategoryList(Set<CategoriesResponseDTO> categoryList) {
         this.categoryList = categoryList;
     }
 
@@ -154,11 +141,11 @@ public class ProductResponseDTO {
         this.updatedAt = updatedAt;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message){
+    public void setMessage(String message) {
         this.message = message;
     }
 }
