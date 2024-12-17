@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/cart-items")
-@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = {"Authorization", "Content-Type"})
 public class ShoppingCartItemController {
 
     private final ShoppingCartService shoppingCartService;

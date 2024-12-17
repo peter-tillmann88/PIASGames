@@ -17,12 +17,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(
-        origins = "http://localhost:5173",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE},
-        allowedHeaders = "*",
-        maxAge = 3600
-)
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
