@@ -301,7 +301,6 @@ function SalesHistoryPage() {
                         <div className="bg-blue-500 text-white p-6 rounded shadow">
                             <h3 className="text-lg font-bold">Total Sales</h3>
                             <p className="text-2xl font-semibold">${totalSales}</p>
-                            <p className="text-sm">Includes ${totalTax} in tax.</p>
                         </div>
                         <div className="bg-green-500 text-white p-6 rounded shadow">
                             <h3 className="text-lg font-bold">Top-Selling Product</h3>

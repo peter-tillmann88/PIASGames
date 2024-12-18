@@ -20,13 +20,13 @@ public class RawCartService {
     public boolean updateCartItemQuantity(Long cartItemId, int newQuantity) {
         String sql = "UPDATE shoppingcartitems SET quantity = ? WHERE cart_itemid = ?";
         int rowsAffected = jdbcTemplate.update(sql, newQuantity, cartItemId);
-        return rowsAffected > 0; // Return true if the update was successful
+        return rowsAffected > 0; 
     }
 
     public boolean deleteCartItem(Long cartItemId) {
         String sql = "DELETE FROM shoppingcartitems WHERE cart_itemid = ?";
         int rowsAffected = jdbcTemplate.update(sql, cartItemId);
-        return rowsAffected > 0; // Return true if at least one row was deleted
+        return rowsAffected > 0;
     }
 
     public String getCartItemsByUserId(Long userId) {
@@ -39,7 +39,7 @@ public class RawCartService {
                 "'unit_price', sci.unit_price, " +
                 "'total_price', sci.total_price, " +
                 "'added_at', sci.added_at, " +
-                "'image_name', i.file_name" +    // Add image_name to the JSON object
+                "'image_name', i.file_name" +   
                 ")) AS cart_items " +
                 "FROM shoppingcartitems sci " +
                 "JOIN shopping_carts sc ON sci.cartid = sc.cartid " +
@@ -55,5 +55,15 @@ public class RawCartService {
                 "WHERE sc.user_id = ?";
 
         return jdbcTemplate.queryForObject(sql, String.class, userId);
+    }
+
+    public boolean updateQuantityByUserIdAndProductId(Long userId, Long productId, int newQuantity) {
+        String sql = "UPDATE shoppingcartitems " +
+                "SET quantity = ? " +
+                "FROM shopping_carts sc " +
+                "WHERE shoppingcartitems.cartid = sc.cartid " +
+                "AND sc.user_id = ? AND shoppingcartitems.productid = ?";
+        int rowsAffected = jdbcTemplate.update(sql, newQuantity, userId, productId);
+        return rowsAffected > 0;
     }
 }

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../screen/homepage/Header';
 import axios from 'axios';
 
 function GameDetailPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [game, setGame] = useState(null);
     const [imageUrls, setImageUrls] = useState(['/placeholder.jpg']);
     const [loading, setLoading] = useState(true);
@@ -14,13 +15,11 @@ function GameDetailPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [alert, setAlert] = useState(null);
 
-    // State for user info
     const [userInfo, setUserInfo] = useState({
         userID: null,
         token: null,
     });
 
-    // Fetch user info from backend
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('accessToken');
@@ -38,15 +37,16 @@ function GameDetailPage() {
                     }
 
                     const data = await response.json();
-                    const { userID } = data; // Adjust based on your API response
+                    const { userID } = data;
                     setUserInfo({ userID, token });
+                    console.log(userID);
+                    console.log(token);
                 } catch (err) {
                     console.error('Error fetching user profile:', err);
                     setUserInfo({ userID: null, token: null });
                 }
             }
         };
-
         fetchUserInfo();
     }, []);
 
@@ -66,6 +66,7 @@ function GameDetailPage() {
                 }
 
                 const data = await response.json();
+                let imageLink = data.signedUrl;
                 return data.signedUrl;
             } catch (err) {
                 console.error('Error fetching signed URL:', err);
@@ -123,11 +124,19 @@ function GameDetailPage() {
                     quantity,
                     imageUrl: imageUrls[0],
                 };
+
+                console.log(newItem.cartItemId);
+                console.log(newItem.id);
+                console.log(newItem.name);
+                console.log(newItem.price);
+                console.log(newItem.quantity);
+                console.log(newItem.imageUrl);
                 tempCart.push(newItem);
             }
 
             localStorage.setItem('tempCart', JSON.stringify(tempCart));
-            alert('Item added to cart (Temporary Cart)');
+            setAlert('Item added to cart (Temporary Cart)');
+
             return;
         }
 
@@ -144,14 +153,17 @@ function GameDetailPage() {
             );
 
             if (response.ok) {
-                alert('Item added to cart successfully!');
+                setAlert('Item added to cart successfully!');
+                setTimeout(() => {
+                    navigate('/cart');
+                }, 2000);
             } else {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Failed to add item to cart');
             }
         } catch (error) {
             console.error('Error adding item to cart:', error);
-            alert(`Error: ${error.message}`);
+            setAlert(`Error: ${error.message}`);
         }
     };
 
@@ -289,7 +301,7 @@ function GameDetailPage() {
                             >
                                 Add to Cart
                             </button>
-                            {alert && <p className="mt-4 text-sm text-red-600">{alert}</p>}
+                            {alert && <p className="mt-4 text-sm text-green-600">{alert}</p>}
                         </div>
                     </div>
                 </div>

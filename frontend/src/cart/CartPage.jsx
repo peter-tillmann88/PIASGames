@@ -76,18 +76,21 @@ function CartPage() {
                 const tempCart = JSON.parse(localStorage.getItem('tempCart')) || [];
                 if (tempCart.length > 0) {
                     for (const item of tempCart) {
-                        await axios.post(
-                            `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${item.id}/add`,
-                            null,
-                            {
-                                headers: { Authorization: `Bearer ${user.token}` },
-                                params: { quantity: item.quantity },
-                            }
-                        );
+                        try {
+                            await axios.post(
+                                `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${item.id}/add`,
+                                null,
+                                {
+                                    headers: { Authorization: `Bearer ${user.token}` },
+                                    params: { quantity: item.quantity },
+                                }
+                            );
+                        } catch (error) {
+                            console.error(`Error adding temp cart item (Product ID: ${item.id}) to backend:`, error);
+                        }
                     }
                     localStorage.removeItem('tempCart');
                 }
-
 
                 try {
                     const response = await axios.get(`${import.meta.env.VITE_API_URL}/cart/${user.userID}/cart`, {
@@ -138,7 +141,7 @@ function CartPage() {
         fetchCartItems();
     }, [user]);
 
-    const handleQuantityUpdate = (cartItemId, newQuantity) => {
+    const handleQuantityUpdate = async (cartItemId, newQuantity) => {
         const updatedCart = cartItems.map((item) => {
             if (item.cartItemId === cartItemId) {
                 return { ...item, quantity: newQuantity };
@@ -153,32 +156,43 @@ function CartPage() {
         } else {
             const cartItem = updatedCart.find(item => item.cartItemId === cartItemId);
             if (cartItem) {
-                axios.post(
-                    `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${cartItem.productId}/update`,
-                    { quantity: newQuantity },
-                    { headers: { Authorization: `Bearer ${user.token}` } }
-                )
-                .then(response => {
-                    console.log('Quantity updated successfully:', response.data);
-                })
-                .catch(error => {
+                try {
+                    await axios.patch(
+                        `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${cartItem.productId}/update-quantity`,
+                        null,
+                        {
+                            headers: { Authorization: `Bearer ${user.token}` },
+                            params: { newQuantity },
+                        }
+                    );
+                    console.log('Quantity updated successfully for Product ID:', cartItem.productId);
+                } catch (error) {
                     console.error('Error updating quantity:', error);
-                });
+                }
             }
         }
     };
 
     const handleRemoveItem = (cartItemId) => {
         if (user) {
-            axios.delete(`${import.meta.env.VITE_API_URL}/cart/item/${cartItemId}`, {
-                headers: { Authorization: `Bearer ${user.token}` },
-            })
-                .then(() => setCartItems(cartItems.filter(item => item.cartItemId !== cartItemId)))
-                .catch(err => console.error('Error removing item:', err));
+            const cartItem = cartItems.find(item => item.cartItemId === cartItemId);
+            if (cartItem) {
+                axios.delete(`${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${cartItem.productId}/del`, {
+                    headers: { Authorization: `Bearer ${user.token}` },
+                })
+                    .then(() => {
+                        setCartItems(cartItems.filter(item => item.cartItemId !== cartItemId));
+                        console.log(`Removed Product ID: ${cartItem.productId} from cart.`);
+                    })
+                    .catch(err => console.error('Error removing item:', err));
+            } else {
+                console.error('Cart item not found:', cartItemId);
+            }
         } else {
             const updatedCart = cartItems.filter(item => item.cartItemId !== cartItemId);
             localStorage.setItem('tempCart', JSON.stringify(updatedCart));
             setCartItems(updatedCart);
+            console.log(`Removed Temp Cart Item ID: ${cartItemId} from localStorage.`);
         }
     };
 
@@ -188,6 +202,29 @@ function CartPage() {
     const calculateTotal = () => {
         const subtotal = calculateSubtotal();
         return subtotal + calculateTax(subtotal) + calculateShipping();
+    };
+
+    const handleProceedToCheckout = async () => {
+        if (user) {
+            try {
+                await Promise.all(cartItems.map(async (item) => {
+                    await axios.patch(
+                        `${import.meta.env.VITE_API_URL}/cart-items/cart/${user.userID}/item/${item.productId}/update-quantity`,
+                        null,
+                        {
+                            headers: { Authorization: `Bearer ${user.token}` },
+                            params: { newQuantity: item.quantity },
+                        }
+                    );
+                }));
+                navigate('/checkout');
+            } catch (error) {
+                console.error('Error updating quantities before checkout:', error);
+                alert('There was an error processing your cart. Please try again.');
+            }
+        } else {
+            navigate('/login');
+        }
     };
 
     return (
@@ -239,7 +276,7 @@ function CartPage() {
                     Total: ${calculateTotal().toFixed(2)}
                 </div>
                 <button
-                    onClick={() => navigate(user ? '/checkout' : '/login')}
+                    onClick={handleProceedToCheckout}
                     className="mt-6 bg-blue-600 text-white px-4 py-2 rounded mr-4"
                 >
                     Proceed to Checkout
