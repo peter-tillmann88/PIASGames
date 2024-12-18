@@ -4,18 +4,11 @@ services:
   backend:
     image: tillsauce/piasgames-backend:latest
     ports:
-      - "5000:5000" # Expose backend API
+      - "8080:5000" # Expose backend API on port 8080
     environment:
-      # Supabase Database Configuration
       - SPRING_DATASOURCE_URL=jdbc:postgresql://aws-0-us-west-1.pooler.supabase.com:6543/postgres?prepareThreshold=0
       - SPRING_DATASOURCE_USERNAME=postgres.dtxzuqapniscqgvkynbf
       - SPRING_DATASOURCE_PASSWORD=RqFhV01j2M8tSAj0
-
-      # Supabase API Configuration
-      - SUPABASE_URL=https://dtxzuqapniscqgvkynbf.supabase.co
-      - SUPABASE_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0eHp1cWFwbmlzY3Fndmt5bmJmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzc3MzQyOCwiZXhwIjoyMDQ5MzQ5NDI4fQ.Ve4PT3n0wuDwzgJZFKyt7vfljK8o1J3krpnFxJNiGy4
-
-      # Other Environment Variables
       - ALLOWED_ORIGIN=http://localhost:3000
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
@@ -24,10 +17,10 @@ services:
   frontend:
     image: tillsauce/piasgames-frontend:latest
     ports:
-      - "8080:80" # Host port 8080 maps to container port 80
+      - "3000:80" # Expose frontend on port 3000
     environment:
-      - VITE_API_URL=http://backend:5000
-      - VITE_IMAGE_SERVER_URL=http://images-server:3000
+      - VITE_API_URL=http://localhost:8080 # Backend API URL
+      - VITE_IMAGE_SERVER_URL=http://localhost:5000 # Images server URL
     depends_on:
       - backend
       - images-server
@@ -37,11 +30,11 @@ services:
   images-server:
     image: tillsauce/piasgames-server:latest
     ports:
-      - "3000:3000" # Expose image server
+      - "5000:3000" # Expose images server on port 5000
     environment:
       - SUPABASE_URL=https://dtxzuqapniscqgvkynbf.supabase.co
       - SUPABASE_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0eHp1cWFwbmlzY3Fndmt5bmJmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMzc3MzQyOCwiZXhwIjoyMDQ5MzQ5NDI4fQ.Ve4PT3n0wuDwzgJZFKyt7vfljK8o1J3krpnFxJNiGy4
-      - FRONTEND_URL=http://localhost:8080
+      - FRONTEND_URL=http://localhost:3000
     networks:
       - piasgames-network
 
