@@ -25,9 +25,7 @@ An E-commerce platform for a video game store
 
 ![Screenshot 2024-12-16 at 7 51 21 PM](https://github.com/user-attachments/assets/c58bc6ba-25bc-4bb8-8548-5ea4dd2e5c4b)
 
-## Our usage for the website depends on whether you are an administrator or a customer. By being an administrator, you have numerous privileges, for example, being able to view any customer's
-## purchase history, editing the quantity or details of a product, etc. As a customer, you are able to filter by the categories or platforms of whatever game you are looking for, add games to your cart,
-## and view your own purchase history. 
+## Our usage for the website depends on whether you are an administrator or a customer. By being an administrator, you have numerous privileges, for example, being able to view any customer's purchase history, editing the quantity or details of a product, etc. As a customer, you are able to filter by the categories or platforms of whatever game you are looking for, add games to your cart, and view your own purchase history. 
 
 ## If you'd like to see features available as an administrator, please login with the following credentials:
 username: arahan_admin
@@ -35,8 +33,7 @@ password: password12345
 
 ## If you'd like to log in as a customer, please register on our website, and enjoy the features our team has implemented!
 
-## Our team has put in a lot of work into ensuring that our database adheres to strict database design rules. All of our tables communicate and connect with one another, emphasizing clarity and functionality.
-## See our SQL scripts below:
+## Our team has put in a lot of work into ensuring that our database adheres to strict database design rules. All of our tables communicate and connect with one another, emphasizing clarity and functionality. See our SQL scripts below:
 
 [SQL Scripts.pdf](https://github.com/user-attachments/files/18185832/SQL.Scripts.pdf)
 
