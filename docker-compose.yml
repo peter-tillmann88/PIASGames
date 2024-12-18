@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   backend:
-    image: tillsauce/piasgames-backend:latest
+    build:
+      context: ./backend/ecomproject/demo
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -22,11 +24,17 @@ services:
       - piasgames-network
 
   frontend:
-    image: tillsauce/piasgames-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+        VITE_IMAGE_SERVER_URL: /images
     ports:
       - "3000:80" # Host port 3000 maps to container port 80 (Nginx)
     environment:
-      # Environment variables for runtime
+      # These environment variables are for runtime, not build-time
+      # Vite embeds build-time variables, so they are passed as build args above
       - VITE_API_URL=/api
       - VITE_IMAGE_SERVER_URL=/images
     depends_on:
@@ -36,7 +44,9 @@ services:
       - piasgames-network
 
   images-server:
-    image: tillsauce/piasgames-server:latest
+    build:
+      context: ./images-server
+      dockerfile: Dockerfile
     ports:
       - "3001:3000"
     environment:
