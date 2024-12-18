@@ -4,7 +4,7 @@ services:
   backend:
     image: tillsauce/piasgames-backend:latest
     ports:
-      - "8080:5000" # Expose backend API on port 8080
+      - "8080:8080" # Expose backend API on port 8080
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://aws-0-us-west-1.pooler.supabase.com:6543/postgres?prepareThreshold=0
       - SPRING_DATASOURCE_USERNAME=postgres.dtxzuqapniscqgvkynbf
