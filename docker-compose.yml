@@ -31,10 +31,8 @@ services:
         VITE_API_URL: /api
         VITE_IMAGE_SERVER_URL: /images
     ports:
-      - "3000:80" # Host port 3000 maps to container port 80 (Nginx)
+      - "3000:80" 
     environment:
-      # These environment variables are for runtime, not build-time
-      # Vite embeds build-time variables, so they are passed as build args above
       - VITE_API_URL=/api
       - VITE_IMAGE_SERVER_URL=/images
     depends_on:
